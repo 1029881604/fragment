@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 发布模块导航栏标题 -->
+    <string name="publish_title">发布</string>
+    <!--技能-->
+    <string name="publish_skill_text">技能</string>
+    <!--需求-->
+    <string name="publish_need_text">需求</string>
+    <!--发布技能-->
+    <string name="publish_fbskill_text">发布技能</string>
+    <!--发布需求-->
+    <string name="publish_fbneed_text">发布需求</string>
+
+    <!-- 时间选择器用到的string -->
+    <string name="cancle">取消</string>
+    <string name="title">请选择时间</string>
+    <string name="commit">确定</string>
+    <string name="year">年</string>
+    <string name="month">月</string>
+    <string name="day">日</string>
+    <string name="hour">时</string>
+    <string name="minute">分</string>
+
+</resources>

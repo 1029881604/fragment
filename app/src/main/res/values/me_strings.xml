@@ -1,0 +1,5 @@
+<resources>
+    <string name="title_activity_me_setting">MeSettingActivity</string>
+    <string name="title_activity_me_profile">MeProfileActivity</string>
+
+</resources>

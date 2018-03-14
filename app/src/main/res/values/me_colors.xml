@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="me_background">#dadada</color>
+    <color name="me_item1">#3bffffff</color>
+    <color name="me_item2">#76ffffff</color>
+    <color name="me_liner_layout">#1b282828</color>
+    <color name="me_title">#ffffff</color>
+    <color name="me_black1">#000000</color>
+    <color name="me_gray1">#464646</color>
+
+</resources>

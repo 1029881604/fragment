@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_root_register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:gravity="center_horizontal"
+    >
+    <!-- 命令规范     控件类型_用途_[属性名_]acitivity/layout -->
+    <!-- Title start -->
+    <TextView
+        android:id="@+id/tv_title_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_title_text_register"
+        android:textSize="22sp"
+        android:layout_marginTop="10dp"
+        android:textColor="#404045"
+        />
+    <!-- Title end -->
+
+    <!-- input start -->
+    <LinearLayout
+        android:id="@+id/ll_group_user_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="50dp"
+        >
+        <TextView
+            android:id="@+id/tv_name_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_name_text_register"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+            />
+
+        <EditText
+            android:id="@+id/et_name_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/et_name_hint_register"
+            android:inputType="text"
+            android:singleLine="true"
+            android:shadowRadius="5"
+            android:background="@color/transparent"
+            android:textColorHint="#ffdddddd"
+            android:textSize="16sp"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#d4cbcb" />
+    <LinearLayout
+        android:id="@+id/ll_group_password_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        >
+        <TextView
+            android:id="@+id/tv_password_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_password_text_register"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+            />
+
+        <EditText
+            android:id="@+id/et_password_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/et_password_register"
+            android:inputType="textPassword"
+            android:background="@color/transparent"
+            android:singleLine="true"
+            android:shadowRadius="5"
+            android:textColorHint="#ffdddddd"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#d4cbcb" />
+
+    <!--<RadioGroup-->
+        <!--android:id="@+id/radiogroup_sex_register"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--&gt;-->
+        <!--<TextView-->
+            <!--android:id="@+id/tv_sex_register"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/tv_sex_register"-->
+            <!--android:textSize="16sp"-->
+
+            <!--/>-->
+        <!--<RadioButton-->
+            <!--android:id="@+id/radio_nan_register"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/radio_nan_text_register"-->
+            <!--android:textSize="18sp"-->
+            <!--/>-->
+        <!--<RadioButton-->
+            <!--android:id="@+id/radio_nv_register"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/radio_nv_text_register"-->
+            <!--android:textSize="18sp"-->
+            <!--/>-->
+    <!--</RadioGroup>-->
+
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.5dp"-->
+        <!--android:background="@drawable/base_horization_line" />-->
+    <LinearLayout
+        android:id="@+id/ll_group_email_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        >
+        <TextView
+            android:id="@+id/tv_email_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_email_register"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+            />
+
+        <EditText
+            android:id="@+id/et_email_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/et_email_register"
+            android:inputType="textEmailAddress"
+            android:background="@color/transparent"
+            android:singleLine="true"
+            android:textColorHint="#ffdddddd"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#d4cbcb" />
+    <LinearLayout
+        android:id="@+id/ll_group_verification_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        >
+        <TextView
+            android:id="@+id/tv_verification_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_verification_text_register"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+            />
+
+        <EditText
+            android:id="@+id/et_verification_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/et_verification_hint_register"
+            android:inputType="textEmailAddress"
+            android:background="@color/transparent"
+            android:singleLine="true"
+            android:textColorHint="#ffdddddd"
+            android:textSize="16sp"
+            />
+        <Button
+            android:id="@+id/btn_verification_register"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="@string/btn_verification_text_register"
+            android:textSize="14sp"
+            android:textColor="@color/text_vercode"
+            android:background="@drawable/btn_vericode_selector"
+            android:padding="5dp"
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#d4cbcb" />
+    <!-- input end -->
+
+    <!-- submit start -->
+    <Button
+        android:id="@+id/btn_submit_register"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/btn_submit_text_register"
+        android:textSize="18sp"
+        android:textColor="#fff"
+        android:background="@drawable/btn_register_selector"
+        />
+    <!-- submit end -->
+
+</LinearLayout>

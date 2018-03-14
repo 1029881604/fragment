@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- toolbar 相关 start -->
+    <color name="colorPrimary">#fcb2c9</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <!-- toolbar 相关 end -->
+    <!-- 透明、半透明 -->
+    <color name="transparent">#00000000</color>
+    <!-- 颜色 start-->
+    <color name="blue">#56b8d9</color>
+    <color name="black">#000000</color>
+    <color name="text_color">#000</color>
+    <color name="bg_vercode1">#FFE91E63</color>
+    <color name="bg_vercode2">#961944</color>
+    <color name="text_vercode">#ece6e6</color>
+    <color name="black2">#ffeeeeee</color>
+    <color name="white">#ffffff</color>
+    <!-- 颜色 end-->
+
+    <!-- 底部导航颜色资源start -->
+    <color name="text_select">#e0620d</color>
+    <color name="text_normal">#9A9A9A</color>
+    <!-- 底部导航颜色资源end -->
+
+    <color name="base_color_text_gray">#9fa0a0</color>
+</resources>

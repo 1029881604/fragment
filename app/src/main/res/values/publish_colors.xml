@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- publish基本色调之白色 -->
+    <color name="publish_color_first">#ffffff</color>
+    <!-- publish基本色调之黑色 -->
+    <color name="publish_color_second">#000000</color>
+    <!-- publish基本色调之灰色 -->
+    <!-- publish基本色调之粉色 -->
+    <color name="publish_color_fouth">#fcb2c9</color>
+
+    <!-- publish两个主要按钮初始背景颜色及外部填充背景色 -->
+    <color name="publish_button">#fcb2c9</color>
+    <!-- publish导航栏字体颜色 -->
+    <color name="publish_title_text">#ffffff</color>
+    <!-- publish两个主要按钮字体颜色 -->
+    <color name="publish_btn_text">#7f7f7f</color>
+
+    <!-- 时间选择器所用到的color -->
+    <color name="background">#FFFFFF</color>
+    <color name="split_line">#11112233</color>
+    <color name="text1">#59B29C</color>
+    <color name="text2">#333333</color>
+
+</resources>

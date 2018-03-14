@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/explore_io_card_container"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:layout_marginLeft="@dimen/spacing_normal"
+    android:layout_marginRight="@dimen/spacing_normal"
+    android:layout_marginBottom="1dp"
+    app:cardBackgroundColor="@color/blue"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_header_elevation"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:id="@+id/ll_user_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:minWidth="60dp"
+            >
+            <ImageView
+                android:id="@+id/rountImg_head"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                />
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxWidth="60dp"
+                android:maxLines="1"
+                android:layout_gravity="center_horizontal"
+                android:text="This is a Placehol"
+                android:textColor="@android:color/white"
+                tools:text=""/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_bottom_text"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal"
+            android:layout_alignBottom="@+id/ll_user_head"
+            android:layout_toEndOf="@+id/ll_user_head"
+            android:layout_marginRight="15dp"
+            >
+            <ImageView
+                android:id="@+id/iv_local"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/icon_local"
+                android:scaleType="fitXY"
+                />
+            <TextView
+                android:id="@+id/tv_addressdesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:text="在..附近"
+                android:layout_weight="1"
+                tools:text="在..的房价的开发基督教打飞机肯德基附近"/>
+
+            <TextView
+                android:id="@+id/tv_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="距离:20000m"
+                tools:text="距离:20000m"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/ll_user_head"
+            android:layout_toStartOf="@+id/ivExpansionIndicator"
+            android:layout_marginTop="15dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.Title"
+            android:textColor="@android:color/white"
+            tools:text="This is a Placeholder of Titles" />
+
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_medium"
+            tools:visibility="visible"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_down"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:id="@+id/ivExpansionIndicator"/>
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+

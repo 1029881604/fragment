@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="login_et_height">35dp</dimen>
+    <dimen name="login_button_height">45dp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+</resources>

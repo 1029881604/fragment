@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright 2014 The Android Open Source Project
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<resources>
+    <string name="news_header_top_task">可接的任务</string>
+    <string name="news_header_top_service">提供的服务</string>
+
+    <!--———— 附近大分类 start————-->
+    <string name="nearby_category_photography">摄影</string>
+    <string name="nearby_category_accompany">陪玩</string>
+    <string name="nearby_category_errand">跑腿</string>
+    <string name="nearby_category_manual">体力活</string>
+    <string name="nearby_category_guide">指导</string>
+    <string name="nearby_category_other">其它</string>
+    <!--———— 附近大分类 end————-->
+
+    <string name="text_publishtime_nearbyitem">发布时间:</string>
+    <string name="text_stoptime_nearbyitem">截止日期:</string>
+    <string name="text_iscomplete">是否完成:</string>
+    <string name="text_location_nearby">地理位置:</string>
+
+
+    <!-- id 资源 start -->
+    <item name="tag_id" type="id"></item>
+    <!-- id 资源 end -->
+</resources>

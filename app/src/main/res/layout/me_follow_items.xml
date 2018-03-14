@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal"
+    android:background="@color/white">
+
+    <team.antelope.fg.util.SetRoundImageViewUtil
+        android:id="@+id/iv_follow_user_head"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"/>
+    <TextView
+        android:id="@+id/tv_personId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/tv_follow_name"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:padding="5dp"
+        android:gravity="left"
+        android:textSize="25dp"
+        android:text="我叫尼玛"/>
+    <ImageView
+        android:id="@+id/iv_send_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:clickable="true"
+        android:layout_marginEnd="30dp"
+        android:src="@mipmap/ic_email_black_24dp"/>
+</LinearLayout>

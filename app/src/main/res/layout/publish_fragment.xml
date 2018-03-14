@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+   <include  android:id="@+id/publish_include_toubu" layout="@layout/publish_include_toolbar"></include>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/publish_button">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true"
+           >
+            <Button
+                style="@style/publish_btn_two"
+                android:id="@+id/btn_publishskill"
+                android:text="@string/publish_skill_text"
+                android:background="@drawable/publish_btn_fabu_skill"
+                />
+            <Button
+                style="@style/publish_btn_two"
+                android:id="@+id/btn_publishneed"
+                android:background="@drawable/publish_btn_fabu_need"
+                android:text="@string/publish_need_text"/>
+        </LinearLayout>
+    </RelativeLayout>
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/publishviewpager"></android.support.v4.view.ViewPager>
+</LinearLayout>

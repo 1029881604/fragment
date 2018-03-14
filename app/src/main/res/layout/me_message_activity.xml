@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/me_message_activity"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/me_background"
+    tools:context="team.antelope.fg.me.activity.MessageListActivity">
+
+
+    <android.support.design.widget.AppBarLayout
+        style="@style/Theme.AppCompat.Light"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:navigationIcon="@mipmap/icon_back"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="消息"
+            app:titleMarginStart="100dp">
+           <FrameLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+            <!--<ImageView-->
+                <!--android:id="@+id/iv_system_message"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="130dp"-->
+                <!--android:src="@mipmap/ic_view_headline_white_36dp"-->
+                <!--/>-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginStart="150dp"-->
+                <!--android:drawableEnd="@drawable/me_msg_num_bg"/>-->
+           </FrameLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"/>
+    <RelativeLayout
+        android:id="@+id/rl_layout_sys_message"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        >
+        <TextView
+            android:id="@+id/tv_senderid_hidden_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
+        <TextView
+            android:id="@+id/tv_me_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/me_black1"
+            android:text="系统消息"
+            android:layout_marginLeft="5dp"
+            android:textSize="20sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_me_msgnum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tv_me_name"
+            android:layout_alignBaseline="@+id/tv_me_name"
+            android:textColor="@color/me_title"
+            android:text=""
+            android:background="@drawable/me_msg_num_bg"
+            android:layout_marginLeft="15dp"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            />
+        <TextView
+            android:id="@+id/tv_me_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="time"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:textSize="11sp"
+            />
+
+
+
+        <TextView
+            android:id="@+id/tv_me_message"
+            android:layout_width="match_parent"
+            android:maxEms="6"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="contentdfdfdfaggdgddddddgfgfgdfkfgdfklgkflkglfkgklfgfgfgdf"
+            android:layout_below="@+id/tv_me_name"
+            android:textSize="18sp"
+            />
+        <!--<View-->
+        <!--android:id="@+id/line_item_message"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:background="@color/me_line"-->
+        <!--android:layout_below="@+id/tv_me_message"-->
+        <!--/>-->
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"/>
+    <ListView
+        android:background="@color/white"
+        android:id="@+id/me_message_list"
+        android:dividerHeight="0.5dip"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </ListView>
+
+
+</LinearLayout>

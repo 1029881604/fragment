@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+   >
+
+<team.antelope.fg.util.SetRoundImageViewUtil
+    android:id="@+id/me_message_head"
+    android:layout_margin="5dp"
+    android:layout_width="50dp"
+    android:layout_height="50dp" />
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_senderid_hidden_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/tv_me_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/me_black1"
+        android:text="消息"
+        android:layout_marginLeft="5dp"
+        android:textSize="20sp"
+         />
+
+    <TextView
+        android:id="@+id/tv_me_msgnum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/tv_me_name"
+        android:layout_alignBaseline="@+id/tv_me_name"
+        android:textColor="@color/me_title"
+        android:text=""
+        android:background="@drawable/me_msg_num_bg"
+        android:layout_marginLeft="15dp"
+        android:textAlignment="center"
+        android:textSize="12sp"
+        />
+    <TextView
+        android:id="@+id/tv_me_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="time"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:textSize="11sp"
+         />
+
+
+
+    <TextView
+        android:id="@+id/tv_me_message"
+        android:layout_width="match_parent"
+        android:maxEms="6"
+        android:singleLine="true"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:text="contentdfdfdfaggdgddddddgfgfgdfkfgdfklgkflkglfkgklfgfgfgdf"
+        android:layout_below="@+id/tv_me_name"
+        android:textSize="18sp"
+        />
+</RelativeLayout>
+
+</LinearLayout>

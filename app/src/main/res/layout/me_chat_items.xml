@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+>
+    <TextView
+        android:id="@+id/tv_me_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/me_item2"
+        android:layout_margin="5dp"
+        android:textSize="13dp"
+        android:layout_gravity="center"/>
+<LinearLayout
+    android:id="@+id/left_chat_me"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <!--<team.antelope.fg.util.SetRoundImageViewUtil-->
+        <!--android:id="@+id/iv_left_image"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:background="@drawable/me_user_head2"/>-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/me_chat_bg_left"
+        >
+
+        <TextView
+            android:id="@+id/tv_me_left_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/me_black1"
+            android:textSize="15dp" />
+    </LinearLayout>
+</LinearLayout>
+    <LinearLayout
+        android:id="@+id/right_chat_me"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+    <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="@drawable/me_chat_bg_right"
+        >
+        <TextView
+            android:id="@+id/tv_me_right_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:textColor="#fff"/>
+
+    </LinearLayout>
+
+        <!--<team.antelope.fg.util.SetRoundImageViewUtil-->
+            <!--android:id="@+id/iv_right_image"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:background="@drawable/me_user_head4"/>-->
+    </LinearLayout>
+
+</LinearLayout>
