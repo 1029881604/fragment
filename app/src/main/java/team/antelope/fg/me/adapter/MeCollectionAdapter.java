@@ -62,4 +62,6 @@ public class MeCollectionAdapter extends RecyclerView.Adapter<MeCollectionAdapte
     public int getItemCount() {
         return mImagePictureList.size();
     }
+
+
 }
