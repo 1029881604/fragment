@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,8 +25,7 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
+import team.antelope.fg.FgApp;
 import team.antelope.fg.R;
 import team.antelope.fg.constant.LocationConst;
 import team.antelope.fg.ui.base.BaseFragment;
@@ -46,7 +46,7 @@ public class NearbyFragment extends BaseFragment {
     ViewPager viewPager;
     SmartTabLayout viewPagerTab; //Fragment的View加载完毕的标记
     public double longitude;
-    public double latitide;
+    public double latitude;
 
     @Override
     protected void init() {
@@ -94,8 +94,10 @@ public class NearbyFragment extends BaseFragment {
     }
 
     private void initPosition() {
+        Log.i("position", "000000");
         mLocationClient = new LocationClient(getmActivity().getApplicationContext());
         mLocationClient.registerLocationListener(new NearbyFragment.MyLocationListener());
+        Log.i("position", "1111111");
         permissionList = new ArrayList<String>();
         if(ContextCompat.checkSelfPermission(getmActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
@@ -111,10 +113,13 @@ public class NearbyFragment extends BaseFragment {
         }
         if(!permissionList.isEmpty()){
             String[] permission = permissionList.toArray(new String[permissionList.size()]);
+            Log.i("position", "1212121212121");
             //requestCode 请求权限的码为1
             ActivityCompat.requestPermissions(getmActivity(), permission, BAIDU_READ_PHONE_STATE);
+            requestLocation();
         } else {
             requestLocation();
+            Log.i("position", "2222222");
         }
     }
     /**
@@ -124,6 +129,7 @@ public class NearbyFragment extends BaseFragment {
     private void requestLocation() {
         initLocation();
         mLocationClient.start();
+        Log.i("position", "3333333");
     }
     /**
      * @Description 更新位置
@@ -170,9 +176,15 @@ public class NearbyFragment extends BaseFragment {
         public void onReceiveLocation(final BDLocation bdLocation) {
             StringBuilder currentPosition = new StringBuilder();
             longitude = bdLocation.getLongitude();
-            latitide = bdLocation.getLatitude();
+            latitude = bdLocation.getLatitude();
+            FgApp fgApp = FgApp.getInstance();
+            fgApp.tudes.put("longitude", longitude);
+            fgApp.tudes.put("latitude", latitude);
             String substring;
             int length = currentPosition.append(bdLocation.getLocationDescribe()).length();
+            Log.i("position", "1112"+currentPosition.toString());
+            Log.i("position", "longitude"+longitude);
+            Log.i("position", "latitude"+latitude);
             if(length < 3 ){
                 substring = LocationConst.NET_ERROR;
             } else {
@@ -180,8 +192,10 @@ public class NearbyFragment extends BaseFragment {
             }
             if (bdLocation.getLocType() == BDLocation.TypeGpsLocation) {
 //                currentPosition.append("GPS");
+                Log.i("getLocType", "GPS");
             } else if (bdLocation.getLocType() == BDLocation.TypeNetWorkLocation){
 //                currentPosition.append("网络");
+                Log.i("getLocType", "网络");
             } else if (bdLocation.getLocType() == BDLocation.TypeOffLineLocation) {
                 //当前为网络定位结果
             } else if (bdLocation.getLocType() == BDLocation.TypeServerError) {

@@ -31,11 +31,9 @@ import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.constant.ForwardConst;
 import team.antelope.fg.entity.NeedPreInfo;
 import team.antelope.fg.entity.PublishNeed;
-import team.antelope.fg.ui.MainActivity;
 import team.antelope.fg.ui.base.BaseNearByActivity;
 import team.antelope.fg.ui.business.NearbyBusiness;
 import team.antelope.fg.ui.business.RetrofitServiceManager;
-import team.antelope.fg.ui.fragment.NearbyFragment;
 import team.antelope.fg.ui.presenter.impl.NearbyAsyncPersenterImpl;
 import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.L;
@@ -62,7 +60,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         mAsyncExpandableListView.setCallbacks(this);
 
         if(isNetConnect){
-            mPresenter.getServerNeedData(type, latitide, longitude);
+            mPresenter.getServerNeedData(type, latitude, longitude);
         } else{
             mPresenter.getLocalNeedData();
         }
@@ -184,7 +182,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         myHeaderViewHolder.getTv_addressdesc().setText(headerItem.getAddressdesc());
         double lat2 = headerItem.getLatitude();
         double longt2 = headerItem.getLongitude();
-        Double distance = P2PUtil.getExactDistance(this.latitide,this.longitude, lat2, longt2);
+        Double distance = P2PUtil.getExactDistance(this.latitude,this.longitude, lat2, longt2);
         int dis = distance.intValue();
         DecimalFormat df = new DecimalFormat("#.00");
         if(dis >= 1000){

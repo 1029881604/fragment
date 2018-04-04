@@ -17,20 +17,15 @@ import android.widget.TextView;
 import com.ericliu.asyncexpandablelist.async.AsyncExpandableListView;
 import com.ericliu.asyncexpandablelist.async.AsyncHeaderViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
-import team.antelope.fg.FgApp;
 import team.antelope.fg.R;
 import team.antelope.fg.constant.LocationConst;
 import team.antelope.fg.constant.SkillAndNeedConst;
 import team.antelope.fg.entity.NeedPreInfo;
-import team.antelope.fg.entity.PublishSkill;
 import team.antelope.fg.entity.SkillPreInfo;
-import team.antelope.fg.ui.MainActivity;
-import team.antelope.fg.ui.activity.AsyncNeedActivity;
 import team.antelope.fg.ui.activity.PersonInfoActivity;
 import team.antelope.fg.ui.dialog.CustomProgressDialog;
 import team.antelope.fg.ui.presenter.INearbyAsyncPresenter;
@@ -54,7 +49,7 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
     public INearbyAsyncPresenter mPresenter;       //代理presenter
     public String type; //skill or need type
     public double longitude;    // user's longitude
-    public double latitide;     // user's latitude
+    public double latitude;     // user's latitude
     public View view_tags[];    //tags
     public int index;           // tags's index
 
@@ -72,9 +67,9 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
         isNetConnect = NetUtil.isConnected(this);
         Intent intent = getIntent();
         type = intent.getStringExtra(SkillAndNeedConst.TYPE);
-        latitide = intent.getDoubleExtra(LocationConst.LATITUDE, 0);
+        latitude = intent.getDoubleExtra(LocationConst.LATITUDE, 0);
         longitude = intent.getDoubleExtra(LocationConst.LONGITUDE, 0);
-        L.i("TAG", "latitide:" + latitide);
+        L.i("TAG", "latitude:" + latitude);
         L.i("TAG", "longitude:" + longitude);
         initPersenter();
     }
@@ -123,7 +118,7 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
                                 || info.getType() == ConnectivityManager.TYPE_MOBILE) {
                             error_view.setVisibility(View.GONE);
                             if(mPresenter != null && type != null){
-                                mPresenter.getServerNeedData(type, latitide, longitude);
+                                mPresenter.getServerNeedData(type, latitude, longitude);
                             }
                         }
                     } else {

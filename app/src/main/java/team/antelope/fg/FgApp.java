@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import team.antelope.fg.constant.AppConst;
@@ -33,6 +35,7 @@ public class FgApp extends Application {
     private static Stack<Activity> activityStack;//activity栈，便于管理
     private static SpUtil mSpUtil;  //用application实例保存SharedPreferences
     private static PropertiesUtil mProp;
+    public Map<String, Double> tudes = new HashMap<String, Double>();
     /**
      * @Description 修复java.lang.NoClassDefFoundError: team.antelope.fg.db.DBOpenHelper
      * @date 2017/12/26

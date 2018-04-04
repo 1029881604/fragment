@@ -2,10 +2,6 @@ package team.antelope.fg.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,7 +20,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import team.antelope.fg.FgApp;
 import team.antelope.fg.R;
-import team.antelope.fg.common.CircleTransform;
 import team.antelope.fg.common.GlideApp;
 import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.constant.LocationConst;
@@ -69,7 +64,7 @@ public class GuideFragment extends BaseNearbyFragment<String, NearbyInfo>{
     protected void init() {
         NearbyFragment fg3 = (NearbyFragment) getmActivity().getSupportFragmentManager()
                 .findFragmentByTag(MainActivity.fgTags[2]);
-        latitide = fg3.latitide;
+        latitude = fg3.latitude;
         longitude = fg3.longitude;
     }
 
@@ -117,7 +112,7 @@ public class GuideFragment extends BaseNearbyFragment<String, NearbyInfo>{
                     intent = new Intent(FgApp.getInstance().getApplicationContext(), AsyncNeedActivity.class);
                     intent.putExtra(SkillAndNeedConst.TYPE, SkillAndNeedConst.NEED_TYPE_GUIDE);
                 }
-                intent.putExtra(LocationConst.LATITUDE, latitide);
+                intent.putExtra(LocationConst.LATITUDE, latitude);
                 intent.putExtra(LocationConst.LONGITUDE, longitude);
                 startActivity(intent);
             }

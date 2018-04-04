@@ -26,6 +26,7 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import team.antelope.fg.FgApp;
 import team.antelope.fg.R;
 import team.antelope.fg.common.CircleTransform;
 import team.antelope.fg.common.GlideApp;
@@ -33,11 +34,9 @@ import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.constant.ForwardConst;
 import team.antelope.fg.entity.PublishSkill;
 import team.antelope.fg.entity.SkillPreInfo;
-import team.antelope.fg.ui.MainActivity;
 import team.antelope.fg.ui.base.BaseNearByActivity;
 import team.antelope.fg.ui.business.NearbyBusiness;
 import team.antelope.fg.ui.business.RetrofitServiceManager;
-import team.antelope.fg.ui.fragment.NearbyFragment;
 import team.antelope.fg.ui.presenter.impl.NearbyAsyncPersenterImpl;
 import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.L;
@@ -66,7 +65,7 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
 
         isNetConnect = NetUtil.isConnected(this);
         if(isNetConnect){
-            mPresenter.getServerSkillData(type, latitide, longitude);
+            mPresenter.getServerSkillData(type, latitude, longitude);
         } else{
             mPresenter.getLocalSkillData();
         }
@@ -186,9 +185,12 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
         myHeaderViewHolder.getTv_title().setText(headerItem.getTitle());
         myHeaderViewHolder.getTv_name().setText(headerItem.getName());
         myHeaderViewHolder.getTv_addressdesc().setText(headerItem.getAddressdesc());
-        double lat2 = headerItem.getLatitude();
-        double longt2 = headerItem.getLongitude();
-        Double distance = P2PUtil.getExactDistance(this.latitide,this.longitude, lat2, longt2);
+//        double lat2 = headerItem.getLatitude();
+//        double longt2 = headerItem.getLongitude();
+        FgApp fgApp = FgApp.getInstance();
+        double lat2 = fgApp.tudes.get("longitude");
+        double longt2 = fgApp.tudes.get("latitude");
+        Double distance = P2PUtil.getExactDistance(this.latitude,this.longitude, lat2, longt2);
         int dis = distance.intValue();
         DecimalFormat df = new DecimalFormat("#.00");
         if(dis >= 1000){

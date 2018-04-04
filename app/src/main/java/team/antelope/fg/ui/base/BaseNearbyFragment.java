@@ -36,7 +36,7 @@ public abstract class BaseNearbyFragment<T1, T2> extends BaseFragment implements
     public static final String TAG = "TAG2";
     public static final int FORWARD_TASK = 0;
     public double longitude;
-    public double latitide;
+    public double latitude;
     public static final int FORWARD_SKILL = 1;
     protected CollectionView<T1, T2> mCollectionView;
     protected CollectionView.Inventory<T1, T2> inventory;

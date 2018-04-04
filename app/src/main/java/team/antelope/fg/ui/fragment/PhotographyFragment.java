@@ -72,7 +72,7 @@ public class PhotographyFragment extends BaseNearbyFragment<String, NearbyInfo>{
     protected void init() {
         NearbyFragment fg3 = (NearbyFragment) getmActivity().getSupportFragmentManager()
                 .findFragmentByTag(MainActivity.fgTags[2]);
-        latitide = fg3.latitide;
+        latitude = fg3.latitude;
         longitude = fg3.longitude;
     }
 
@@ -122,7 +122,7 @@ public class PhotographyFragment extends BaseNearbyFragment<String, NearbyInfo>{
                     intent = new Intent(FgApp.getInstance().getApplicationContext(), AsyncNeedActivity.class);
                     intent.putExtra(SkillAndNeedConst.TYPE, SkillAndNeedConst.NEED_TYPE_PHOTOGRAPHY);
                 }
-                intent.putExtra(LocationConst.LATITUDE, latitide);
+                intent.putExtra(LocationConst.LATITUDE, latitude);
                 intent.putExtra(LocationConst.LONGITUDE, longitude);
                 startActivity(intent);
             }
