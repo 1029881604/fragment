@@ -31,7 +31,6 @@ import team.antelope.fg.util.L;
 *@Date: 2017/12/12 22:04
 *@Description: publish模块的fragment
 */
-
 public class PublishFragment extends BaseFragment implements ViewPager.OnPageChangeListener,View.OnClickListener {
 
     private ViewPager publishviewpager;
