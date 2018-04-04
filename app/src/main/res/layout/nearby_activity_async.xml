@@ -11,6 +11,10 @@
         android:visibility="gone"
         layout="@layout/include_net_error"
         />
+    <include android:id="@+id/layout_server_error"
+        android:visibility="gone"
+        layout="@layout/include_server_error"
+        />
     <com.ericliu.asyncexpandablelist.async.AsyncExpandableListView
         android:id="@+id/asyncExpandableCollectionView"
         android:layout_width="match_parent"

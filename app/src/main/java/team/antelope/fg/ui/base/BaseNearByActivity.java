@@ -43,6 +43,7 @@ import team.antelope.fg.util.ToastUtil;
 public abstract class BaseNearByActivity extends BaseActivity implements INearbyAsyncView {
     public boolean isNetConnect;           //检测网络是否连接
     public View error_view;        //网络错误显示视图
+    public View error_server;        //服务器端异常
     public Dialog loadingDialog;       //Iview控件dialog
     public NetStateReceiver mBroadcastReceiver;
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
@@ -62,7 +63,9 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
     @Override
     protected void initView(Bundle savedInstanceState) {
         error_view = findViewById(R.id.layout_net_error);
+        error_server = findViewById(R.id.layout_server_error);
         error_view.setVisibility(View.GONE);
+        error_server.setVisibility(View.GONE);
         mBroadcastReceiver = new NetStateReceiver();
         isNetConnect = NetUtil.isConnected(this);
         Intent intent = getIntent();
@@ -200,6 +203,7 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
     @Override
     public void showDataError() {
 //        finish();
+        error_server.setVisibility(View.VISIBLE);
     }
 
     /**

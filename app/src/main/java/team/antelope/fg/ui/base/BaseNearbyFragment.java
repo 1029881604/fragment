@@ -133,7 +133,7 @@ public abstract class BaseNearbyFragment<T1, T2> extends BaseFragment implements
                 loadable = true;
                 isNetConnect = NetUtil.isConnected(getmActivity());
             }
-        }, 1000*60*5);
+        }, 1000*60*1);
     }
 
     /* —————————————— lazyload end  ————————————*/

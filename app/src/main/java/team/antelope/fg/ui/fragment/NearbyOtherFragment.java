@@ -131,6 +131,12 @@ public class NearbyOtherFragment extends BaseNearbyFragment<String, NearbyInfo>{
             mNearbyModularInfo = readData(mType);
             if(mNearbyModularInfo != null){
                 showData(mNearbyModularInfo);
+            }else{
+                CollectionView.InventoryGroup<String, NearbyInfo> group1 =
+                        inventory.newGroup(FORWARD_TASK);
+                group1.setHeaderItem(getString(R.string.net_connect_error));
+                ////别忘了这步，更新视图
+                mCollectionView.updateInventory(inventory);
             }
             return;
         }

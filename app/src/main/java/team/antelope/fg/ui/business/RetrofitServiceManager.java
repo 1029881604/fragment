@@ -17,8 +17,8 @@ import team.antelope.fg.util.PropertiesUtil;
  */
 
 public class RetrofitServiceManager {
-    private static final int DEFAULT_TIME_OUT = 2;//超时时间 5s
-    private static final int DEFAULT_READ_TIME_OUT = 8;
+    private static final int DEFAULT_TIME_OUT = 1;//超时时间 5s
+    private static final int DEFAULT_READ_TIME_OUT = 4;
     private Retrofit mRetrofit;
     private static PropertiesUtil prop;
     private static RetrofitServiceManager instance;

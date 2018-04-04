@@ -169,7 +169,7 @@ public class DBUtil {
         L.i("createdb2");
         SQLiteDatabase db = openHelper.getWritableDatabase();
 
-        insertNearbymodular();
+//        insertNearbymodular();   联网之后数据从服务器端读取
 
         User u = new User(1001l, "吃烤鸭", "zhangsan", "ddd@qq.com");
         new UserDaoImpl(mContext).insert(u);

@@ -139,7 +139,7 @@ public class NearbyFragment extends BaseFragment {
         LocationClientOption option = new LocationClientOption();
 //        option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setScanSpan(5000);
+        option.setScanSpan(1001);
         option.setOpenGps(true);
         option.setIsNeedLocationDescribe(true);//可选，设置是否需要地址描述
         option.setIsNeedAddress(true);

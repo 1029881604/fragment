@@ -17,6 +17,7 @@
 
     <TextView
         android:paddingTop="@dimen/margin_medium"
+        android:paddingBottom="@dimen/margin_medium"
         android:layout_marginLeft="@dimen/margin_medium"
         android:layout_marginRight="@dimen/margin_medium"
         android:id="@+id/title"

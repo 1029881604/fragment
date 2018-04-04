@@ -55,7 +55,6 @@ public class NearbyAsyncPersenterImpl implements INearbyAsyncPresenter {
                 if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-
                 L.i("tag", "onCompleted:onCompleted");
             }
 

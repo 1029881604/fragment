@@ -37,7 +37,7 @@ public class NearbyModularInfoDaoImpl implements INearbyModularInfoDao {
         values.put("needimg", nearbyModularInfo.getNeedimg());
         values.put("skilltitle", nearbyModularInfo.getSkilltitle());
         values.put("skillbody", nearbyModularInfo.getSkillbody());
-        values.put("skillimg", nearbyModularInfo.getNeedimg());
+        values.put("skillimg", nearbyModularInfo.getSkillimg());
         values.put("type", nearbyModularInfo.getType());
         values.put("needupdatetime", nearbyModularInfo.getNeedupdatetime().getTime());
         values.put("skillupdatetime", nearbyModularInfo.getSkillupdatetime().getTime());
@@ -53,7 +53,7 @@ public class NearbyModularInfoDaoImpl implements INearbyModularInfoDao {
         values.put("needimg", nearbyModularInfo.getNeedimg());
         values.put("skilltitle", nearbyModularInfo.getSkilltitle());
         values.put("skillbody", nearbyModularInfo.getSkillbody());
-        values.put("skillimg", nearbyModularInfo.getNeedimg());
+        values.put("skillimg", nearbyModularInfo.getSkillimg());
         values.put("needupdatetime", nearbyModularInfo.getNeedupdatetime().getTime());
         values.put("skillupdatetime", nearbyModularInfo.getSkillupdatetime().getTime());
         return db.update("nearbymodular",  values, "type=?",

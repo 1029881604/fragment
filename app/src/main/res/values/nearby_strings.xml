@@ -33,7 +33,8 @@
     <string name="text_iscomplete">是否完成:</string>
     <string name="text_location_nearby">地理位置:</string>
 
-
+    <!--网络连接失败 -->
+    <string name="net_connect_error">网络连接失败，请检查网络...</string>
     <!-- id 资源 start -->
     <item name="tag_id" type="id"></item>
     <!-- id 资源 end -->
