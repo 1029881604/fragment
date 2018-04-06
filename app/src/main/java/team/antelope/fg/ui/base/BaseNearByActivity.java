@@ -21,6 +21,7 @@ import java.util.List;
 
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
+import team.antelope.fg.FgApp;
 import team.antelope.fg.R;
 import team.antelope.fg.constant.LocationConst;
 import team.antelope.fg.constant.SkillAndNeedConst;
@@ -70,8 +71,10 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
         isNetConnect = NetUtil.isConnected(this);
         Intent intent = getIntent();
         type = intent.getStringExtra(SkillAndNeedConst.TYPE);
-        latitude = intent.getDoubleExtra(LocationConst.LATITUDE, 0);
-        longitude = intent.getDoubleExtra(LocationConst.LONGITUDE, 0);
+//        latitude = intent.getDoubleExtra(LocationConst.LATITUDE, 0);
+//        longitude = intent.getDoubleExtra(LocationConst.LONGITUDE, 0);
+        latitude = FgApp.getInstance().tudes.get("latitude");
+        longitude = FgApp.getInstance().tudes.get("longitude");
         L.i("TAG", "latitude:" + latitude);
         L.i("TAG", "longitude:" + longitude);
         initPersenter();
@@ -121,7 +124,12 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
                                 || info.getType() == ConnectivityManager.TYPE_MOBILE) {
                             error_view.setVisibility(View.GONE);
                             if(mPresenter != null && type != null){
-                                mPresenter.getServerNeedData(type, latitude, longitude);
+                                L.i("whoami", "latitude:"+latitude+" longitude:" + longitude);
+                                if("AsyncNeedActivity".equals(this.getClass().getSimpleName())){
+                                    mPresenter.getServerNeedData(type, latitude, longitude);
+                                } else if("AsyncSkillActivity".equals(this.getClass().getSimpleName())){
+                                    mPresenter.getServerSkillData(type, latitude, longitude);
+                                }
                             }
                         }
                     } else {
@@ -204,6 +212,7 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
     public void showDataError() {
 //        finish();
         error_server.setVisibility(View.VISIBLE);
+        L.i("whoami", this.getClass().getSimpleName());
     }
 
     /**

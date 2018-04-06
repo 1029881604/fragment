@@ -59,6 +59,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         //设置回调函数
         mAsyncExpandableListView.setCallbacks(this);
 
+        L.i("whoami", this.getClass().getSimpleName()+"被创建");
         if(isNetConnect){
             mPresenter.getServerNeedData(type, latitude, longitude);
         } else{
@@ -93,6 +94,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
             return;
         }
         view_tags = new View[needs.size()];
+        L.i("indexSize", "size: "+ needs.size());
         index = 0;
         for (int i = 0; i < needs.size(); i++) {
             NeedPreInfo NeedPreInfo = needs.get(i);
@@ -194,8 +196,13 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         }
         View view_tag = myHeaderViewHolder.getHeadView();
         view_tag.setTag(R.id.tag_id, headerItem.getId());    //打标签
-        view_tags[index++] = view_tag;
-        L.i("TAGg", "myHeaderViewHolder.getHeadView():" + view_tags[index-1].getTag(R.id.tag_id));
+        if(index == view_tags.length){
+            index = 0;
+        }
+        view_tags[index] = view_tag;
+        L.i("indexSize", "bindCollectionHeaderView被调用，index为 " + index);
+        L.i("TAGg", "myHeaderViewHolder.getHeadView():" + view_tags[index].getTag(R.id.tag_id));
+        index++;
     }
 
 

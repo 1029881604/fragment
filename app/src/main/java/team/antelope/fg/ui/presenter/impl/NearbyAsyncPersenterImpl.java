@@ -67,6 +67,7 @@ public class NearbyAsyncPersenterImpl implements INearbyAsyncPresenter {
                 L.i("tag", "onError:onError");
 //                mView.showToast("获取数据失败");
                 mView.showDataError();
+                L.i("whoami", "getServerNeedData");
             }
 
             @Override
@@ -116,6 +117,7 @@ public class NearbyAsyncPersenterImpl implements INearbyAsyncPresenter {
                 L.i("tag", "onError:onError");
 //                mView.showToast("获取数据失败");
                 mView.showDataError();
+                L.i("whoami", "getServerSkillData");
             }
 
             @Override

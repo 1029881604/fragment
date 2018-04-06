@@ -63,6 +63,7 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
         //设置回调函数
         mAsyncExpandableListView.setCallbacks(this);
 
+        L.i("whoami", this.getClass().getSimpleName()+"被创建");
         isNetConnect = NetUtil.isConnected(this);
         if(isNetConnect){
             mPresenter.getServerSkillData(type, latitude, longitude);
@@ -185,11 +186,8 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
         myHeaderViewHolder.getTv_title().setText(headerItem.getTitle());
         myHeaderViewHolder.getTv_name().setText(headerItem.getName());
         myHeaderViewHolder.getTv_addressdesc().setText(headerItem.getAddressdesc());
-//        double lat2 = headerItem.getLatitude();
-//        double longt2 = headerItem.getLongitude();
-        FgApp fgApp = FgApp.getInstance();
-        double lat2 = fgApp.tudes.get("longitude");
-        double longt2 = fgApp.tudes.get("latitude");
+        double lat2 = headerItem.getLatitude();
+        double longt2 = headerItem.getLongitude();
         Double distance = P2PUtil.getExactDistance(this.latitude,this.longitude, lat2, longt2);
         int dis = distance.intValue();
         DecimalFormat df = new DecimalFormat("#.00");
@@ -202,8 +200,13 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
         }
         View view_tag = myHeaderViewHolder.getHeadView();
         view_tag.setTag(R.id.tag_id, headerItem.getId());    //打标签
-        view_tags[index++] = view_tag;
-        L.i("TAGg", "myHeaderViewHolder.getHeadView():" + view_tags[index-1].getTag(R.id.tag_id));
+        if(index == view_tags.length){
+            index = 0;
+        }
+        view_tags[index] = view_tag;
+        L.i("indexSize", "bindCollectionHeaderView被调用，index为 " + index);
+        L.i("TAGg", "myHeaderViewHolder.getHeadView():" + view_tags[index].getTag(R.id.tag_id));
+        index++;
     }
 
     @Override

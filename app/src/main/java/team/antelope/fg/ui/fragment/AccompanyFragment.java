@@ -182,7 +182,7 @@ public class AccompanyFragment extends BaseNearbyFragment<String, NearbyInfo>{
 
     @Override
     public void setmType() {
-        mType = SkillAndNeedConst.NEED_TYPE_ACCOMPANY;
+        mType = SkillAndNeedConst.TYPE_ACCOMPANY;
     }
 
 

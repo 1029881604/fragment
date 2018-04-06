@@ -182,9 +182,6 @@ public class NearbyFragment extends BaseFragment {
             fgApp.tudes.put("latitude", latitude);
             String substring;
             int length = currentPosition.append(bdLocation.getLocationDescribe()).length();
-            Log.i("position", "1112"+currentPosition.toString());
-            Log.i("position", "longitude"+longitude);
-            Log.i("position", "latitude"+latitude);
             if(length < 3 ){
                 substring = LocationConst.NET_ERROR;
             } else {
@@ -192,10 +189,8 @@ public class NearbyFragment extends BaseFragment {
             }
             if (bdLocation.getLocType() == BDLocation.TypeGpsLocation) {
 //                currentPosition.append("GPS");
-                Log.i("getLocType", "GPS");
             } else if (bdLocation.getLocType() == BDLocation.TypeNetWorkLocation){
 //                currentPosition.append("网络");
-                Log.i("getLocType", "网络");
             } else if (bdLocation.getLocType() == BDLocation.TypeOffLineLocation) {
                 //当前为网络定位结果
             } else if (bdLocation.getLocType() == BDLocation.TypeServerError) {
