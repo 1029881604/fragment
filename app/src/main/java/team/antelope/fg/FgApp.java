@@ -35,7 +35,7 @@ public class FgApp extends Application {
     private static Stack<Activity> activityStack;//activity栈，便于管理
     private static SpUtil mSpUtil;  //用application实例保存SharedPreferences
     private static PropertiesUtil mProp;
-    public Map<String, Double> tudes = new HashMap<String, Double>();
+    public static Map<String, Double> tudes ;  //经纬度
     /**
      * @Description 修复java.lang.NoClassDefFoundError: team.antelope.fg.db.DBOpenHelper
      * @date 2017/12/26
@@ -54,6 +54,7 @@ public class FgApp extends Application {
         mSpUtil = getSpUtil();
         initDB();
         mProp = PropertiesUtil.getInstance0(getResources());
+        tudes = new HashMap<String, Double>();
     }
     /**
      * @Description 初始化数据库和创建表

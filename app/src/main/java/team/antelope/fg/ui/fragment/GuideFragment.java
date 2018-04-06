@@ -33,6 +33,7 @@ import team.antelope.fg.ui.base.BaseNearbyFragment;
 import team.antelope.fg.ui.business.NearbyBusiness;
 import team.antelope.fg.ui.business.RetrofitServiceManager;
 import team.antelope.fg.util.L;
+import team.antelope.fg.util.NetUtil;
 import team.antelope.fg.util.PropertiesUtil;
 
 /**
@@ -133,11 +134,17 @@ public class GuideFragment extends BaseNearbyFragment<String, NearbyInfo>{
             if(mNearbyModularInfo != null){
                 showData(mNearbyModularInfo);
             }else{
+                isNetConnect = NetUtil.isConnected(getmActivity());
                 CollectionView.InventoryGroup<String, NearbyInfo> group1 =
                         inventory.newGroup(FORWARD_TASK);
-                group1.setHeaderItem(getString(R.string.net_connect_error));
+                if(!isNetConnect) {
+                    group1.setHeaderItem(getString(R.string.net_connect_error));
+                } else {
+                    group1.setHeaderItem(getString(R.string.error_server));
+                }
                 ////别忘了这步，更新视图
                 mCollectionView.updateInventory(inventory);
+                loadable = true;
             }
             return;
         }

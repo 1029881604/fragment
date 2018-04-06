@@ -71,10 +71,14 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
         isNetConnect = NetUtil.isConnected(this);
         Intent intent = getIntent();
         type = intent.getStringExtra(SkillAndNeedConst.TYPE);
-//        latitude = intent.getDoubleExtra(LocationConst.LATITUDE, 0);
-//        longitude = intent.getDoubleExtra(LocationConst.LONGITUDE, 0);
-        latitude = FgApp.getInstance().tudes.get("latitude");
-        longitude = FgApp.getInstance().tudes.get("longitude");
+        latitude = intent.getDoubleExtra(LocationConst.LATITUDE, 0);
+        longitude = intent.getDoubleExtra(LocationConst.LONGITUDE, 0);
+        L.i("latitudelongitude", "tudes: "+FgApp.getInstance().tudes);
+        if (!FgApp.getInstance().tudes.isEmpty()){
+            latitude = FgApp.getInstance().tudes.get("latitude");
+            longitude = FgApp.getInstance().tudes.get("longitude");
+        }
+
         L.i("TAG", "latitude:" + latitude);
         L.i("TAG", "longitude:" + longitude);
         initPersenter();

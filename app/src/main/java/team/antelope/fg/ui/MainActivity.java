@@ -149,6 +149,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             getSupportFragmentManager().beginTransaction()
                     .show(fg1).hide(fg2).hide(fg3).hide(fg4)
                     .commit();
+            if(fgs == null){
+                fgs = new BaseFragment[]{
+                        fg1, fg2, fg3, fg4
+                };
+            }
         }
     }
     /**
@@ -174,6 +179,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         if(currentIndex != selectIndex){
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            L.i("fgsNULLPoint", "fgs :" +fgs);
+            L.i("fgsNULLPoint", "fgs[selectIndex] :" +fgs[selectIndex]);
             if(!fgs[selectIndex].isAdded()){
                 transaction.add(R.id.fragment_container, fgs[selectIndex], fgTags[selectIndex]);
             }

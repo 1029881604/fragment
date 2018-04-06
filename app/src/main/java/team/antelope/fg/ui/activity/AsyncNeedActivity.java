@@ -58,7 +58,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         mAsyncExpandableListView = (AsyncExpandableListView) findViewById(R.id.asyncExpandableCollectionView);
         //设置回调函数
         mAsyncExpandableListView.setCallbacks(this);
-
+        L.i("latitudelongitude", "latitude，longitude: " + this.latitude+"," +this.longitude);
         L.i("whoami", this.getClass().getSimpleName()+"被创建");
         if(isNetConnect){
             mPresenter.getServerNeedData(type, latitude, longitude);
@@ -186,6 +186,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         double longt2 = headerItem.getLongitude();
         Double distance = P2PUtil.getExactDistance(this.latitude,this.longitude, lat2, longt2);
         int dis = distance.intValue();
+
         DecimalFormat df = new DecimalFormat("#.00");
         if(dis >= 1000){
             distance = distance/1000;
@@ -200,7 +201,6 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
             index = 0;
         }
         view_tags[index] = view_tag;
-        L.i("indexSize", "bindCollectionHeaderView被调用，index为 " + index);
         L.i("TAGg", "myHeaderViewHolder.getHeadView():" + view_tags[index].getTag(R.id.tag_id));
         index++;
     }

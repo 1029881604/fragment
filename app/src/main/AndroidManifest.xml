@@ -101,6 +101,8 @@
 
         <activity android:name=".ui.activity.AsyncSkillActivity" />
         <activity android:name=".ui.activity.AsyncNeedActivity" />
+        <activity android:name=".ui.activity.PersonInfoActivity"
+            ></activity>
 
         <!-- ——————nearby end—————— -->
 
@@ -123,10 +125,9 @@
         <activity android:name=".me.activity.MeChangeProfileActivity" />
         <activity android:name=".me.activity.MePersonActivity" />
         <activity android:name=".me.activity.MeAddCollectActivity" />
-        <activity android:name=".ui.activity.PersonInfoActivity"></activity>
         <!-- ——————————me end——————— -->
-        <!-- ——————————————activity end ———————————————— -->
 
+        <!-- ——————————————activity end ———————————————— -->
 
 
         <!-- ——————————————privider start ———————————————— -->

@@ -4,11 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="team.antelope.fg.ui.activity.PersonInfoActivity">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="个人页面,......."
-        android:textSize="20dp"
-        android:layout_gravity="center"
-        />
+    <team.antelope.fg.widght.MyWebView
+        android:id="@+id/webview_person"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </team.antelope.fg.widght.MyWebView>
 </LinearLayout>
