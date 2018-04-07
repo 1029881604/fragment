@@ -63,14 +63,28 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="性别"/>
-        <EditText
+        <TextView
+            android:id="@+id/tv_sex"
+            android:layout_marginStart="20dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="男"
+            />
+
+     <!--   <EditText
 
             android:id="@+id/et_sex"
             android:layout_marginStart="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@null"/>
+            android:background="@null"/>-->
+
     </LinearLayout>
 
     <View
@@ -88,7 +102,18 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="年龄"/>
-        <EditText
+
+        <!--<TextView-->
+            <!--android:id="@+id/tv_age"-->
+            <!--android:layout_marginStart="20dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true"-->
+            <!--android:text="18"-->
+            <!--/>-->
+     <EditText
 
             android:id="@+id/et_age"
             android:layout_marginStart="20dp"
@@ -122,5 +147,6 @@
             android:layout_gravity="center"
             android:background="@null"/>
     </LinearLayout>
+
 
 </LinearLayout>

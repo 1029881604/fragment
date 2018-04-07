@@ -21,4 +21,5 @@ public class AccessNetConst {
     public static final String GETPUBLISHNEEDENDPATH = "getPublishNeedEndPath";
     public static final String GETPUBLISHSKILLENDPATH = "getPublishSkillEndPath";
     public static final String NEARBYFRAGMENTINFOSENDPATH = "NearbyFragmentInfosEndPath";
+    public static final String CHANGEPROFILESERVLEENDTPATH = "changeProfileServletEndPath";
 }

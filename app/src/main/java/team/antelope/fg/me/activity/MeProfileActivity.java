@@ -1,16 +1,26 @@
 package team.antelope.fg.me.activity;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.IOException;
 
 import team.antelope.fg.R;
 import team.antelope.fg.db.dao.impl.PersonDaoImpl;
@@ -18,6 +28,7 @@ import team.antelope.fg.db.dao.impl.UserDaoImpl;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.entity.User;
 import team.antelope.fg.ui.base.BaseActivity;
+import team.antelope.fg.util.CircleImageViewUtil;
 
 public class MeProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -27,6 +38,9 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
     SharedPreferences sharedPreferences;
     String user_name;
     String user_age,user_sex,user_email;
+    CircleImageViewUtil iv_user_head;
+     private final static int CHOOSE_PHOTO= 2;
+
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -37,7 +51,7 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
         tv_dealNum = findViewById(R.id.tv_dealNum);
         tv_fanNum = findViewById(R.id.tv_fanNum);
         iv_chang =findViewById(R.id.iv_chang);
-
+        iv_user_head = findViewById(R.id.iv_user_head);
         mToolbar.setTitle("个人资料");
         tv_set_name = findViewById(R.id.tv_set_name);
         Intent intent = getIntent();
@@ -56,6 +70,13 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
         user_age =tv_age.getText().toString();
         user_sex =tv_sex.getText().toString();
         user_email =tv_email.getText().toString();
+//        RequestOptions options = new RequestOptions();
+//        GlideApp.with(MeProfileActivity.this)
+//                .load(person.getHeadImg())
+//                .placeholder(R.mipmap.default_avatar400)
+//                .error(R.mipmap.error400)
+//                .apply(options)
+//                .into(iv_user_head);
 
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -74,6 +95,7 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         iv_chang.setOnClickListener(this);
+        iv_user_head.setOnClickListener(this);
 
     }
 
@@ -97,6 +119,32 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
                 intent.putExtra("email",user_email);
                 startActivityForResult(intent, 1);
                 break;
+            }
+            case  R.id.iv_user_head:{
+                //同样new一个file用于存放照片
+                File imageFile = new File(Environment
+                        .getExternalStorageDirectory(), "outputImage.jpg");
+                if (imageFile.exists()) {
+                    imageFile.delete();
+                }
+                try {
+                    imageFile.createNewFile();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                }
+                //转换成Uri
+                Uri imageUri = Uri.fromFile(imageFile);
+                //开启选择呢绒界面
+                Intent intent = new Intent("android.intent.action.GET_CONTENT");
+                //设置可以缩放
+                intent.putExtra("scale", true);
+                //设置可以裁剪
+                intent.putExtra("crop", true);
+                intent.setType("image/*");
+                //设置输出位置
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                //开始选择
+                startActivityForResult(intent, CHOOSE_PHOTO);
             }
 
         }
@@ -122,6 +170,67 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
                     user_name =tv_set_name.getText().toString();
                     break;
                 }
+            case CHOOSE_PHOTO:
+                if(resultCode==RESULT_OK){
+                    handleImageOnKitkat(data);
+                }
+                break;
         }
     }
+
+    private void handleImageOnKitkat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri
+                    .getAuthority())) {
+                String id = docId.split(":")[1]; // 解析出数字格式的id
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri
+                    .getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(
+                        Uri.parse("content://downloads/public_downloads"),
+                        Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果不是document类型的Uri，则使用普通方式处理
+            imagePath = getImagePath(uri, null);
+        }
+        displayImage(imagePath); // 根据图片路径显示图片
+        System.err.println(imagePath);
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null,
+                null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor
+                        .getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private void displayImage(String imagePath) {
+        if (imagePath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            
+            iv_user_head.setImageBitmap(bitmap);
+        } else {
+            Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT)
+                    .show();
+        }
+
+    }
+
+
 }

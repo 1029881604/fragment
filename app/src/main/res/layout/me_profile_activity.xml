@@ -39,12 +39,14 @@
                 android:layout_height="wrap_content"
                 android:text="你好呀"
                 />
-            <team.antelope.fg.util.SetRoundImageViewUtil
+            <team.antelope.fg.util.CircleImageViewUtil
                 android:id="@+id/iv_user_head"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:layout_marginBottom="30dp"
                 android:layout_gravity="center"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/me_user_head1"
                 />
             <LinearLayout
