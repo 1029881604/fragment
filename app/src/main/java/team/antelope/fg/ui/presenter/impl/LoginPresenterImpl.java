@@ -3,6 +3,8 @@ package team.antelope.fg.ui.presenter.impl;
 import android.app.Application;
 import android.os.Handler;
 
+import com.google.gson.Gson;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Properties;
@@ -32,6 +34,7 @@ public class LoginPresenterImpl implements ILoginPresenter<User>, IOnLoginCallba
 	private Properties mProp;
 	private FgApp mApp;
 	Handler handler = new Handler();
+	private User mUser;
 	public LoginPresenterImpl(ILoginView IView) {
 		mView = IView;
 		mModel = new LoginModelImpl();
@@ -53,6 +56,7 @@ public class LoginPresenterImpl implements ILoginPresenter<User>, IOnLoginCallba
 	/*ILoginPresenter*/
 	@Override
 	public void doLogin(User user) {
+		mUser = user;
 		String url = null;
 		try {
 			url = mProp.getProperty(AccessNetConst.BASEPATH)
@@ -80,14 +84,17 @@ public class LoginPresenterImpl implements ILoginPresenter<User>, IOnLoginCallba
 
 	/*IOnLoginCallback*/
 	@Override
-	public void onSuccess(final String t) {
-		System.out.println(t);
-		L.i("login", t);
+	public void onSuccess(final String json) {
+		Gson gson = new Gson();
+		final String[] strings = gson.fromJson(json, String[].class);
+		mUser.setId(Long.valueOf(strings[1]));
+		System.out.println(strings[0]);
+		L.i("login", strings[0]);
 		handler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				mView.closeDialog();
-				mView.showToast(t);
+				mView.showToast(strings[0]);
 				mView.asychStartActivity();
 			}
 		}, 300);

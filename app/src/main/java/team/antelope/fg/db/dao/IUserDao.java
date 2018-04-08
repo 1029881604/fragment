@@ -12,4 +12,6 @@ import team.antelope.fg.entity.User;
 public interface IUserDao extends IBaseDao<User> {
 	List <User> queryAllUser();
 	User queryByName(String name);
+	//删除所有用户
+	int deleteAll();
 }

@@ -8,16 +8,34 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
+import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.db.DBOpenHelper;
+import team.antelope.fg.db.dao.IPersonDao;
 import team.antelope.fg.db.dao.impl.PersonDaoImpl;
 import team.antelope.fg.db.dao.impl.UserDaoImpl;
+import team.antelope.fg.entity.NearbyModularInfo;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.entity.User;
 import team.antelope.fg.ui.base.BaseFragment;
+import team.antelope.fg.ui.business.MeBusiness;
+import team.antelope.fg.ui.business.NearbyBusiness;
+import team.antelope.fg.ui.business.RetrofitServiceManager;
+import team.antelope.fg.util.L;
+import team.antelope.fg.util.PropertiesUtil;
 import team.antelope.fg.util.SetRoundImageViewUtil;
 
 import static android.app.Activity.RESULT_OK;
+import static android.media.CamcorderProfile.get;
 
 
 /**
@@ -31,6 +49,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     private LinearLayout layout_user_profile;
     private DBOpenHelper dbOpenHelper;
     SetRoundImageViewUtil setRoundImageViewUtil;
+    public CompositeSubscription compositeSubscription = new CompositeSubscription();
+    protected User mUser;
+    protected Person mPerson;
 
     @Override
     protected void initView(View layout, Bundle savedInstanceState) {
@@ -53,15 +74,76 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     private void initLayoutView() {
         UserDaoImpl userDao = new UserDaoImpl(getmActivity());
-        User user = userDao.queryAllUser().get(0);
-        Person person = new PersonDaoImpl(getmActivity()).queryById(user.getId());
-        tv_name.setText(person.getName());
+        //取user之前要判断数据库中有没有
+        List<User> userList = userDao.queryAllUser();
+        User user = null;
+        if(userList != null && !userList.isEmpty()){
+            user = userList.get(0);
+        }
+        if(user != null){
+            //先判断数据库中有没有好吧
+            mUser = user;
+            Person person = new PersonDaoImpl(getmActivity()).queryById(user.getId());
+            //如果数据库中没有，则去服务器获取
+            if(person == null){
+                String endUrl = PropertiesUtil.getInstance().
+                        getProperty(AccessNetConst.GETUSERENDPATH);
+                Observable<Person> observable = RetrofitServiceManager.getInstance()
+                        .create(MeBusiness.class).getUser(endUrl,
+                                mUser.getId()).observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io()).delaySubscription(0, TimeUnit.MILLISECONDS);
+                addSubscription(observable.subscribe(new Subscriber<Person>() {
+                    @Override
+                    public void onCompleted() {
+//                view.setvisibililty(view.gone);  设置加载图片消失
+                        L.i("mytag", "complete123");
+                        L.i("mytag", "mNearbyModularInfo"+mPerson.toString());
+                        if (mPerson != null){
+                            //保存到本地数据库中 start
+                            saveData();
+//                            //保存到本地数据库中 end
+                            tv_name.setText(mPerson.getName());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        L.i("mytag", "onError");
+//                        loadable = false;
+//                        loadData();
+                    }
+
+                    @Override
+                    public void onNext(Person person) {
+                        mPerson = person;
+                        L.i("mytag", "onnext123");
+                    }
+                }));
+            }
+        }
+    }
+
+    public void saveData(){
+        IPersonDao personDao = new PersonDaoImpl(getmActivity());
+        personDao.insert(mPerson);
     }
 
 
-
-
-
+    public void addSubscription(Subscription subscription){
+        compositeSubscription.add(subscription);
+    }
+    /**
+     * @Description 取消订阅
+     * @date 2018/1/5
+     */
+    public void unSubscribe(){
+        if (compositeSubscription.hasSubscriptions()) {
+            if (!compositeSubscription.isUnsubscribed()) {
+                compositeSubscription.unsubscribe();
+                compositeSubscription.clear();
+            }
+        }
+    }
 
 
     @Override

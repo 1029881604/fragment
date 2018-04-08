@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import team.antelope.fg.R;
 import team.antelope.fg.db.dao.impl.PersonDaoImpl;
@@ -29,6 +30,8 @@ import team.antelope.fg.entity.Person;
 import team.antelope.fg.entity.User;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.CircleImageViewUtil;
+
+import static android.media.CamcorderProfile.get;
 
 public class MeProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -59,7 +62,14 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
         tv_set_name.setText(user_name);
 
         UserDaoImpl userDao = new UserDaoImpl(MeProfileActivity.this);
-        User user = userDao.queryAllUser().get(0);
+        //先判断userList是否为null或者没有元素
+        List<User> userList = userDao.queryAllUser();
+        User user = null;
+        if(userList !=null && !userList.isEmpty()){
+            user = userList.get(0);
+        } else{
+            return;
+        }
         PersonDaoImpl personDao = new PersonDaoImpl(MeProfileActivity.this);
         Person person = personDao.queryById(user.getId());
         tv_dealNum.setText(String.valueOf(person.getDealnum()));

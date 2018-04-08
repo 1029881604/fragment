@@ -38,14 +38,14 @@ public class LoginModelImpl implements ILoginModel<User> {
 		String password = (String) mSpUtil.getSp(context, SpUtil.KEY_PASSWORD, "");
 		if("".equals(username) || "".equals(password)){
             List<User> users = new UserDaoImpl(context).queryAllUser();
-            if(users != null){
+            if(users != null && !username.isEmpty()){
                 User user = users.get(0);
                 return  user;
             }
             return null;
 		} else{
 			List<User> users = new UserDaoImpl(context).queryAllUser();
-			if(users != null){
+			if(users != null && !username.isEmpty()){
 				Iterator<User> iterator = users.iterator();
 				while (iterator.hasNext()){
 					User user = iterator.next();
@@ -65,11 +65,10 @@ public class LoginModelImpl implements ILoginModel<User> {
 		String password = user.getPassword();
 		mSpUtil.setSP(context, SpUtil.KEY_USERNAME, username);
  		mSpUtil.setSP(context, SpUtil.KEY_PASSWORD, password);
-//		UserDaoImpl userDao = new UserDaoImpl(context);
-//		User mUser = userDao.queryByName(username);
-//		if(mUser == null){
-//			userDao.insert(user);
-//		}
+		UserDaoImpl userDao = new UserDaoImpl(context);
+		//删除所有user记录，添加当前用户
+		userDao.deleteAll();
+		userDao.insert(user);
 	}
 
 	public void doLogin(final String url, IOnLoginCallback<String> callback) {

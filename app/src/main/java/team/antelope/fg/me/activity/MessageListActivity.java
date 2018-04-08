@@ -32,6 +32,8 @@ import team.antelope.fg.util.L;
 import team.antelope.fg.util.SetRoundImageViewUtil;
 import team.antelope.fg.util.ToastUtil;
 
+import static android.media.CamcorderProfile.get;
+
 public class MessageListActivity extends BaseActivity implements View.OnClickListener {
     Toolbar mToolbar;
     ListView lv_message;    //消息列表
@@ -149,7 +151,13 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
         List<PrivateMessage> privateMessages = privateMessageDao.queryAllPrivateMessage();
         List<Map<String, Object>> listMap1 = new ArrayList<Map<String, Object>>();
         UserDaoImpl dao = new UserDaoImpl(MessageListActivity.this);
-        User user = dao.queryAllUser().get(0);
+        User user = null;
+        List<User> userList = dao.queryAllUser();
+        if(userList != null && !userList.isEmpty()){
+            user = userList.get(0);
+        } else{
+            return;
+        }
         long userId = user.getId();
         for (int i = 0; i < privateMessages.size(); i++) {
             Map<String, Object> map = new HashMap<String, Object>();

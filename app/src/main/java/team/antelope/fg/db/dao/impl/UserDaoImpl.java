@@ -64,6 +64,12 @@ public class UserDaoImpl implements IUserDao {
         return null;
     }
 
+    @Override
+    public int deleteAll() {
+        SQLiteDatabase db = openHelper.getReadableDatabase();
+        return db.delete("user",null, null);
+    }
+
     /**
      * @Description 添加用户
      * @date 2017/12/6

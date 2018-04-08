@@ -174,6 +174,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void asychStartActivity() {
         //跳转前保存name, pwd到偏好设置和数据库(如果没有)
         L.i("login", "asychStartActivity1");
+        //将用户信息保存到数据库之前要查找该用户的id
+
         saveData();
         //跳转
         L.i("login", "asychStartActivity1");

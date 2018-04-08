@@ -9,6 +9,8 @@ import java.util.Properties;
 
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+
 import team.antelope.fg.ui.model.callback.IOnLoginCallback;
 import team.antelope.fg.util.L;
 import team.antelope.fg.util.PropertiesUtil;
@@ -99,10 +101,14 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 	 * @date 2017/12/13
 	 */
 	protected void onPostExecute(String result) {
-		if(LOGIN_SUCCESS.equals(result)){
-			callback.onSuccess(result);
-		}else {
+		Gson gson = new Gson();
+		if(REQUEST_FAIL.equals(result)){
 			callback.onFail(result);
+			return;
+		}
+		String[] strings = gson.fromJson(result, String[].class);
+		if(LOGIN_SUCCESS.equals(strings[0])){
+			callback.onSuccess(result);
 		}
 	}
 }

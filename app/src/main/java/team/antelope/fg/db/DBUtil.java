@@ -171,8 +171,8 @@ public class DBUtil {
 
 //        insertNearbymodular();   联网之后数据从服务器端读取
 
-        User u = new User(1001l, "吃烤鸭", "zhangsan", "ddd@qq.com");
-        new UserDaoImpl(mContext).insert(u);
+//        User u = new User(1001l, "吃烤鸭", "zhangsan", "ddd@qq.com");  一开始不创建用户
+//        new UserDaoImpl(mContext).insert(u);
 
         //Person 表 Start
         Person person1 = new Person(1003l, "吃鸡腿", "男",
