@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import team.antelope.fg.FgApp;
@@ -220,5 +221,8 @@ public class AccompanyFragment extends BaseNearbyFragment<String, NearbyInfo>{
         ////别忘了这步，更新视图
         mCollectionView.updateInventory(inventory);
     }
+
+
+
 
 }
