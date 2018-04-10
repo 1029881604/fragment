@@ -10,18 +10,23 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
-import team.antelope.fg.db.dao.impl.PersonDaoImpl;
-import team.antelope.fg.db.dao.impl.PublishNeedDaoImpl;
 import team.antelope.fg.db.dao.impl.PublishSkillDaoImpl;
-import team.antelope.fg.entity.Person;
-import team.antelope.fg.entity.PublishNeed;
-import team.antelope.fg.entity.PublishSkill;
+import team.antelope.fg.entity.PersonSkill;
 import team.antelope.fg.publish.adapter.PublishItemsAdapter;
 import team.antelope.fg.ui.base.BaseFragment;
+
+import team.antelope.fg.ui.business.PublishBusiness;
+import team.antelope.fg.ui.business.RetrofitServiceManager;
 import team.antelope.fg.util.DateUtil;
-import team.antelope.fg.util.L;
 
 /**
 *@Author: lry
@@ -34,6 +39,9 @@ public class PublishFragmentSkill extends BaseFragment {
     PublishItemsAdapter skillItemsAdapter;
     ArrayList<HashMap<String,Object>> listItem;
     PublishSkillDaoImpl publishSkillDao;
+    List<PersonSkill> personSkills;
+
+    public CompositeSubscription compositeSubscription = new CompositeSubscription();
     @Override
     protected int getLayoutId() {
         return R.layout.publish_fragment_listview;
@@ -57,11 +65,51 @@ public class PublishFragmentSkill extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setskillitem();
-
+//        setskillitem();
     }
     public void setskillitem(){
-        publishSkillDao=new PublishSkillDaoImpl(getContext());
+        Observable<List<PersonSkill>> observable = RetrofitServiceManager.getInstance()
+                .create(PublishBusiness.class).getAllPersonSkill("GetAllPersonSkillServlet").observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).delaySubscription(0, TimeUnit.MILLISECONDS);
+        addSubscription(observable.subscribe(new Subscriber<List<PersonSkill>>() {
+            @Override
+            public void onCompleted() {
+//                view.setvisibililty(view.gone);  设置加载图片消失
+
+                if (personSkills != null){
+                    listItem=new  ArrayList<>();
+                    for (int i=0;i<personSkills.size();i++){
+                        HashMap<String,Object> map=new HashMap<String,Object>();
+                        map.put("username", personSkills.get(i).getName());
+                        map.put("isonline",personSkills.get(i).isIsonline());
+                        map.put("dingwei",personSkills.get(i).getAddressdesc());
+                        map.put("detail",personSkills.get(i).getContent());
+                        map.put("fbtime", DateUtil.formatDate(personSkills.get(i).getPublishdate().getTime()));
+                        listItem.add(map);
+                    }
+                    skillItemsAdapter= new PublishItemsAdapter(getContext(),listItem,false);
+                    //setListAdapter(simpleAdapter);
+                    lv_skill.setAdapter(skillItemsAdapter);  //为ListView绑定Adapter
+                    skillItemsAdapter.notifyDataSetChanged();
+                    lv_skill.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Log.v("Publishskill","你点击了ListView条目"+position);  //在LogCat中输出信息
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(List<PersonSkill> ps) {
+                personSkills = ps;
+            }
+        }));
+        /*publishSkillDao=new PublishSkillDaoImpl(getContext());
         List<PublishSkill> publishSkills=publishSkillDao.queryAllPublishSkill();
         listItem=new  ArrayList<>();
         for (int i = 0; i < publishSkills.size(); i++) {
@@ -86,6 +134,32 @@ public class PublishFragmentSkill extends BaseFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.v("Publishskill","你点击了ListView条目"+position);  //在LogCat中输出信息
             }
-        });
+        });*/
+    }
+
+    /**
+     * @Description 订阅
+     * @date 2018/1/5
+     */
+    public void addSubscription(Subscription subscription){
+        compositeSubscription.add(subscription);
+    }
+    /**
+     * @Description 取消订阅
+     * @date 2018/1/5
+     */
+    public void unSubscribe(){
+        if (compositeSubscription.hasSubscriptions()) {
+            if (!compositeSubscription.isUnsubscribed()) {
+                compositeSubscription.unsubscribe();
+                compositeSubscription.clear();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unSubscribe();
     }
 }
