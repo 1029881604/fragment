@@ -1,6 +1,5 @@
 package team.antelope.fg.customized.adapter;
 
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,23 +9,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import team.antelope.fg.R;
+import team.antelope.fg.customized.util.SetImageViewUtil;
 
 /**
  * Created by Kyrene on 2017/12/18.
  */
 
-public class DzRecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
+public class DzRecyclerAdapterImgUrl extends RecyclerView.Adapter<MyViewHolderImgUrl> {
     private List<String> lists;
     private Context context;
-//    private List<Integer> heights;
+    //    private List<Integer> heights;
     private OnItemClickListener mListener;
-    private List<Integer> resids;
+    private List<String> resids;
 
-    public DzRecyclerAdapter(Context context,List<String> lists,List<Integer> resids) {
+    public DzRecyclerAdapterImgUrl(Context context, List<String> lists, List<String> resids) {
         this.context = context;
         this.lists = lists;
         this.resids = resids;
@@ -49,18 +48,20 @@ public class DzRecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
 //    }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolderImgUrl onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.lx_items1,parent,false);
-        MyViewHolder viewHolder = new MyViewHolder(view);
+        MyViewHolderImgUrl viewHolder = new MyViewHolderImgUrl(view);
         return viewHolder;
     }
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolderImgUrl holder, int position) {
         ViewGroup.LayoutParams params =  holder.itemView.getLayoutParams();//得到item的LayoutParams布局参数
 //        params.height = heights.get(position);//把随机的高度赋予item布局
         holder.itemView.setLayoutParams(params);//把params设置给item布局
-        holder.mIv.setBackgroundResource(resids.get(position));//设置图片（本地）
+//        holder.mIv.setBackgroundResource(resids.get(position));//设置图片（本地）
 //        holder.mIv.setImageURI(Uri.parse(resids.get(position)));//设置图片（服务器）
+
+        SetImageViewUtil.setImageToImageView(holder.mIv, resids.get(position));
         holder.mTv.setText(lists.get(position));//为控件绑定数据
 
         if(mListener!=null){//如果设置了监听那么它就不为空，然后回调相应的方法
@@ -90,11 +91,11 @@ public class DzRecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
 }
 
-class MyViewHolder extends RecyclerView.ViewHolder{
+class MyViewHolderImgUrl extends RecyclerView.ViewHolder{
     LinearLayout mll;
     TextView mTv;
     ImageView mIv;
-    public MyViewHolder(View itemView) {
+    public MyViewHolderImgUrl(View itemView) {
         super(itemView);
         mTv = itemView.findViewById(R.id.textView);
         mIv = itemView.findViewById(R.id.iv);

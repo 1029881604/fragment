@@ -39,7 +39,7 @@ public class DzFragment extends BaseFragment implements View.OnClickListener {
 //    private Toolbar mToolbar;
 //    private ImageView imageSearch;
     private Button button_search;
-    private static final String[] CHANNELS = new String[]{"动画制作", "UI设计", "网页设计/制作","平面设计","视频/后期制作", "App开发", "程序语言设计","排版设计/制作"};
+    private static final String[] CHANNELS = new String[]{"动画制作", "UI设计", "网页设计/制作","平面设计","视频/后期制作", "App开发", "程序语言设计","排版设计/制作","Test"};
     private List<String> mDataList = new ArrayList<String>(Arrays.asList(CHANNELS));
     private TopPagerAdapter mTopPagerAdapter = new TopPagerAdapter(mDataList);//适配器
     private ViewPager mViewPager;   //ViewPager

@@ -27,4 +27,6 @@ public interface AccessNetConst {
     String CHANGEPROFILESERVLEENDTPATH = "changeProfileServletEndPath";
     //获取用户的person信息
     String GETUSERENDPATH = "getuserendpath";
+
+    String GETCUSTOMIZEDSKILLENDPATH = "getCustomizedSkillEndPath";
 }
