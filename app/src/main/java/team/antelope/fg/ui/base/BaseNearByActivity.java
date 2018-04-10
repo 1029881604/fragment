@@ -23,6 +23,7 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.FgApp;
 import team.antelope.fg.R;
+import team.antelope.fg.constant.ForwardConst;
 import team.antelope.fg.constant.LocationConst;
 import team.antelope.fg.constant.SkillAndNeedConst;
 import team.antelope.fg.entity.NeedPreInfo;
@@ -88,7 +89,8 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, PersonInfoActivity.class);
-                startActivity(intent, bundle);
+                intent.putExtra(ForwardConst.USERID, bundle.getLong(ForwardConst.USERID, -1));
+                startActivity(intent);
             }
         });
     }

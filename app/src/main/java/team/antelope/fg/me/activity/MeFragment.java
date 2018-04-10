@@ -90,8 +90,10 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             //先判断数据库中有没有好吧
             mUser = user;
             Person person = new PersonDaoImpl(getmActivity()).queryById(user.getId());
-            //如果数据库中没有，则去服务器获取
-            if(person == null){
+            if(person != null){
+                mPerson = person;
+                tv_name.setText(mPerson.getName());
+            } else if(person == null){//如果数据库中没有，则去服务器获取
                 String endUrl = PropertiesUtil.getInstance().
                         getProperty(AccessNetConst.GETUSERENDPATH);
                 Observable<Person> observable = RetrofitServiceManager.getInstance()
@@ -105,6 +107,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                         L.i("mytag", "complete123");
                         L.i("mytag", "mNearbyModularInfo"+mPerson.toString());
                         if (mPerson != null){
+                            L.i("executed", "yyyyyyyy");
                             //保存到本地数据库中 start
                             saveData();
 //                            //保存到本地数据库中 end
@@ -114,7 +117,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
                     @Override
                     public void onError(Throwable e) {
-                        L.i("mytag", "onError");
+                        L.i("executed", "onError?????");
 //                        loadable = false;
 //                        loadData();
                     }
@@ -122,7 +125,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onNext(Person person) {
                         mPerson = person;
-                        L.i("mytag", "onnext123");
+                        L.i("executed", "onnext123????");
                     }
                 }));
             }
@@ -131,7 +134,11 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     public void saveData(){
         IPersonDao personDao = new PersonDaoImpl(getmActivity());
-        personDao.insert(mPerson);
+        //先看看本地数据库中有没有
+        Person p = personDao.queryById(mPerson.getId());
+        if(p == null){
+            personDao.insert(mPerson);
+        }
     }
 
 
@@ -151,6 +158,11 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unSubscribe();
+    }
 
     @Override
     protected int getLayoutId() {

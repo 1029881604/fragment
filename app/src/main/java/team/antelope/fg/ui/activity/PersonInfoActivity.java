@@ -3,7 +3,11 @@ package team.antelope.fg.ui.activity;
 import android.os.Bundle;
 
 import team.antelope.fg.R;
+import team.antelope.fg.constant.AccessNetConst;
+import team.antelope.fg.constant.ForwardConst;
 import team.antelope.fg.ui.base.BaseActivity;
+import team.antelope.fg.util.L;
+import team.antelope.fg.util.PropertiesUtil;
 import team.antelope.fg.widght.MyWebView;
 /**
  * @Author hwc
@@ -34,8 +38,12 @@ public class PersonInfoActivity extends BaseActivity{
     }
 
     private void init() {
+        long id = getIntent().getLongExtra(ForwardConst.USERID, -1l);
         webView =  findViewById(R.id.webview_person);
-        webView.loadUrl("http://192.168.1.102:8080/crmBaseDao");
+        String url = PropertiesUtil.getInstance().
+                getProperty(AccessNetConst.BASEPATH) + "ToUserInfoServlet?id="+id;
+        L.i("AccessNetConst", url);
+        webView.loadUrl(url);
     }
 
     @Override
