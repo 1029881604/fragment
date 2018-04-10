@@ -194,6 +194,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      */
     private void saveData() {
         mPresenter.saveData(user);
+        L.i("whouser: ", user.toString());
     }
     //ILoginView  end
 

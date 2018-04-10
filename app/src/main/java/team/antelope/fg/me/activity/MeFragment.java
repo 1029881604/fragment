@@ -69,8 +69,14 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         setRoundImageViewUtil.setImageResource(R.drawable.me_user_head1);
         dbOpenHelper =new DBOpenHelper(getActivity(),"my.db",null,1);
         Log.d("debug","111111111");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         initLayoutView();
     }
+
 
     private void initLayoutView() {
         UserDaoImpl userDao = new UserDaoImpl(getmActivity());
