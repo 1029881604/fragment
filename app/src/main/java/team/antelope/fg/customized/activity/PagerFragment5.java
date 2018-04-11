@@ -184,6 +184,25 @@ public class PagerFragment5 extends BaseFragment implements View.OnClickListener
         }));
     }
 
+    /**
+     * @Description 取消订阅
+     * @date 2018/1/5
+     */
+    public void unSubscribe(){
+        if (compositeSubscription.hasSubscriptions()) {
+            if (!compositeSubscription.isUnsubscribed()) {
+                compositeSubscription.unsubscribe();
+                compositeSubscription.clear();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unSubscribe();
+    }
+
     public void addSubscription(Subscription subscription){
         compositeSubscription.add(subscription);
     }
