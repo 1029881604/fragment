@@ -15,7 +15,8 @@
         <ImageView
             android:layout_width="50sp"
             android:layout_height="50sp"
-            android:background="@mipmap/default_avatar400"/>
+            android:background="@mipmap/default_avatar400"
+            android:id="@+id/skillbb"/>
         <TextView
             android:id="@+id/skillTitle"
             android:layout_width="wrap_content"
