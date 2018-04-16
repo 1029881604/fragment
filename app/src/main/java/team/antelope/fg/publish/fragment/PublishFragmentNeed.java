@@ -9,13 +9,16 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
-
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -55,11 +58,7 @@ public class PublishFragmentNeed extends BaseFragment {
     @Override
     protected void initView(View layout, Bundle savedInstanceState) {
         lv_need = (ListView) layout.findViewById(R.id.publish_lv);
-        try {
-            sendRequest();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        sendRequest();
     }
     /**
     *@Description: 初始化视图处理事件
@@ -71,8 +70,12 @@ public class PublishFragmentNeed extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        sendRequest();
     }
     public void setneeditem(){
+        if(personNeeds == null){
+            return ;
+        }
         L.i("gson","setneeditem调用成功");
         listItem=new  ArrayList<>();
         for (int i = 0; i < personNeeds.size(); i++) {
@@ -98,33 +101,38 @@ public class PublishFragmentNeed extends BaseFragment {
         });
 
     }
-    private void sendRequest() throws InterruptedException {
+    private void sendRequest() {
         L.i("gson","Need请求发出");
-        Thread t = new Thread(new Runnable() {
+        mProp = PropertiesUtil.getInstance();
+        String url = mProp.getProperty(AccessNetConst.BASEPATH)+ mProp.getProperty("getAllPublishNeedEndPath");
+        L.i("gson",url);
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
             @Override
-            public void run() {
-                L.i("gson","Need线程开启");
-                try{
-                    mProp = PropertiesUtil.getInstance();
-                    String url = mProp.getProperty(AccessNetConst.BASEPATH)+ mProp.getProperty("getAllPublishNeedEndPath");
-                    L.i("gson",url);
-                    OkHttpClient client=new OkHttpClient();
-                    Request request=new Request.Builder().url(url).build();
-                    Response response=client.newCall(request).execute();
-                    String responseData=response.body().string();
-                    Gson gson=new Gson();
-                    personNeeds=gson.fromJson(responseData, new TypeToken<List<PersonNeed>>(){}.getType());
-                    L.i("gson","Need,try开启");
-                    L.i("gson","personNeeds.size="+personNeeds.size());
-                    latch.countDown();
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+            public void onFailure(Call call, IOException e) {
+                L.i("gson","resp error");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Gson gson=new Gson();
+                String resp = response.body().string();
+                L.i("gson","resp "+resp);
+                personNeeds=gson.fromJson(resp, new TypeToken<List<PersonNeed>>(){}.getType());
+                L.i("gson","personNeeds: "+personNeeds);
+                latch.countDown();
             }
         });
-        t .start();
-        latch.await();
+        try {
+            latch.await(500, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         setneeditem();
-        t.join();
     }
 }

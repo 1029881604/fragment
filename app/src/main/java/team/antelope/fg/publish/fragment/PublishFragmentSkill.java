@@ -22,7 +22,6 @@ import team.antelope.fg.R;
 import team.antelope.fg.entity.PersonSkill;
 import team.antelope.fg.publish.adapter.PublishItemsAdapter;
 import team.antelope.fg.ui.base.BaseFragment;
-
 import team.antelope.fg.ui.business.PublishBusiness;
 import team.antelope.fg.ui.business.RetrofitServiceManager;
 import team.antelope.fg.util.DateUtil;
@@ -63,7 +62,7 @@ public class PublishFragmentSkill extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        setskillitem();
+        setskillitem();
     }
     public void setskillitem(){
         Observable<List<PersonSkill>> observable = RetrofitServiceManager.getInstance()
