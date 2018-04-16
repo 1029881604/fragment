@@ -22,7 +22,6 @@ import okhttp3.Response;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
-import team.antelope.fg.db.dao.impl.PublishNeedDaoImpl;
 import team.antelope.fg.entity.PersonNeed;
 import team.antelope.fg.publish.adapter.PublishItemsAdapter;
 import team.antelope.fg.ui.base.BaseFragment;
@@ -40,7 +39,6 @@ public class PublishFragmentNeed extends BaseFragment {
     ListView lv_need;
     PublishItemsAdapter needItemsAdapter;
     ArrayList<HashMap<String,Object>> listItem;
-    PublishNeedDaoImpl publishNeedDao;
     private Properties mProp;
     private CountDownLatch latch = new CountDownLatch(1);
     private List<PersonNeed> personNeeds;
@@ -102,7 +100,7 @@ public class PublishFragmentNeed extends BaseFragment {
     }
     private void sendRequest() throws InterruptedException {
         L.i("gson","Need请求发出");
-        new Thread(new Runnable() {
+        Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 L.i("gson","Need线程开启");
@@ -123,8 +121,10 @@ public class PublishFragmentNeed extends BaseFragment {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
+        t .start();
         latch.await();
         setneeditem();
+        t.join();
     }
 }

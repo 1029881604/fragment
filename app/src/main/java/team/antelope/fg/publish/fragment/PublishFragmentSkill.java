@@ -19,7 +19,6 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
-import team.antelope.fg.db.dao.impl.PublishSkillDaoImpl;
 import team.antelope.fg.entity.PersonSkill;
 import team.antelope.fg.publish.adapter.PublishItemsAdapter;
 import team.antelope.fg.ui.base.BaseFragment;
@@ -38,7 +37,6 @@ public class PublishFragmentSkill extends BaseFragment {
     ListView lv_skill;
     PublishItemsAdapter skillItemsAdapter;
     ArrayList<HashMap<String,Object>> listItem;
-    PublishSkillDaoImpl publishSkillDao;
     List<PersonSkill> personSkills;
 
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
@@ -109,32 +107,6 @@ public class PublishFragmentSkill extends BaseFragment {
                 personSkills = ps;
             }
         }));
-        /*publishSkillDao=new PublishSkillDaoImpl(getContext());
-        List<PublishSkill> publishSkills=publishSkillDao.queryAllPublishSkill();
-        listItem=new  ArrayList<>();
-        for (int i = 0; i < publishSkills.size(); i++) {
-            HashMap<String,Object> map=new HashMap<String,Object>();
-            Person person=(new PersonDaoImpl(getContext())).queryById(publishSkills.get(i).getuId());
-            if (person == null){
-                break;
-            }
-            map.put("username", person.getName());
-            map.put("isonline",publishSkills.get(i).isOnline());
-            map.put("dingwei",publishSkills.get(i).getAddressDesc());
-            map.put("detail",publishSkills.get(i).getContent());
-            map.put("fbtime", DateUtil.formatDate(publishSkills.get(i).getPublishDate().getTime()));
-            listItem.add(map);
-        }
-        skillItemsAdapter= new PublishItemsAdapter(getContext(),listItem,false);
-        //setListAdapter(simpleAdapter);
-        lv_skill.setAdapter(skillItemsAdapter);  //为ListView绑定Adapter
-        skillItemsAdapter.notifyDataSetChanged();
-        lv_skill.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("Publishskill","你点击了ListView条目"+position);  //在LogCat中输出信息
-            }
-        });*/
     }
 
     /**
