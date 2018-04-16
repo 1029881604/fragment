@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import team.antelope.fg.R;
+import team.antelope.fg.constant.SkillAboutDetails;
 import team.antelope.fg.customized.adapter.FragAdapter;
 import team.antelope.fg.customized.adapter.TopPagerAdapter;
 import team.antelope.fg.ui.base.BaseFragment;
@@ -39,7 +40,16 @@ public class DzFragment extends BaseFragment implements View.OnClickListener {
 //    private Toolbar mToolbar;
 //    private ImageView imageSearch;
     private Button button_search;
-    private static final String[] CHANNELS = new String[]{"动画制作", "UI设计", "网页设计/制作","平面设计","视频/后期制作", "App开发", "程序语言设计","排版设计/制作","Test"};
+    private static final String[] CHANNELS = new String[]{
+            SkillAboutDetails.SKILLTYPE1,
+            SkillAboutDetails.SKILLTYPE2,
+            SkillAboutDetails.SKILLTYPE3,
+            SkillAboutDetails.SKILLTYPE4,
+            SkillAboutDetails.SKILLTYPE5,
+            SkillAboutDetails.SKILLTYPE6,
+            SkillAboutDetails.SKILLTYPE7,
+            SkillAboutDetails.SKILLTYPE8,
+            "Test"};
     private List<String> mDataList = new ArrayList<String>(Arrays.asList(CHANNELS));
     private TopPagerAdapter mTopPagerAdapter = new TopPagerAdapter(mDataList);//适配器
     private ViewPager mViewPager;   //ViewPager
@@ -54,14 +64,14 @@ public class DzFragment extends BaseFragment implements View.OnClickListener {
     private PagerFragment6 pfg6=new PagerFragment6();
     private PagerFragment7 pfg7=new PagerFragment7();
     private PagerFragment8 pfg8=new PagerFragment8();
-//    private PublishFragmentNeed pfg7=new PublishFragmentNeed();
+    //    private PublishFragmentNeed pfg7=new PublishFragmentNeed();
     private FragAdapter fragAdapter;
     private List<Fragment> list=new ArrayList<Fragment>();
 
     /**
-    * @说明 获取布局
-    * @创建日期 2017/12/11 下午7:23
-    */
+     * @说明 获取布局
+     * @创建日期 2017/12/11 下午7:23
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.lx_activity_index;
@@ -118,9 +128,9 @@ public class DzFragment extends BaseFragment implements View.OnClickListener {
 //    }
 
     /**
-    * @说明 选项卡相关设置，初始化MagicIndicator，设置页面切换
-    * @创建日期 2017/12/18 下午2:38
-    */
+     * @说明 选项卡相关设置，初始化MagicIndicator，设置页面切换
+     * @创建日期 2017/12/18 下午2:38
+     */
 
     private CommonNavigatorAdapter adapter = new CommonNavigatorAdapter() {     //设置选项卡的数据
         @Override
@@ -159,9 +169,9 @@ public class DzFragment extends BaseFragment implements View.OnClickListener {
     };
 
     /**
-    * @说明 设置某些组件的点击监听事件
-    * @创建日期 2017/12/11 下午8:44
-    */
+     * @说明 设置某些组件的点击监听事件
+     * @创建日期 2017/12/11 下午8:44
+     */
     public void setListener(){
         button_search.setOnClickListener(this); //设置搜索图标按钮点击监听事件
 

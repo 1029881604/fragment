@@ -34,9 +34,9 @@ import team.antelope.fg.util.PropertiesUtil;
  */
 
 /**
-* @说明 动画制作分类Pager
-* @创建日期 2018/4/9 下午5:45
-*/
+ * @说明 动画制作分类Pager
+ * @创建日期 2018/4/9 下午5:45
+ */
 public class PagerFragment1 extends BaseFragment implements View.OnClickListener {
 
     private RecyclerView mRecyclerView;
@@ -52,18 +52,18 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
     protected List<PublishSkill> publishSkills;
 
     /**
-    * @说明 点击事件
-    * @创建日期 2018/4/9 下午5:38
-    */
+     * @说明 点击事件
+     * @创建日期 2018/4/9 下午5:38
+     */
     @Override
     public void onClick(View v) {
 
     }
 
     /**
-    * @说明 初始视图等界面控件
-    * @创建日期 2018/4/9 下午5:39
-    */
+     * @说明 初始视图等界面控件
+     * @创建日期 2018/4/9 下午5:39
+     */
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
@@ -81,7 +81,7 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
         userid = new ArrayList();
         //资源id集合
         resids = new ArrayList();
-        
+
         mRecyclerView=view.findViewById(R.id.recyclerView);
 
         initLayoutView();
@@ -89,27 +89,27 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
     }
 
     /**
-    * @说明 获取布局文件id
-    * @创建日期 2018/4/9 下午5:39
-    */
+     * @说明 获取布局文件id
+     * @创建日期 2018/4/9 下午5:39
+     */
     @Override
     protected int getLayoutId() {
         return R.layout.lx_pager_fragment1;
     }
 
     /**
-    * @说明 初始化
-    * @创建日期 2018/4/9 下午5:40
-    */
+     * @说明 初始化
+     * @创建日期 2018/4/9 下午5:40
+     */
     @Override
     protected void init() {
 
     }
 
     /**
-    * @说明 初始化布局视图
-    * @创建日期 2018/4/9 下午5:40
-    */
+     * @说明 初始化布局视图
+     * @创建日期 2018/4/9 下午5:40
+     */
     private void initLayoutView() {
         String endUrl = PropertiesUtil.getInstance().
                 getProperty(AccessNetConst.GETCUSTOMIZEDSKILLENDPATH);
@@ -157,6 +157,7 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
                         intent.putExtra("startdate",startdate.get(postion));
                         intent.putExtra("stopdate",stopdate.get(postion));
                         intent.putExtra("userid",userid.get(postion));
+                        intent.putExtra("skillpic",resids.get(postion));    //新增的传递的图片
                         intent.setClass(getActivity(),SkillDetails.class);  //指定传递对象
                         startActivity(intent);
 //                ToastUtil.showCustom(getActivity().getApplicationContext(),"点击了："+postion, 2000);
@@ -186,6 +187,25 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
 
             }
         }));
+    }
+
+    /**
+     * @Description 取消订阅
+     * @date 2018/1/5
+     */
+    public void unSubscribe(){
+        if (compositeSubscription.hasSubscriptions()) {
+            if (!compositeSubscription.isUnsubscribed()) {
+                compositeSubscription.unsubscribe();
+                compositeSubscription.clear();
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unSubscribe();
     }
 
     public void addSubscription(Subscription subscription){

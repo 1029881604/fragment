@@ -28,5 +28,7 @@ public interface AccessNetConst {
     //获取用户的person信息
     String GETUSERENDPATH = "getuserendpath";
 
+    //lx添加的
     String GETCUSTOMIZEDSKILLENDPATH = "getCustomizedSkillEndPath";
+    String GETPERSONDETAILSENDPATH = "getPersonDetailsEndPath";
 }

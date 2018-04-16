@@ -22,6 +22,9 @@ public interface CustmoizedBusiness {
     Observable<List<PublishSkill>> getList(@Path("endPath") String endPath,
                                            @Query("skilltype") String skilltype);
 
+    @GET("{endPath}")
+    Observable<Person> getPerson(@Path("endPath") String endPath, @Query("id") long id);
+
 }
 
 
