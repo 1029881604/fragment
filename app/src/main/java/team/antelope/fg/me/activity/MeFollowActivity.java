@@ -5,7 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,11 +18,27 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import team.antelope.fg.R;
+import team.antelope.fg.db.dao.IAttentionDao;
+import team.antelope.fg.db.dao.IPersonDao;
 import team.antelope.fg.db.dao.impl.AttentionDaoImpl;
 import team.antelope.fg.db.dao.impl.PersonDaoImpl;
 import team.antelope.fg.db.dao.impl.PrivateMessageDaoImpl;
@@ -26,26 +46,41 @@ import team.antelope.fg.db.dao.impl.UserDaoImpl;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.entity.User;
 import team.antelope.fg.me.adapter.MeFollowListAdapter;
+import team.antelope.fg.me.entity.PersonPinyin;
+import team.antelope.fg.me.quickindexbar.QuickIndexBar;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.SetRoundImageViewUtil;
 
 
 public class MeFollowActivity extends BaseActivity {
     Toolbar mToolbar;
-    private HashMap<String, Integer> selector;// 存放含有索引字母的位置
     TextView indexTv, tv_follow_name, tv_show;
     ImageView iv_follow_user_head;
-    ImageView iv_send_message;
     ListView listView;
-    LinearLayout layoutIndex;
+    ArrayList<PersonPinyin> personPinyins;
+    ArrayList<PersonPinyin> after_person;
+    private TextView tv_center;
     MeFollowListAdapter meFollowListAdapter;
     List<Person> personList;
-    List<ImagePicture> imagePictureList = new ArrayList<>();
-    private String[] indexStr = {"#", "A", "B", "C", "D", "E", "F", "G", "H",
-            "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
-            "V", "W", "X", "Y", "Z"};
-    private int height;// 字体高度
-    private boolean flag = false;
+    Long person_id;
+    List<Person> psList;
+  List<Person> after_psList;
+
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+
+            after_person= (ArrayList<PersonPinyin>) msg.obj;
+            meFollowListAdapter = new MeFollowListAdapter(MeFollowActivity.this, after_person);
+            listView.setAdapter(meFollowListAdapter);
+
+
+
+        }
+    };
+
+
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -58,20 +93,132 @@ public class MeFollowActivity extends BaseActivity {
                 finish();
             }
         });
-        indexTv = findViewById(R.id.indexTv);
         tv_follow_name = findViewById(R.id.tv_follow_name);
         iv_follow_user_head = findViewById(R.id.iv_follow_user_head);
         listView = findViewById(R.id.listView);
-        layoutIndex = (LinearLayout) this.findViewById(R.id.layout);
-        layoutIndex.setBackgroundColor(Color.parseColor("#00ffffff"));
-        tv_show = (TextView) findViewById(R.id.tv);
-        tv_show.setVisibility(View.GONE);
+        tv_center = (TextView) findViewById(R.id.tv_center);
+        QuickIndexBar quickIndexBar = findViewById(R.id.quick_bar);
+        quickIndexBar.setListener(new QuickIndexBar.OnLetterUpdateListener() {
+            @Override
+            public void onLetterUpdate(String letter) {
+//                Toast.makeText(getApplicationContext(),letter,Toast.LENGTH_SHORT).show();
+                showLetter(letter);
+                // 根据字母定位ListView, 找到集合中第一个以letter为拼音首字母的对象,得到索引
+                for (int i = 0; i < personPinyins.size(); i++) {
+                    String size= String.valueOf(personPinyins.size());
+                    Log.i("personPinyins.size()",size);
+                    PersonPinyin personPinyin = personPinyins.get(i);
+                    String l = personPinyin.getPinyin().charAt(0) + "";
+                    String eng=personPinyin.getName().charAt(0)+"";
+                    if(TextUtils.equals(letter, l)||TextUtils.equals(letter, eng)){
+                        // 匹配成功
+                        Log.i("kkkkkkkkkk","成功匹配");
+                        listView.setSelection(i);
+                        break;
+                    }
+                }
+
+            }
+        });
+        User user = new UserDaoImpl(this).queryAllUser().get(0);
+        person_id =user.getId();
+        sendOkHttpRequest();
         initListView();
         initListEvent();
-        meFollowListAdapter = new MeFollowListAdapter(this, personList, imagePictureList);
-        listView.setAdapter(meFollowListAdapter);
 
 
+
+
+    }
+
+    /**
+     //     * 显示字母
+     //     * @param letter
+     //     */
+    protected void showLetter(String letter) {
+        tv_center.setVisibility(View.VISIBLE);
+        tv_center.setText(letter);
+
+        handler.removeCallbacksAndMessages(null);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                tv_center.setVisibility(View.GONE);
+            }
+        }, 2000);
+
+    }
+/**
+ * @Author：Carlos
+ * @Date:  2018/4/18 10:17
+ * @Description:  建立连接
+ **/
+    private void sendOkHttpRequest() {
+
+        new  Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("person_id", String.valueOf(person_id))
+                            .build();
+                    Request request = new Request.Builder()
+                            .url("http://192.168.137.1:8080/fragment_server/PostPersonFriendsServlet")
+                            .post(requestBody)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData= response.body().string();
+                    parseJSONWithGSON(responseData);
+                    Message message=new Message();
+                    personPinyins =new ArrayList<PersonPinyin>();
+                    fillAndSortData(personPinyins);
+                    message.obj=personPinyins;
+                    IPersonDao personDao = new PersonDaoImpl(MeFollowActivity.this);
+                    for (Person person: psList){
+                    personDao.insert(person);
+                    }
+                    handler.sendMessage(message);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+    }
+    /**
+     * @Author：Carlos
+     * @Date:  2018/4/17 10:15
+     * @Description: 填充数据排序
+     **/
+    private void fillAndSortData(ArrayList<PersonPinyin> personPinyins) {
+        for (Person person: psList){
+            String name=person.getName();
+            String head=person.getHeadImg();
+            Long personId=person.getId();
+            personPinyins.add(new PersonPinyin(name,head,personId));
+            Log.d("JSONActivity","id is"+person.getId());
+            Log.d("JSONActivity","name is"+person.getName());
+        }
+        Collections.sort(personPinyins);
+    }
+
+/**
+ * @Author：Carlos
+ * @Date:  2018/4/18 10:19
+ * @Description:  解析Json
+ **/
+    private void parseJSONWithGSON(String responseData) {
+
+        Gson gson = new Gson();
+        psList = gson.fromJson(responseData, new TypeToken<List<Person>>()
+        {}.getType());
+        for (Person person: psList){
+
+            Log.d("JSONActivity","id is"+person.getId());
+            Log.d("JSONActivity","name is"+person.getName());
+            Log.d("JSONActivity","version is"+person.getEmail());
+        }
     }
 
     private void initListEvent() {
@@ -88,42 +235,27 @@ public class MeFollowActivity extends BaseActivity {
 
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (!flag) {
-            height = layoutIndex.getMeasuredHeight() / indexStr.length;
-            getIndexView();
-            flag = true;
-        }
-    }
+
 
     private void initListView() {
-        User user = new UserDaoImpl(this).queryAllUser().get(0);
-        AttentionDaoImpl attentionDao = new AttentionDaoImpl(this);
-        personList = attentionDao.findFriends(user.getId());
+
+//        User user = new UserDaoImpl(this).queryAllUser().get(0);
+//        AttentionDaoImpl attentionDao = new AttentionDaoImpl(this);
+//        personList = psList;
 
 
 
-        selector = new HashMap<String, Integer>();
-        for (int j = 0; j < indexStr.length; j++) {// 循环字母表，找出newPersons中对应字母的位置
-            for (int i = 0; i < personList.size(); i++) {
-                if (personList.get(i).getName().equals(indexStr[j])) {
-                    selector.put(indexStr[j], i);
-                }
-            }
+//
+//        for (int i = 0; i < 2; i++) {
+//            ImagePicture head1 = new ImagePicture("j",R.drawable.me_user_head5);
+//            imagePictureList.add(head1);
+//            ImagePicture head2 = new ImagePicture("j",R.drawable.me_user_head3);
+//            imagePictureList.add(head2);
+//            ImagePicture head3 = new ImagePicture("j",R.drawable.me_user_head4);
+//            imagePictureList.add(head3);
 
-        }
-        for (int i = 0; i < 2; i++) {
-            ImagePicture head1 = new ImagePicture("j",R.drawable.me_user_head5);
-            imagePictureList.add(head1);
-            ImagePicture head2 = new ImagePicture("j",R.drawable.me_user_head3);
-            imagePictureList.add(head2);
-            ImagePicture head3 = new ImagePicture("j",R.drawable.me_user_head4);
-            imagePictureList.add(head3);
-            ImagePicture head4 = new ImagePicture("j",R.drawable.me_user_head1);
-            imagePictureList.add(head4);
-
-        }
+//
+//        }
     }
 
 
@@ -132,59 +264,6 @@ public class MeFollowActivity extends BaseActivity {
         return R.layout.me_follow_activity;
     }
 
-    /**
-     * 绘制索引列表
-     */
-    public void getIndexView() {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, height);
-        for (int i = 0; i < indexStr.length; i++) {
-            final TextView tv = new TextView(this);
-            tv.setLayoutParams(params);
-            tv.setText(indexStr[i]);
-            tv.setPadding(10, 0, 10, 0);
-            layoutIndex.addView(tv);
-            layoutIndex.setOnTouchListener(new View.OnTouchListener() {
 
-                @Override
-                public boolean onTouch(View v, MotionEvent event)
-
-                {
-                    float y = event.getY();
-                    int index = (int) (y / height);
-                    if (index > -1 && index < indexStr.length) {// 防止越界
-                        String key = indexStr[index];
-                        if (selector.containsKey(key)) {
-                            int pos = selector.get(key);
-                            if (listView.getHeaderViewsCount() > 0) {// 防止ListView有标题栏，本例中没有。
-                                listView.setSelectionFromTop(
-                                        pos + listView.getHeaderViewsCount(), 0);
-                            } else {
-                                listView.setSelectionFromTop(pos, 0);// 滑动到第一项
-                            }
-                            tv_show.setVisibility(View.VISIBLE);
-                            tv_show.setText(indexStr[index]);
-                        }
-                    }
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            layoutIndex.setBackgroundColor(Color
-                                    .parseColor("#606060"));
-                            break;
-
-                        case MotionEvent.ACTION_MOVE:
-
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            layoutIndex.setBackgroundColor(Color
-                                    .parseColor("#00ffffff"));
-                            tv_show.setVisibility(View.GONE);
-                            break;
-                    }
-                    return true;
-                }
-            });
-        }
-    }
 
 }

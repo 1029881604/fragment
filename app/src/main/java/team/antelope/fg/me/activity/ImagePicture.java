@@ -1,5 +1,7 @@
 package team.antelope.fg.me.activity;
 
+import team.antelope.fg.me.me_utils.PinyinUtils;
+
 /**
  * Created by Carlos on 2017/12/30.
  */
@@ -14,6 +16,7 @@ public class ImagePicture {
     public ImagePicture(String name,int imageId) {
         this.imageId = imageId;
         this.name =name;
+        this.personLetterName = PinyinUtils.getPinyin(name);
 
     }
 

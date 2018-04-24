@@ -1,9 +1,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
-    android:orientation="vertical">
+    >
 
     <android.support.design.widget.AppBarLayout
         style="@style/Theme.AppCompat.Light"
@@ -23,48 +24,50 @@
             app:titleMarginStart="90dp">
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:text="关注列表"
-        android:textColor="#000000"
-        android:textSize="16sp" />
-
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff" >
+        android:layout_height="match_parent">
+        <!--<TextView-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="10dp"-->
+            <!--android:text="关注列表"-->
+            <!--android:layout_above="@+id/listView"-->
+            <!--android:textColor="#000000"-->
+            <!--android:textSize="16sp" />-->
+
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:cacheColorHint="#00000000"
-            android:fadingEdge="none"
-            android:scrollbars="none" >
+            android:layout_height="match_parent"
+            >
         </ListView>
+        <team.antelope.fg.me.quickindexbar.QuickIndexBar
+
+            android:id="@+id/quick_bar"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/me_bar_sector"
+            />
 
         <TextView
-            android:id="@+id/tv"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:background="#f0606060"
+            android:id="@+id/tv_center"
+            android:layout_width="160dp"
+            android:layout_height="100dp"
             android:gravity="center"
-            android:text="A"
+            android:textSize="32sp"
+            android:background="@drawable/me_bar_bg_index"
+            android:visibility="gone"
             android:textColor="#ffffff"
-            android:textSize="30sp" />
+            android:layout_centerInParent="true"
+            android:text="A" />
 
-        <LinearLayout
-            android:id="@+id/layout"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_gravity="right"
-            android:background="#d7d7d7"
-            android:gravity="center"
-            android:orientation="vertical" >
-        </LinearLayout>
-    </FrameLayout>
+
+    </RelativeLayout>
+
+
+
 
 </LinearLayout>

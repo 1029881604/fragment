@@ -14,6 +14,7 @@ import team.antelope.fg.common.GlideApp;
 import team.antelope.fg.db.dao.impl.PersonDaoImpl;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.ui.base.BaseActivity;
+import team.antelope.fg.util.CircleImageViewUtil;
 import team.antelope.fg.util.SetRoundImageViewUtil;
 
 public class MePersonActivity extends BaseActivity{
@@ -22,12 +23,12 @@ public class MePersonActivity extends BaseActivity{
     TextView tv_name,tv_user_name,tv_sex,tv_age,tv_email,tv_dealNum,tv_fanNum;
     long personId;
     List<Person> personList;
-    SetRoundImageViewUtil setRoundImageViewUtil;
+    CircleImageViewUtil circleImageViewUtil;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setRoundImageViewUtil=findViewById(R.id.iv_user_head);
+        circleImageViewUtil=findViewById(R.id.iv_user_head);
         tv_name =findViewById(R.id.tv_name);
         tv_sex =findViewById(R.id.tv_sex);
         tv_age =findViewById(R.id.tv_age);
@@ -70,7 +71,7 @@ public class MePersonActivity extends BaseActivity{
                 .placeholder(R.mipmap.default_avatar400)
                 .error(R.mipmap.error400)
                 .apply(options)
-                .into(setRoundImageViewUtil);
+                .into(circleImageViewUtil);
 
     }
 
