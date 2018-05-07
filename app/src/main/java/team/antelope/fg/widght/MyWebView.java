@@ -74,11 +74,11 @@ public class MyWebView extends WebView {
         //  WebSettings.LOAD_NO_CACHE  只加载网络数据，不加载本地缓存
         //  WebSettings.LOAD_CACHE_ONLY 只加载缓存数据，不加载网络数据
         //Tips:有网络可以使用LOAD_DEFAULT 没有网时用LOAD_CACHE_ELSE_NETWORK
-        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         //开启 DOM storage API 功能 较大存储空间，使用简单
         settings.setDomStorageEnabled(true);
         //开启 Application Caches 功能 方便构建离线APP 不推荐使用
-        settings.setAppCacheEnabled(true);
+        settings.setAppCacheEnabled(false);
         final String cachePath = context.getApplicationContext().getDir("cache", Context.MODE_PRIVATE).getPath();
         settings.setAppCachePath(cachePath);
         settings.setAppCacheMaxSize(5 * 1024 * 1024);
