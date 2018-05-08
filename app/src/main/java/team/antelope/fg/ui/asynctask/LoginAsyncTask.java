@@ -11,14 +11,17 @@ import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 
+import team.antelope.fg.FgApp;
 import team.antelope.fg.ui.model.callback.IOnLoginCallback;
 import team.antelope.fg.util.L;
 import team.antelope.fg.util.PropertiesUtil;
+import team.antelope.fg.util.SpUtil;
+
 /**
  * @Author hwc
  * @Date 2017/12/13
  * @TODO LoginAsyncTask 登入的异步任务类
- * 
+ *
  */
 public class LoginAsyncTask extends AsyncTask<String, String, String> {
 
@@ -31,7 +34,7 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 //	public static final String NEED_NAME="请输入用户名";
 //	public static final String NEED_PWD="请输入密码";
 //	public static final String ERROR_INPUT="账号或密码错误";
-	
+
 	public LoginAsyncTask(IOnLoginCallback<String> callback, String url) {
 		this.callback = callback;
 		this.path = url;
@@ -54,15 +57,18 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 			conn.setConnectTimeout(3000);
 			conn.setReadTimeout(3000);
 			conn.setRequestMethod("GET");
-			if(mProp.getProperty("cookie") != null){
-				conn.setRequestProperty("Cookie", mProp.getProperty("cookie"));
-				System.out.println("cookie:"+mProp.getProperty("cookie"));
+			String cookieVal = (String) SpUtil.getSp(FgApp.getInstance(), SpUtil.KEY_COOKIE, "");
+			if(cookieVal!= null && !"".equals(cookieVal)){
+				conn.setRequestProperty("Cookie", cookieVal);
+				System.out.println("cookie:"+cookieVal);
 			} else{
 				String cookieValuePair = conn.getHeaderField("Set-Cookie");
 				if(cookieValuePair != null){
 					System.out.println("conn:"+conn+ "cookievaluepair:"+cookieValuePair);
 					mProp.setProperty("cookie", cookieValuePair.substring(0, cookieValuePair.indexOf(";")));
 					System.out.println("cookie:"+mProp.getProperty("cookie"));
+					//存入SharedPreferences
+					SpUtil.setSP(FgApp.getInstance(), SpUtil.KEY_COOKIE, cookieValuePair);
 				}
 			}
 		
@@ -85,7 +91,7 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 				System.out.println("请求码不为200");
 				return REQUEST_FAIL;
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally{

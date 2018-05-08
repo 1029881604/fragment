@@ -24,25 +24,26 @@ public interface NearbyBusiness {
     // Retrofit单独使用时返回的是Call
     //Retrofit与Rxjava结合，将Call改成Observable
 //    @GET("beforePath/{needAdd}/afterPath")
-    @GET("{endPath}")
+//    @GET("{endPath}") , 命名空间在这里设置
+    @GET("nearby/{endPath}")
     Observable<List<NeedPreInfo>> getNeedListInfo(@Path("endPath") String endPath,
                                                   @Query("type") String type,
                                                   @Query("latitude") double latitude,
                                                   @Query("longitude") double longitude);
 
-    @GET("{endSkillPath}")
+    @GET("nearby/{endSkillPath}")
     Observable<List<SkillPreInfo>> getSkillListInfo(@Path("endSkillPath") String endPath,
                                                     @Query("type") String type,
                                                     @Query("latitude") double latitude,
                                                     @Query("longitude") double longitude);
 
-    @GET("{endPath}")
+    @GET("nearby/{endPath}")
     Observable<PublishNeed> getNearbyPublishNeed(@Path("endPath") String endPath, @Query("id") long id);
 
-    @GET("{endPath}")
+    @GET("nearby/{endPath}")
     Observable<PublishSkill> getNearbyPublishSkill(@Path("endPath") String endPath, @Query("id") long id);
 
-    @GET("{endPath}")
+    @GET("nearby/{endPath}")
     Observable<NearbyModularInfo> getNearbyFgInfos(@Path("endPath") String endPath, @Query("type") String type);
 
 }

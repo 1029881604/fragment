@@ -46,7 +46,6 @@ public class NearbyAsyncPersenterImpl implements INearbyAsyncPresenter {
     public void getServerNeedData(String type, double latitude, double longitude) {
         L.i("tag", "persenter:getServerNeedData");
         String endUrl = mProp.getProperty(AccessNetConst.GETNEEDINFOENDPATH);
-        L.i("tag", mProp.getProperty(AccessNetConst.BASEPATH)+endUrl);
         final Dialog dialog = mView.showProgressDialog("正在加载...");//显示对话框
         addSubscription( mMoldel.getServerNeedData(endUrl, type,
                 latitude, longitude).subscribe(new Subscriber<List<NeedPreInfo>>() {

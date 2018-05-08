@@ -11,16 +11,22 @@ public interface AccessNetConst {
     String LOADFAIL = "加载失败";
     String LOGINING = "正在登入...";
     String REGISTERING = "正在注册...";
+    //base
     String BASEPATH = "basePath";
+    //use
     String LOGINENDPATH = "loginEndPath";
     String FINDFRIENDENDPATH = "findFriendEndPath";
     String REGISTERENDPATH = "registerEndPath";
     String GETREQVERICODEENDPATH = "getReqVeriCodeEndPath";
+    //nearby
     String GETSKILLINFOENDPATH = "getNearbySkillInfoEndPath";
     String GETNEEDINFOENDPATH = "getNearbyNeedInfoEndPath";
     String GETPUBLISHNEEDENDPATH = "getPublishNeedEndPath";
     String GETPUBLISHSKILLENDPATH = "getPublishSkillEndPath";
     String NEARBYFRAGMENTINFOSENDPATH = "NearbyFragmentInfosEndPath";
+    //forward
+    String TOPERSONINFOENDPATH = "toPersonInfoEndPath";
+
 
 
     /*yy添加的*/

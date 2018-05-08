@@ -6,9 +6,11 @@ import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.constant.ForwardConst;
 import team.antelope.fg.ui.base.BaseActivity;
-import team.antelope.fg.util.L;
 import team.antelope.fg.util.PropertiesUtil;
 import team.antelope.fg.widght.MyWebView;
+
+import static java.lang.System.getProperty;
+
 /**
  * @Author hwc
  * @Date 2018/4/6
@@ -40,9 +42,10 @@ public class PersonInfoActivity extends BaseActivity{
     private void init() {
         long id = getIntent().getLongExtra(ForwardConst.USERID, -1l);
         webView =  findViewById(R.id.webview_person);
-        String url = PropertiesUtil.getInstance().
-                getProperty(AccessNetConst.BASEPATH) + "ToUserInfoServlet?id="+id;
-        L.i("AccessNetConst", url);
+        PropertiesUtil prop = PropertiesUtil.getInstance();
+        String url = prop.getProperty(AccessNetConst.BASEPATH)
+                + prop.getProperty(AccessNetConst.TOPERSONINFOENDPATH)
+                +"?id="+id;
         webView.loadUrl(url);
     }
 

@@ -154,6 +154,7 @@ public class AccompanyFragment extends BaseNearbyFragment<String, NearbyInfo>{
         setLoadable();          //过几分钟之后才能加载
         String endUrl = PropertiesUtil.getInstance().
                 getProperty(AccessNetConst.NEARBYFRAGMENTINFOSENDPATH);
+
         Observable<NearbyModularInfo> observable = RetrofitServiceManager.getInstance()
                 .create(NearbyBusiness.class).getNearbyFgInfos(endUrl,
                         mType).observeOn(AndroidSchedulers.mainThread())

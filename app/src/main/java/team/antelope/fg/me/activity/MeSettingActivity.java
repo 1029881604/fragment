@@ -62,6 +62,7 @@ public class MeSettingActivity extends BaseActivity implements View.OnClickListe
             case R.id.btn_exit_login:
                 SpUtil spUtil = mApp.getSpUtil();
                 spUtil.setSP(getApplicationContext(), SpUtil.KEY_LOGINSTATE, AppConst.UNLOGIN_STATE);
+                SpUtil.remove(MeSettingActivity.this, SpUtil.KEY_COOKIE);
                 Intent intent = new Intent(MeSettingActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();

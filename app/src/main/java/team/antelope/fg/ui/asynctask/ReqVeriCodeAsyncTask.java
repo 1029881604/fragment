@@ -7,8 +7,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.os.AsyncTask;
+
+import team.antelope.fg.FgApp;
 import team.antelope.fg.ui.model.callback.IOnSendVerificationCallBack;
 import team.antelope.fg.util.PropertiesUtil;
+import team.antelope.fg.util.SpUtil;
 import team.antelope.fg.util.StreamUtil;
 
 public class ReqVeriCodeAsyncTask extends AsyncTask<String, String, String> {
@@ -38,16 +41,20 @@ public class ReqVeriCodeAsyncTask extends AsyncTask<String, String, String> {
 			conn.setDoOutput(true);
 			conn.setConnectTimeout(60000);
 			conn.setRequestMethod("GET");
-
-			if(mProp.getProperty("cookie") != null){
-				conn.setRequestProperty("Cookie", mProp.getProperty("cookie"));
-				System.out.println("cookie:"+mProp.getProperty("cookie"));
+			String cookieVal = (String) SpUtil.getSp(FgApp.getInstance(), SpUtil.KEY_COOKIE, "");
+			if(cookieVal!= null  && !"".equals(cookieVal)){
+				conn.setRequestProperty("Cookie", cookieVal);
+				System.out.println("cookie:"+cookieVal);
 			} else{
+				//之前没有存储cookie， 则直接访问服务器去获取新的cookie
 				String cookieValuePair = conn.getHeaderField("Set-Cookie");
 				if(cookieValuePair != null){
 					System.out.println("conn:"+conn+ "cookievaluepair:"+cookieValuePair);
+					//存入properties
 					mProp.setProperty("cookie", cookieValuePair.substring(0, cookieValuePair.indexOf(";")));
 					System.out.println("cookie:"+mProp.getProperty("cookie"));
+					//存入SharedPreferences
+					SpUtil.setSP(FgApp.getInstance(), SpUtil.KEY_COOKIE, cookieValuePair);
 				}
 			}
 

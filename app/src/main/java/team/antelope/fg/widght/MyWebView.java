@@ -13,6 +13,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.ValueCallback;
@@ -25,7 +27,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import team.antelope.fg.FgApp;
+import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.util.L;
+import team.antelope.fg.util.PropertiesUtil;
+import team.antelope.fg.util.SpUtil;
 
 /**
  * @Author：hwc
@@ -60,6 +65,11 @@ public class MyWebView extends WebView {
         //把进度条加到Webview中
         addView(progressView);
         //初始化设置
+        String baseUrl = PropertiesUtil.getInstance().getProperty(AccessNetConst.BASEPATH);
+        String cookies = (String) SpUtil.getSp(context, SpUtil.KEY_COOKIE, "");
+        L.i("cookies", cookies);
+        boolean b = syncCookie(baseUrl, cookies.split(";"));
+        L.i("cookie_is_ok", b+"");
         initWebSettings();
         setWebChromeClient(new MyWebCromeClient());
         setWebViewClient(new MyWebviewClient());
@@ -87,7 +97,21 @@ public class MyWebView extends WebView {
         final String dbPath = context.getApplicationContext().getDir("db", Context.MODE_PRIVATE).getPath();
         settings.setDatabasePath(dbPath);
     }
-
+    /*
+      * 同步cookie
+      * */
+    public boolean syncCookie(String baseUrl, String[] cookies) {
+        CookieManager cookieManager = CookieManager.getInstance();
+        for (int i = 0; i <cookies.length ; i++) {
+            cookieManager.setCookie(baseUrl, cookies[i]);
+        }
+        String newCookie = cookieManager.getCookie(baseUrl);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(FgApp.getInstance());
+            cookieSyncManager.sync();
+        }
+        return TextUtils.isEmpty(newCookie) ? false : true;
+    }
 
     private class MyWebCromeClient extends WebChromeClient {
         @Override
