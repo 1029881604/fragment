@@ -64,12 +64,6 @@ public class MyWebView extends WebView {
         progressView.setProgress(10);
         //把进度条加到Webview中
         addView(progressView);
-        //初始化设置
-        String baseUrl = PropertiesUtil.getInstance().getProperty(AccessNetConst.BASEPATH);
-        String cookies = (String) SpUtil.getSp(context, SpUtil.KEY_COOKIE, "");
-        L.i("cookies", cookies);
-        boolean b = syncCookie(baseUrl, cookies.split(";"));
-        L.i("cookie_is_ok", b+"");
         initWebSettings();
         setWebChromeClient(new MyWebCromeClient());
         setWebViewClient(new MyWebviewClient());

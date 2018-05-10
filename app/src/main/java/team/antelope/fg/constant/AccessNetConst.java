@@ -15,6 +15,7 @@ public interface AccessNetConst {
     String BASEPATH = "basePath";
     //use
     String LOGINENDPATH = "loginEndPath";
+    String LOGOUTENDPATH = "logoutEndPath";
     String FINDFRIENDENDPATH = "findFriendEndPath";
     String REGISTERENDPATH = "registerEndPath";
     String GETREQVERICODEENDPATH = "getReqVeriCodeEndPath";

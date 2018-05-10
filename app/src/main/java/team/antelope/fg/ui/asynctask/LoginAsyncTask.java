@@ -31,9 +31,9 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 	private PropertiesUtil mProp;
 	public static final String REQUEST_FAIL="请求失败";
 	public static final String LOGIN_SUCCESS="登入成功";
-//	public static final String NEED_NAME="请输入用户名";
-//	public static final String NEED_PWD="请输入密码";
-//	public static final String ERROR_INPUT="账号或密码错误";
+	public static final String NEED_NAME="请输入用户名";
+	public static final String NEED_PWD="请输入密码";
+	public static final String ERROR_INPUT="账号或密码错误";
 
 	public LoginAsyncTask(IOnLoginCallback<String> callback, String url) {
 		this.callback = callback;
@@ -65,7 +65,6 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 				String cookieValuePair = conn.getHeaderField("Set-Cookie");
 				if(cookieValuePair != null){
 					System.out.println("conn:"+conn+ "cookievaluepair:"+cookieValuePair);
-					mProp.setProperty("cookie", cookieValuePair.substring(0, cookieValuePair.indexOf(";")));
 					System.out.println("cookie:"+mProp.getProperty("cookie"));
 					//存入SharedPreferences
 					SpUtil.setSP(FgApp.getInstance(), SpUtil.KEY_COOKIE, cookieValuePair);
@@ -97,7 +96,6 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 		} finally{
 			if(conn != null){
 				conn.disconnect();
-				conn = null;
 			}
 		}
 		return REQUEST_FAIL;
@@ -115,6 +113,12 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 		String[] strings = gson.fromJson(result, String[].class);
 		if(LOGIN_SUCCESS.equals(strings[0])){
 			callback.onSuccess(result);
+		} else if(NEED_NAME.equals(strings[0])){
+			callback.onFail(NEED_NAME);
+		} else if(NEED_PWD.equals(strings[0])){
+			callback.onFail(NEED_PWD);
+		} else if(ERROR_INPUT.equals(strings[0])){
+			callback.onFail(ERROR_INPUT);
 		}
 	}
 }

@@ -6,7 +6,9 @@ import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.constant.ForwardConst;
 import team.antelope.fg.ui.base.BaseActivity;
+import team.antelope.fg.util.L;
 import team.antelope.fg.util.PropertiesUtil;
+import team.antelope.fg.util.SpUtil;
 import team.antelope.fg.widght.MyWebView;
 
 import static java.lang.System.getProperty;
@@ -46,7 +48,17 @@ public class PersonInfoActivity extends BaseActivity{
         String url = prop.getProperty(AccessNetConst.BASEPATH)
                 + prop.getProperty(AccessNetConst.TOPERSONINFOENDPATH)
                 +"?id="+id;
+        syncCookie(); //同步cookie要在loadUrl之前设置
         webView.loadUrl(url);
+    }
+
+    private void syncCookie() {
+        //初始化设置
+        String baseUrl = PropertiesUtil.getInstance().getProperty(AccessNetConst.BASEPATH);
+        String cookies = (String) SpUtil.getSp(this, SpUtil.KEY_COOKIE, "");
+        L.i("cookies", cookies);
+        boolean b = webView.syncCookie(baseUrl, cookies.split(";"));
+        L.i("cookie_is_ok", b+"");
     }
 
     @Override

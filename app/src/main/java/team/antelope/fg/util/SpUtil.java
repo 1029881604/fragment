@@ -24,7 +24,7 @@ public class SpUtil {
     public static String KEY_PASSWORD = "key_password";
     public static String KEY_LOGINSTATE = "key_loginstate";
     public static String KEY_IS_CREATEDB = "key_is_createdb";
-    public static String KEY_COOKIE = "Set-Cookie";
+    public static String KEY_COOKIE = "key_cookie";
 
     private static SharedPreferences mSp;
     private static SharedPreferences.Editor mEditor;
