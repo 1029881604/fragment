@@ -1,5 +1,7 @@
 package team.antelope.fg.util;
 
+import android.text.TextUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import team.antelope.fg.constant.AccessNetConst;
  * @Desc: ...  okhttp的工具类
  * 应用拦截器
 不需要担心中间过程的响应,如重定向和重试.
-总是只调用一次,即使HTTP响应是从缓存中获取.
+总是调用一次,即使HTTP响应是从缓存中获取.
 观察应用程序的初衷. 不关心OkHttp注入的头信息如: If-None-Match.
 允许短路而不调用 Chain.proceed(),即中止调用.
 允许重试,使 Chain.proceed()调用多次.
@@ -44,6 +46,10 @@ public class OkHttpUtils {
     public static OkHttpClient.Builder createHttpClientBuild(){
         //cookie容器
         final HashMap<String, List<Cookie>> cookieStore = new HashMap<>();
+        //缓存控制
+        final CacheControl cacheControl = new CacheControl.Builder()
+                .maxAge(60, TimeUnit.SECONDS)
+                .build();
         //client.build
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 //添加cookie管理
@@ -71,29 +77,34 @@ public class OkHttpUtils {
                     }
                 })//设置cookie管理
 // 已经设置了cookie管理， 不用在这里设置cookie，如果要用到别的，可以使用
-// .addInterceptor(new Interceptor() {  //应用拦截器
-//                    @Override
-//                    public Response intercept(Chain chain) throws IOException {
-//                        Request request = processRequest(chain.request());
-//                        Response response = processResponse(chain.proceed(request));
-//                        return response;
-//
-//                    }
-//                    //访问网络之前，处理Request(这里统一添加了Cookie)
-//                    private  Request processRequest(Request request) {
-//                        String cookieStr = (String) SpUtil.getSp(FgApp.getInstance(), SpUtil.KEY_COOKIE, "");
-//                        String[] strids = cookieStr.split(";");
-//                        return request
-//                                .newBuilder()
-//                                .addHeader("Cookie", strids[0])
-//                                .build();
-//                    }
-//
-//                    //访问网络之后，处理Response(这里没有做特别处理)
-//                    private  Response processResponse(Response response) {
-//                        return response;
-//                    }
-//                })
+ .addInterceptor(new Interceptor() {  //应用拦截器
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request();
+                        String cacheControl = request.cacheControl().toString();
+                        if (!NetUtil.isConnected(FgApp.getInstance())) {
+                            L.i("intercepter", "没网络了");
+                            L.i("intercepter", "req.headers:" + request.headers().toString());
+                            request = request.newBuilder()
+                                    .cacheControl(TextUtils.isEmpty(cacheControl)? CacheControl.FORCE_CACHE:CacheControl.FORCE_NETWORK)
+                                    .build();
+                        }
+                        Response originalResponse = chain.proceed(request);
+                        if (NetUtil.isConnected(FgApp.getInstance())){
+                            //有网的时候连接服务器请求,缓存一天
+                            return originalResponse.newBuilder()
+                                    .header("Cache-Control", "public, max-age=" + 1*60)
+                                    .removeHeader("Pragma")
+                                    .build();
+                        } else {
+                            //网络断开时读取缓存
+                            return originalResponse.newBuilder()
+                                    .header("Cache-Control", "public, only-if-cached, max-stale=" + 60 * 60 * 24 * 28)
+                                    .removeHeader("Pragma")
+                                    .build();
+                        }
+                    }
+                })
 
                 //添加反馈时的应用拦截器signingInterceptor
                 .addInterceptor(new Interceptor() {
@@ -143,7 +154,7 @@ public class OkHttpUtils {
                                 .build();
                     }
                 })
-                .cache(new Cache(new File(FgApp.getInstance().getCacheDir(), "http"), 10 * 1024 * 1024))
+                .cache(new Cache(new File(FgApp.getInstance().getCacheDir(), "http"), 30 * 1024 * 1024))
                 ;
         return builder;
     }

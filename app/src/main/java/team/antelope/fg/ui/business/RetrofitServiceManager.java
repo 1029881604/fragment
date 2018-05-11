@@ -48,6 +48,7 @@ public class RetrofitServiceManager {
         OkHttpClient.Builder builder = OkHttpUtils.createHttpClientBuild();
         builder.connectTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS);//连接超时时间        builder.writeTimeout(DEFAULT_READ_TIME_OUT,TimeUnit.SECONDS);//写操作 超时时间
         builder.readTimeout(DEFAULT_READ_TIME_OUT,TimeUnit.SECONDS);//读操作超时时间
+        OkHttpClient httpClient = builder.build();
         // 添加公共参数拦截器
 //        HttpCommonInterceptor commonInterceptor = new HttpCommonInterceptor.Builder()
 //                .addHeaderParams("paltform","android")
@@ -58,7 +59,7 @@ public class RetrofitServiceManager {
         // 创建Retrofit
         L.i("tag", "RetrofitServiceManager:RetrofitServiceManager--mid");
         Retrofit.Builder builder1 = new Retrofit.Builder();
-        builder1.client(builder.build());
+        builder1.client(httpClient);
         builder1.addCallAdapterFactory(RxJavaCallAdapterFactory.create());
         builder1.addConverterFactory(GsonConverterFactory.create());
         String baseUrl = prop.getProperty(AccessNetConst.BASEPATH);
