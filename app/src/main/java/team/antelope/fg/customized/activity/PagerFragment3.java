@@ -18,8 +18,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
-import team.antelope.fg.constant.AccessNetConst;
-import team.antelope.fg.constant.SkillAboutDetails;
+import team.antelope.fg.customized.constant.AccessNetConst;
+import team.antelope.fg.customized.constant.SkillAboutDetails;
 import team.antelope.fg.customized.adapter.DzRecyclerAdapterImgUrl;
 import team.antelope.fg.entity.PublishSkill;
 import team.antelope.fg.ui.base.BaseFragment;
@@ -119,13 +119,9 @@ public class PagerFragment3 extends BaseFragment implements View.OnClickListener
                 L.i("1234", "complete123");
                 L.i("1234", "publishSkills:"+publishSkills);
 
-                //循环添加集合元素
-                for (int i=0; i<publishSkills.size(); i++) {
-                    if (!publishSkills.isEmpty()&&
-                            publishSkills.get(i).getSkillType().equals(SkillAboutDetails.SKILLTYPE3)&&
-                            publishSkills.get(i).isOnline()&&
-                            !publishSkills.get(i).isComplete()
-                            ){
+                if (!publishSkills.isEmpty()){
+                    //循环添加集合元素
+                    for (int i=0; i<publishSkills.size(); i++) {
                         lists.add(publishSkills.get(i).getTitle());
                         contents.add(publishSkills.get(i).getContent());
                         type.add(publishSkills.get(i).getSkillType());
@@ -153,6 +149,7 @@ public class PagerFragment3 extends BaseFragment implements View.OnClickListener
                         intent.putExtra("startdate",startdate.get(postion));
                         intent.putExtra("stopdate",stopdate.get(postion));
                         intent.putExtra("userid",userid.get(postion));
+                        intent.putExtra("skillpic",resids.get(postion));    //新增的传递的图片
                         intent.setClass(getActivity(),SkillDetails.class);  //指定传递对象
                         startActivity(intent);
 //                ToastUtil.showCustom(getActivity().getApplicationContext(),"点击了："+postion, 2000);

@@ -1,4 +1,4 @@
-package team.antelope.fg.constant;
+package team.antelope.fg.customized.constant;
 
 /**
  * Created by Kyrene on 2018/4/9.
