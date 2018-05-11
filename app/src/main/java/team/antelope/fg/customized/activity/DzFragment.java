@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import team.antelope.fg.R;
-import team.antelope.fg.constant.SkillAboutDetails;
+import team.antelope.fg.customized.constant.SkillAboutDetails;
 import team.antelope.fg.customized.adapter.FragAdapter;
 import team.antelope.fg.customized.adapter.TopPagerAdapter;
 import team.antelope.fg.ui.base.BaseFragment;

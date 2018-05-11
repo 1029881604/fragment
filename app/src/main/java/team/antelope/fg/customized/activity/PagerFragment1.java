@@ -18,8 +18,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
-import team.antelope.fg.constant.AccessNetConst;
-import team.antelope.fg.constant.SkillAboutDetails;
+import team.antelope.fg.customized.constant.AccessNetConst;
+import team.antelope.fg.customized.constant.SkillAboutDetails;
 import team.antelope.fg.customized.adapter.DzRecyclerAdapterImgUrl;
 import team.antelope.fg.entity.PublishSkill;
 import team.antelope.fg.ui.base.BaseFragment;
@@ -123,22 +123,18 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
                 L.i("1234", "complete123");
                 L.i("1234", "publishSkills:"+publishSkills);
 
-                //循环添加集合元素
-                for (int i=0; i<publishSkills.size(); i++) {
-                    if (!publishSkills.isEmpty()&&
-                            publishSkills.get(i).getSkillType().equals(SkillAboutDetails.SKILLTYPE1)&&
-                            publishSkills.get(i).isOnline()&&
-                            !publishSkills.get(i).isComplete()
-                            ){
-                        lists.add(publishSkills.get(i).getTitle());
-                        contents.add(publishSkills.get(i).getContent());
-                        type.add(publishSkills.get(i).getSkillType());
-                        startdate.add(DateUtil.formatDate(publishSkills.get(i).getPublishDate().getTime()));
-                        stopdate.add(DateUtil.formatDate(publishSkills.get(i).getStopDate().getTime()));
-                        userid.add(publishSkills.get(i).getuId());
-                        resids.add(publishSkills.get(i).getImg());
+                if (!publishSkills.isEmpty()){
+                    //循环添加集合元素
+                    for (int i=0; i<publishSkills.size(); i++) {
+                    lists.add(publishSkills.get(i).getTitle());
+                    contents.add(publishSkills.get(i).getContent());
+                    type.add(publishSkills.get(i).getSkillType());
+                    startdate.add(DateUtil.formatDate(publishSkills.get(i).getPublishDate().getTime()));
+                    stopdate.add(DateUtil.formatDate(publishSkills.get(i).getStopDate().getTime()));
+                    userid.add(publishSkills.get(i).getuId());
+                    resids.add(publishSkills.get(i).getImg());
                     }
-                }
+               }
 
                 //recyclerView的相关设置,绑定适配器
                 mRecyclerView.setItemAnimator(new DefaultItemAnimator());

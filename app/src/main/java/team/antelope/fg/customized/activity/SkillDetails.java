@@ -29,8 +29,8 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
 import team.antelope.fg.common.GlideApp;
-import team.antelope.fg.constant.AccessNetConst;
-import team.antelope.fg.constant.SkillAboutDetails;
+import team.antelope.fg.customized.constant.AccessNetConst;
+import team.antelope.fg.customized.constant.SkillAboutDetails;
 import team.antelope.fg.customized.adapter.DzRecyclerAdapterImgUrl;
 import team.antelope.fg.customized.scrollView.MyScrollView;
 import team.antelope.fg.customized.util.BitmapUtil;
@@ -162,6 +162,11 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
                 finishnum.setText(String.valueOf(mPerson.getDealnum()));
 //                skillBitmap.setImageURI(Uri.parse(skillPic));   没用
 //                SetImageViewUtil.setImageToImageView(skillBitmap,skillPic);
+                
+                /**
+                * @说明 设置图片
+                * @创建日期 2018/5/10 下午10:07
+                */
                 RequestOptions options = new RequestOptions();
                 options.centerCrop()
                         .placeholder(R.mipmap.default_avatar200)
@@ -181,7 +186,6 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
                         .apply(options)
                         .into(ivHeader);
                 L.i("testPic",skillPicture);
-
 
             }
 
