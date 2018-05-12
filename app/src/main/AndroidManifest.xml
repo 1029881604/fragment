@@ -47,7 +47,7 @@
         <!-- —————————————— activity start ———————————————— -->
         <!-- ——————splash—————— -->
         <activity android:name=".ui.activity.SplashActivity"
-           android:theme="@style/SplashTheme" >
+            android:theme="@style/SplashTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -101,8 +101,8 @@
 
         <activity android:name=".ui.activity.AsyncSkillActivity" />
         <activity android:name=".ui.activity.AsyncNeedActivity" />
-        <activity android:name=".ui.activity.PersonInfoActivity"
-            ></activity>
+        <activity android:name=".ui.activity.PersonInfoActivity" />
+        <activity android:name=".ui.activity.NeedInfoActivity" />
 
         <!-- ——————nearby end—————— -->
 

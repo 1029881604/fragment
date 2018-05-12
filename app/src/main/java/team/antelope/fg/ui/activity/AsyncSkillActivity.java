@@ -27,7 +27,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-import team.antelope.fg.FgApp;
 import team.antelope.fg.R;
 import team.antelope.fg.common.CircleTransform;
 import team.antelope.fg.common.GlideApp;
@@ -50,7 +49,7 @@ import team.antelope.fg.util.PropertiesUtil;
  * @Author hwc
  * @Date 2017/12/20
  * @TODO AsyncSkillActivity 1.长时间刷新不了 3.presenter
- * 
+ *
  */
 public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpandableListViewCallbacks<SkillPreInfo, PublishSkill> {
 
@@ -187,7 +186,7 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
         //设置点击事件
         Bundle bundle = new Bundle();
         bundle.putLong(ForwardConst.USERID, headerItem.getUid());
-        initEvent(this, myHeaderViewHolder.getRoundImg(), bundle);    //设置头像点击事件
+        addHeadImgClickEvent(this, myHeaderViewHolder.getRoundImg(), bundle);    //设置头像点击事件
         RequestOptions options = new RequestOptions();
         options.centerCrop()
                 .placeholder(R.mipmap.default_avatar200)
@@ -196,9 +195,9 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
                 .fitCenter()
                 .transform(new CircleTransform(this));
         GlideApp.with(AsyncSkillActivity.this)
-            .load(headerItem.getHeadimg())
-            .apply(options)
-            .into(myHeaderViewHolder.getRoundImg());
+                .load(headerItem.getHeadimg())
+                .apply(options)
+                .into(myHeaderViewHolder.getRoundImg());
         myHeaderViewHolder.getTv_title().setText(headerItem.getTitle());
         myHeaderViewHolder.getTv_name().setText(headerItem.getName());
         myHeaderViewHolder.getTv_addressdesc().setText(headerItem.getAddressdesc());
@@ -229,20 +228,20 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
     public void bindCollectionItemView(Context context, RecyclerView.ViewHolder holder,
                                        int groupOrdinal, PublishSkill item) {
         SkillItemHolder skillItemHolder = (SkillItemHolder) holder;
-            skillItemHolder.getTextViewTitle().setText(item.getTitle());
-            skillItemHolder.getTextViewDescrption().setText(item.getContent());
-            skillItemHolder.getTv_publish_time().setText(DateUtil.formatDataTime2(item.getPublishDate()));
-            skillItemHolder.getTv_stop_time().setText(DateUtil.formatDataTime2(item.getStopDate()));
-            skillItemHolder.getTv_iscomplete().setText(item.isComplete() ? "是" : "否");
-            skillItemHolder.getTv_location().setText(item.getAddressDesc());
-            skillItemHolder.getIv_preview_skill().setVisibility(View.VISIBLE);
-            RequestOptions options = new RequestOptions();
-            options.centerCrop()
+        skillItemHolder.getTextViewTitle().setText(item.getTitle());
+        skillItemHolder.getTextViewDescrption().setText(item.getContent());
+        skillItemHolder.getTv_publish_time().setText(DateUtil.formatDataTime2(item.getPublishDate()));
+        skillItemHolder.getTv_stop_time().setText(DateUtil.formatDataTime2(item.getStopDate()));
+        skillItemHolder.getTv_iscomplete().setText(item.isComplete() ? "是" : "否");
+        skillItemHolder.getTv_location().setText(item.getAddressDesc());
+        skillItemHolder.getIv_preview_skill().setVisibility(View.VISIBLE);
+        RequestOptions options = new RequestOptions();
+        options.centerCrop()
                 .placeholder(R.mipmap.default_avatar400)
                 .error(R.mipmap.error400)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .fitCenter();
-            GlideApp.with(AsyncSkillActivity.this)
+        GlideApp.with(AsyncSkillActivity.this)
                 .load(item.getImg())
                 .apply(options)
                 .into(skillItemHolder.getIv_preview_skill());

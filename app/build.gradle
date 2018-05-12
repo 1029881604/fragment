@@ -68,6 +68,8 @@ dependencies {
     //glide added by hwc at 2018/1/3　
     compile 'com.github.bumptech.glide:glide:4.3.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.3.1'
+    compile 'org.apache.httpcomponents:httpcore:4.4.4'
+
     //add by lx at 2018/1/5
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'

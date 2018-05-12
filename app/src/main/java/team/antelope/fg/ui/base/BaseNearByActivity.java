@@ -28,6 +28,7 @@ import team.antelope.fg.constant.LocationConst;
 import team.antelope.fg.constant.SkillAndNeedConst;
 import team.antelope.fg.entity.NeedPreInfo;
 import team.antelope.fg.entity.SkillPreInfo;
+import team.antelope.fg.ui.activity.NeedInfoActivity;
 import team.antelope.fg.ui.activity.PersonInfoActivity;
 import team.antelope.fg.ui.dialog.CustomProgressDialog;
 import team.antelope.fg.ui.presenter.INearbyAsyncPresenter;
@@ -84,7 +85,14 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
         L.i("TAG", "longitude:" + longitude);
         initPersenter();
     }
-    public void initEvent(final Context context, View view, final Bundle bundle) {
+
+    /**
+     * 增加头像点击事件，进行页面跳转
+     * @param context
+     * @param view
+     * @param bundle
+     */
+    protected void addHeadImgClickEvent(final Context context, View view, final Bundle bundle) {
         view.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -94,6 +102,21 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
             }
         });
     }
+
+    /**
+     * 增加itemdetail的点击事件， 进行页面跳转
+     */
+    protected void addNeedDetailClickEvent(final Context context, View view, final Bundle bundle){
+        view.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, NeedInfoActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+    }
+
     protected abstract void initPersenter();
 
     /**

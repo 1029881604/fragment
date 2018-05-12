@@ -81,6 +81,7 @@ public class MyWebView extends WebView {
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         //开启 DOM storage API 功能 较大存储空间，使用简单
         settings.setDomStorageEnabled(true);
+        settings.setDefaultTextEncodingName("utf-8");//设置网页默认编码
         //开启 Application Caches 功能 方便构建离线APP 不推荐使用
         settings.setAppCacheEnabled(false);
         final String cachePath = context.getApplicationContext().getDir("cache", Context.MODE_PRIVATE).getPath();

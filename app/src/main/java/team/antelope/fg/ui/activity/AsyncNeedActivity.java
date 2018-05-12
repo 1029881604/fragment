@@ -46,7 +46,7 @@ import team.antelope.fg.util.PropertiesUtil;
  * @Author hwc
  * @Date 2018/1/2
  * @TODO AsyncNeedActivity
- * 
+ *
  */
 public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpandableListViewCallbacks<NeedPreInfo, PublishNeed> {
 
@@ -183,7 +183,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         //设置头像点击事件
         Bundle bundle = new Bundle();
         bundle.putLong(ForwardConst.USERID, headerItem.getUid());
-        initEvent(this, myHeaderViewHolder.getRoundImg(), bundle);    //设置头像点击事件
+        addHeadImgClickEvent(this, myHeaderViewHolder.getRoundImg(), bundle);    //设置头像点击事件
         RequestOptions options = new RequestOptions();
         options.centerCrop()
                 .placeholder(R.mipmap.default_avatar200)
@@ -241,7 +241,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
      * @TODO AsyncSkillActivity  itemholder 静态内部类
      *
      */
-    public static class NeedItemHolder extends RecyclerView.ViewHolder {
+    public class NeedItemHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
         private final TextView tvDescription;
         private final TextView tv_publish_time;
@@ -253,11 +253,17 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         public NeedItemHolder(View v) {
             super(v);
             // Define click listener for the ViewHolder's View.
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
+            // 定义item的点击事件
+//            v.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                }
+//            });
+            Bundle bundle = new Bundle();
+            bundle.putLong("id", 101l);
+            addNeedDetailClickEvent(AsyncNeedActivity.this, v, bundle);
+
             tvTitle = v.findViewById(R.id.title);
             tvDescription = v.findViewById(R.id.description);
             tv_publish_time = v.findViewById(R.id.tv_publish_time);
