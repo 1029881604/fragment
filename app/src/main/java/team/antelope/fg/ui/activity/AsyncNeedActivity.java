@@ -255,13 +255,10 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
             // Define click listener for the ViewHolder's View.
             // 定义item的点击事件
 //            v.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
 //            });
             Bundle bundle = new Bundle();
             bundle.putLong("id", 101l);
+            //定义item的点击事件
             addNeedDetailClickEvent(AsyncNeedActivity.this, v, bundle);
 
             tvTitle = v.findViewById(R.id.title);

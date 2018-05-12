@@ -68,7 +68,6 @@ public class NeedInfoActivity extends BaseActivity{
 //        }
         String postData = builder1.toString();
         L.i("webvv", "url:" + url + "postData: "+postData);
-
         webView.postUrl(url, EncodingUtils.getBytes(postData, "UTF-8"));
     }
 
