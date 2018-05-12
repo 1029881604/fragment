@@ -9,6 +9,12 @@
     <color name="transparent">#00000000</color>
     <!-- 颜色 start-->
     <color name="blue">#56b8d9</color>
+    <color name="async_photography">#56b8d9</color>
+    <color name="async_accompany">#bf8dfc</color>
+    <color name="async_manual">#eac075</color>
+    <color name="async_errand">#ef91c7</color>
+    <color name="async_guide">#f9979e</color>
+    <color name="async_other">#59ab7f</color>
     <color name="black">#000000</color>
     <color name="text_color">#000</color>
     <color name="bg_vercode1">#FFE91E63</color>

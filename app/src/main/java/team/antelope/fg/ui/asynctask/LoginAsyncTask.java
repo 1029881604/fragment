@@ -31,7 +31,7 @@ public class LoginAsyncTask extends AsyncTask<String, String, String> {
 	private PropertiesUtil mProp;
 	public static final String REQUEST_FAIL="请求失败";
 	public static final String LOGIN_SUCCESS="登入成功";
-	public static final String NEED_NAME="请输入用户名";
+	public static final String NEED_NAME="请输入账号";
 	public static final String NEED_PWD="请输入密码";
 	public static final String ERROR_INPUT="账号或密码错误";
 

@@ -3,6 +3,7 @@ package team.antelope.fg.ui.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import team.antelope.fg.common.CircleTransform;
 import team.antelope.fg.common.GlideApp;
 import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.constant.ForwardConst;
+import team.antelope.fg.constant.SkillAndNeedConst;
 import team.antelope.fg.entity.PublishSkill;
 import team.antelope.fg.entity.SkillPreInfo;
 import team.antelope.fg.ui.base.BaseNearByActivity;
@@ -153,6 +155,20 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
         // Create a new view.
         View v = LayoutInflater.from(context)
                 .inflate(R.layout.nearby_header_row_item_async, parent, false);
+        CardView cardView = v.findViewById(R.id.explore_io_card_container);
+        if(type.equals(SkillAndNeedConst.TYPE_PHOTOGRAPHY)){
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.async_photography));
+        } else if(type.equals(SkillAndNeedConst.TYPE_ACCOMPANY)){
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.async_accompany));
+        }else if(type.equals(SkillAndNeedConst.TYPE_MANUAL)){
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.async_manual));
+        }else if(type.equals(SkillAndNeedConst.TYPE_ERRAND)){
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.async_errand));
+        }else if(type.equals(SkillAndNeedConst.TYPE_GUIDE)){
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.async_guide));
+        }else if(type.equals(SkillAndNeedConst.TYPE_OTHER)){
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.async_other));
+        }
         return new MyHeaderViewHolder(v, groupOrdinal, mAsyncExpandableListView);
     }
 
