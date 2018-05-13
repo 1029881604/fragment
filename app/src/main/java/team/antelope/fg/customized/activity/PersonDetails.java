@@ -152,25 +152,27 @@ public class PersonDetails extends BaseActivity{
                 L.i("person",mPerson.toString());
 
 //                L.i("testforpersonimg",mPerson.getHeadImg());
-                mToolbar.setTitle(mPerson.getName());
-                personName.setText(mPerson.getName());
-                personSex.setText(mPerson.getSex());
-                personAge.setText(String.valueOf(mPerson.getAge()) );
-                personEmail.setText(mPerson.getEmail());
-                PersonDealNum.setText(String.valueOf(mPerson.getDealnum()));
-                PersonFansNum.setText(String.valueOf(mPerson.getFansnum()) );
+                if (mPerson!=null) {
+                    mToolbar.setTitle(mPerson.getName());
+                    personName.setText(mPerson.getName());
+                    personSex.setText(mPerson.getSex());
+                    personAge.setText(String.valueOf(mPerson.getAge()));
+                    personEmail.setText(mPerson.getEmail());
+                    PersonDealNum.setText(String.valueOf(mPerson.getDealnum()));
+                    PersonFansNum.setText(String.valueOf(mPerson.getFansnum()));
 
-                /**
-                 * @说明 设置图片
-                 * @创建日期 2018/5/10 下午10:07
-                 */
-                RequestOptions options = new RequestOptions();
-                GlideApp.with(PersonDetails.this)
-                        .load(mPerson.getHeadImg())
-                        .placeholder(R.mipmap.default_avatar400)
-                        .error(R.drawable.ic_launcher_round)
-                        .apply(options)
-                        .into(setRoundImageViewUtil);
+                    /**
+                     * @说明 设置图片
+                     * @创建日期 2018/5/10 下午10:07
+                     */
+                    RequestOptions options = new RequestOptions();
+                    GlideApp.with(PersonDetails.this)
+                            .load(mPerson.getHeadImg())
+                            .placeholder(R.mipmap.default_avatar400)
+                            .error(R.drawable.ic_launcher_round)
+                            .apply(options)
+                            .into(setRoundImageViewUtil);
+                }
             }
 
             @Override

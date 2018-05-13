@@ -155,37 +155,40 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
 //                personpic.setImageBitmap(BitmapUtil.getBitmap(mPerson.getHeadImg()));
 
 //                L.i("testforpersonimg",mPerson.getHeadImg());
-                personaname.setText(mPerson.getName());
-                personrank.setText(String.valueOf(mPerson.getStarnum()));
+
+                if (mPerson!=null) {
+                    personaname.setText(mPerson.getName());
+                    personrank.setText(String.valueOf(mPerson.getStarnum()));
 //        skillnum.setText(person.get);
-                fansnum.setText(String.valueOf(mPerson.getFansnum()));
-                finishnum.setText(String.valueOf(mPerson.getDealnum()));
+                    fansnum.setText(String.valueOf(mPerson.getFansnum()));
+                    finishnum.setText(String.valueOf(mPerson.getDealnum()));
 //                skillBitmap.setImageURI(Uri.parse(skillPic));   没用
 //                SetImageViewUtil.setImageToImageView(skillBitmap,skillPic);
-                
-                /**
-                * @说明 设置图片
-                * @创建日期 2018/5/10 下午10:07
-                */
-                RequestOptions options = new RequestOptions();
-                options.centerCrop()
-                        .placeholder(R.mipmap.default_avatar200)
-                        .error(R.mipmap.error200)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .fitCenter();
-                GlideApp.with(SkillDetails.this)
-                        .load(mPerson.getHeadImg())
-                        .apply(options)
-                        .into(personpic);
-                GlideApp.with(SkillDetails.this)
-                        .load(skillPicture)
-                        .apply(options)
-                        .into(skillpic);
-                GlideApp.with(SkillDetails.this)
-                        .load(skillPicture)
-                        .apply(options)
-                        .into(ivHeader);
-                L.i("testPic",skillPicture);
+
+                    /**
+                     * @说明 设置图片
+                     * @创建日期 2018/5/10 下午10:07
+                     */
+                    RequestOptions options = new RequestOptions();
+                    options.centerCrop()
+                            .placeholder(R.mipmap.default_avatar200)
+                            .error(R.mipmap.error200)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .fitCenter();
+                    GlideApp.with(SkillDetails.this)
+                            .load(mPerson.getHeadImg())
+                            .apply(options)
+                            .into(personpic);
+                    GlideApp.with(SkillDetails.this)
+                            .load(skillPicture)
+                            .apply(options)
+                            .into(skillpic);
+                    GlideApp.with(SkillDetails.this)
+                            .load(skillPicture)
+                            .apply(options)
+                            .into(ivHeader);
+                    L.i("testPic", skillPicture);
+                }
 
             }
 
