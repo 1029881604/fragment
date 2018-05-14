@@ -105,12 +105,16 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
 
     /**
      * 增加itemdetail的点击事件， 进行页面跳转
+     * @param  activityType 0 为need， 1为skill
      */
-    protected void addNeedDetailClickEvent(final Context context, View view, final Bundle bundle){
+    protected void addNeedDetailClickEvent(final Context context, View view, final Bundle bundle, final int activityType){
         view.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, NeedInfoActivity.class);
+                if (activityType == 1){
+//                    intent = new Intent(context, SkillInfoActivity.class);
+                }
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
