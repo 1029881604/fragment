@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="30dip"
-    tools:context=".customized.TrPay.PayActivity">
+    tools:context=".customized.trpay.PayActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

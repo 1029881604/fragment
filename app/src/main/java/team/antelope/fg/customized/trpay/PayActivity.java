@@ -1,4 +1,4 @@
-package team.antelope.fg.customized.TrPay;
+package team.antelope.fg.customized.trpay;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,10 +20,10 @@ import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.ToastUtil;
 
 /**
- * describe：接入TRPAY快捷支付Demo实例
- * author：trpay
- * date：2017-12-01
- */
+ * Create by Kyrene
+* @说明 TrPay支付
+* @创建日期 2018/5/14 下午6:09
+*/
 public class PayActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText commodityName;//商品名称
@@ -100,11 +100,11 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
                  */
                 @Override
                 public void onPayFinish(Context context, String outtradeno, int resultCode, String resultString, int payType, Long amount, String tradename) {
-                    if (resultCode == TrPayResult.RESULT_CODE_SUCC.getId()) {//1：支付成功回调
-                        TrPay.getInstance((Activity) context).closePayView();//关闭快捷支付页面
+                    if (resultCode == TrPayResult.RESULT_CODE_SUCC.getId()) {       //1：支付成功回调
+                        TrPay.getInstance((Activity) context).closePayView();       //关闭快捷支付页面
                         ToastUtil.showCustom(PayActivity.this, resultString, Toast.LENGTH_LONG);
                         //支付成功逻辑处理
-                    } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {//2：支付失败回调
+                    } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {        //2：支付失败回调
                         ToastUtil.showCustom(PayActivity.this, resultString, Toast.LENGTH_LONG);
                         //支付失败逻辑处理
                     }
@@ -127,11 +127,11 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
                  */
                 @Override
                 public void onPayFinish(Context context, String outtradeno, int resultCode, String resultString, int payType, Long amount, String tradename) {
-                    if (resultCode == TrPayResult.RESULT_CODE_SUCC.getId()) {//1：支付成功回调
-                        TrPay.getInstance((Activity) context).closePayView();//关闭快捷支付页面
+                    if (resultCode == TrPayResult.RESULT_CODE_SUCC.getId()) {       //1：支付成功回调
+                        TrPay.getInstance((Activity) context).closePayView();       //关闭快捷支付页面
                         ToastUtil.showCustom(PayActivity.this, resultString, Toast.LENGTH_LONG);
                         //支付成功逻辑处理
-                    } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {//2：支付失败回调
+                    } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {        //2：支付失败回调
                         ToastUtil.showCustom(PayActivity.this, resultString, Toast.LENGTH_LONG);
                         //支付失败逻辑处理
                     }
@@ -154,11 +154,11 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
                  */
                 @Override
                 public void onPayFinish(Context context, String outtradeno, int resultCode, String resultString, int payType, Long amount, String tradename) {
-                    if (resultCode == TrPayResult.RESULT_CODE_SUCC.getId()) {//1：支付成功回调
-                        TrPay.getInstance((Activity) context).closePayView();//关闭快捷支付页面
+                    if (resultCode == TrPayResult.RESULT_CODE_SUCC.getId()) {       //1：支付成功回调
+                        TrPay.getInstance((Activity) context).closePayView();       //关闭快捷支付页面
                         ToastUtil.showCustom(PayActivity.this, resultString, Toast.LENGTH_LONG);
                         //支付成功逻辑处理
-                    } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {//2：支付失败回调
+                    } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {        //2：支付失败回调
                         ToastUtil.showCustom(PayActivity.this, resultString, Toast.LENGTH_LONG);
                         //支付失败逻辑处理
                     }

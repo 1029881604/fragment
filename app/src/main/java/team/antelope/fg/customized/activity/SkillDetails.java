@@ -1,11 +1,8 @@
 package team.antelope.fg.customized.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +13,8 @@ import android.widget.TextView;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -30,20 +23,13 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
 import team.antelope.fg.common.GlideApp;
-import team.antelope.fg.customized.TrPay.PayActivity;
+import team.antelope.fg.customized.trpay.PayActivity;
 import team.antelope.fg.customized.constant.AccessNetConst;
-import team.antelope.fg.customized.constant.SkillAboutDetails;
-import team.antelope.fg.customized.adapter.DzRecyclerAdapterImgUrl;
 import team.antelope.fg.customized.scrollView.MyScrollView;
-import team.antelope.fg.customized.util.BitmapUtil;
-import team.antelope.fg.customized.util.SetImageViewUtil;
-import team.antelope.fg.db.dao.impl.PersonDaoImpl;
 import team.antelope.fg.entity.Person;
-import team.antelope.fg.entity.PublishSkill;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.ui.business.CustmoizedBusiness;
 import team.antelope.fg.ui.business.RetrofitServiceManager;
-import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.L;
 import team.antelope.fg.util.PropertiesUtil;
 import team.antelope.fg.util.ToastUtil;

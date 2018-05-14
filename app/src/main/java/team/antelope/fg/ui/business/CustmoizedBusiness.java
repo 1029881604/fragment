@@ -18,7 +18,6 @@ public interface CustmoizedBusiness {
 //    @GET("beforePath/{needAdd}/afterPath")
 
     @GET("{endPath}")
-
     Observable<List<PublishSkill>> getList(@Path("endPath") String endPath, @Query("skilltype") String skilltype);
 
     @GET("{endPath}")
@@ -26,6 +25,9 @@ public interface CustmoizedBusiness {
 
     @GET("{endPath}")
     Observable<List<PublishSkill>> getListByPerson(@Path("endPath") String endPath, @Query("id") long id);
+
+    @GET("{endPath}")
+    Observable<List<PublishSkill>> searchResult(@Path("endPath") String endPath, @Query("keyword") String keyword);
 
 }
 

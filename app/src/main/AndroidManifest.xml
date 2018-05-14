@@ -81,7 +81,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".customized.activity.SkillDetails" />
         <activity android:name=".customized.activity.SearchResult" />
-        <activity android:name=".customized.TrPay.PayActivity"/>
+        <activity android:name=".customized.activity.PersonDetails"/>
+        <activity android:name=".customized.trpay.PayActivity"/>
         <!-- ————————定制—————————— -->
 
         <!-- ——————publish start—————— -->
