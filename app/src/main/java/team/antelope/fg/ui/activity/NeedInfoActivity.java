@@ -49,7 +49,7 @@ public class NeedInfoActivity extends BaseActivity{
         PropertiesUtil prop = PropertiesUtil.getInstance();
         String baseUrl =prop.getProperty(AccessNetConst.BASEPATH);
         String url = baseUrl
-                + prop.getProperty(AccessNetConst.TOPERSONINFOENDPATH);
+                + prop.getProperty(AccessNetConst.TONEEDINFO);
         L.i("webvv", "url:" + url );
         syncCookie(baseUrl); //同步cookie要在loadUrl之前设置
         StringBuilder builder1 = new StringBuilder();

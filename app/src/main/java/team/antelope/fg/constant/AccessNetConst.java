@@ -25,6 +25,9 @@ public interface AccessNetConst {
     String GETPUBLISHNEEDENDPATH = "getPublishNeedEndPath";
     String GETPUBLISHSKILLENDPATH = "getPublishSkillEndPath";
     String NEARBYFRAGMENTINFOSENDPATH = "NearbyFragmentInfosEndPath";
+    //nearby need
+    String TONEEDINFO = "toNeedInfo";
+
     //forward
     String TOPERSONINFOENDPATH = "toPersonInfoEndPath";
 

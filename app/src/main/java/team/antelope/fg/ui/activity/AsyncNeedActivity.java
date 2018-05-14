@@ -233,6 +233,12 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         needItemHolder.getTv_stop_time().setText(DateUtil.formatDataTime2(item.getRequestDate()));
         needItemHolder.getTv_iscomplete().setText(item.isComplete() ? "是" : "否");
         needItemHolder.getTv_location().setText(item.getAddressDesc());
+        needItemHolder.getItemView();
+        // 定义item的点击事件
+        Bundle bundle = new Bundle();
+        bundle.putLong("id", item.getId());
+        //定义item的点击事件
+        addNeedDetailClickEvent(AsyncNeedActivity.this, needItemHolder.getItemView(), bundle, 0);
     }
 
     /**
@@ -249,6 +255,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         private final TextView tv_iscomplete;
         private final TextView tv_location;
 
+        private final View itemView;
 
         public NeedItemHolder(View v) {
             super(v);
@@ -256,10 +263,6 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
             // 定义item的点击事件
 //            v.setOnClickListener(new View.OnClickListener() {
 //            });
-            Bundle bundle = new Bundle();
-            bundle.putLong("id", 101l);
-            //定义item的点击事件
-            addNeedDetailClickEvent(AsyncNeedActivity.this, v, bundle);
 
             tvTitle = v.findViewById(R.id.title);
             tvDescription = v.findViewById(R.id.description);
@@ -267,6 +270,7 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
             tv_stop_time = v.findViewById(R.id.tv_stop_time);
             tv_iscomplete = v.findViewById(R.id.tv_iscomplete);
             tv_location = v.findViewById(R.id.tv_location);
+            itemView = v;
         }
 
         public TextView getTextViewTitle() {
@@ -289,5 +293,10 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         public TextView getTv_location(){
             return tv_location;
         }
+
+        public View getItemView() {
+            return itemView;
+        }
+
     }
 }
