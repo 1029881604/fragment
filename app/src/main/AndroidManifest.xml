@@ -81,7 +81,6 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".customized.activity.SkillDetails" />
         <activity android:name=".customized.activity.SearchResult" />
-        <activity android:name=".customized.activity.PersonDetails"/>
         <!-- ————————定制—————————— -->
 
         <!-- ——————publish start—————— -->

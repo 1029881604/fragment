@@ -8,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
 import team.antelope.fg.common.GlideApp;
+import team.antelope.fg.customized.TrPay.PayActivity;
 import team.antelope.fg.customized.constant.AccessNetConst;
 import team.antelope.fg.customized.constant.SkillAboutDetails;
 import team.antelope.fg.customized.adapter.DzRecyclerAdapterImgUrl;
@@ -77,6 +79,8 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
     LinearLayout personDetailsLayout;
     ImageView skillpic;
 
+    Button pay;
+
     Person mPerson;  //人物实例
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
 
@@ -108,10 +112,12 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
         finishnum = findViewById(R.id.finishNum);   //人物技能完成数
         personDetailsLayout = findViewById(R.id.persondetails);     //人物信息部分LinearLayout
         skillpic = findViewById(R.id.skillbb);     //技能图片
+        pay = findViewById(R.id.pay_btn);
 
         ivBack.setOnClickListener(this);
         ivShoppingCart.setOnClickListener(this);
         ivMore.setOnClickListener(this);
+        pay.setOnClickListener(this);
 
         //获得Intent，并获取上一个activity传递过来的值
         Intent intent=getIntent();
@@ -324,6 +330,10 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
 //                intentPerson.putExtra("person_id",userid);
 //                intentPerson.setClass(SkillDetails.this,PersonDetails.class);
 //                startActivity(intentPerson);
+            case R.id.pay_btn:
+                Intent intent = new Intent();
+                intent.setClass(this, PayActivity.class);
+                startActivity(intent);
             default:
                 break;
         }
