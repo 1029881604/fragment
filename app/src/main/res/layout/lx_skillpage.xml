@@ -48,11 +48,12 @@
 
     <!--价格，开始日期，结束日期-->
     <TextView
+        android:id="@+id/skillprice"
         android:layout_width="match_parent"
         android:layout_height="50sp"
         android:textColor="#e46a6a"
         android:textSize="18sp"
-        android:text="这里显示价格"
+        android:text="0.10"
         android:gravity="center_vertical"
         android:layout_marginLeft="28dp"/>
     <TextView

@@ -83,6 +83,7 @@
         <activity android:name=".customized.activity.SearchResult" />
         <activity android:name=".customized.activity.PersonDetails"/>
         <activity android:name=".customized.trpay.PayActivity"/>
+        <activity android:name=".customized.trpay.SkillsByTrPayActivity"/>
         <!-- ————————定制—————————— -->
 
         <!-- ——————publish start—————— -->

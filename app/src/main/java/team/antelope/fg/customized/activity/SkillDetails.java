@@ -26,6 +26,7 @@ import team.antelope.fg.common.GlideApp;
 import team.antelope.fg.customized.trpay.PayActivity;
 import team.antelope.fg.customized.constant.AccessNetConst;
 import team.antelope.fg.customized.scrollView.MyScrollView;
+import team.antelope.fg.customized.trpay.SkillsByTrPayActivity;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.ui.business.CustmoizedBusiness;
@@ -62,6 +63,7 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
     TextView fansnum;   //
     TextView skillnum; //
     TextView finishnum; //
+    TextView skillprice;
     LinearLayout personDetailsLayout;
     ImageView skillpic;
 
@@ -98,6 +100,7 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
         finishnum = findViewById(R.id.finishNum);   //人物技能完成数
         personDetailsLayout = findViewById(R.id.persondetails);     //人物信息部分LinearLayout
         skillpic = findViewById(R.id.skillbb);     //技能图片
+        skillprice = findViewById(R.id.skillprice); //技能价格
         pay = findViewById(R.id.pay_btn);
 
         ivBack.setOnClickListener(this);
@@ -269,6 +272,21 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
             }
         });
 
+        /**
+        * @说明 支付按钮点击事件
+        * @创建日期 2018/5/15 下午3:13
+        */
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent();
+                intent1.putExtra("title",skillTitle);
+                intent1.putExtra("price",skillprice.getText().toString().trim());
+                intent1.setClass(SkillDetails.this, SkillsByTrPayActivity.class);
+                startActivity(intent1);
+            }
+        });
+
     }
 
     private void HeaderTranslate(float distance) {
@@ -316,10 +334,12 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
 //                intentPerson.putExtra("person_id",userid);
 //                intentPerson.setClass(SkillDetails.this,PersonDetails.class);
 //                startActivity(intentPerson);
-            case R.id.pay_btn:
-                Intent intent = new Intent();
-                intent.setClass(this, PayActivity.class);
-                startActivity(intent);
+//            case R.id.pay_btn:
+//                Intent intent = new Intent();
+//                intent.putExtra("title",skillTitle);
+//                intent.setClass(this, PayActivity.class);
+//
+//                startActivity(intent);
             default:
                 break;
         }
