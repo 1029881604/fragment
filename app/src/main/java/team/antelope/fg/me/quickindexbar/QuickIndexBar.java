@@ -64,8 +64,8 @@ public class QuickIndexBar extends View {
         super(context, attrs, defStyle);
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(Color.WHITE);
-        mPaint.setTextSize(30);
+        mPaint.setColor(Color.GRAY);
+        mPaint.setTextSize(35);
         mPaint.setTypeface(Typeface.DEFAULT_BOLD);
     }
 
@@ -83,7 +83,7 @@ public class QuickIndexBar extends View {
             int y = (int) (cellHeight / 2.0f + textHeight / 2.0f + i * cellHeight);
 
             // 根据按下的字母, 设置画笔颜色
-            mPaint.setColor(touchIndex == i ? Color.GRAY : Color.WHITE);
+            mPaint.setColor(touchIndex == i ? Color.BLACK : Color.GRAY);
 
             // 绘制文本A-Z
             canvas.drawText(text, x, y, mPaint);

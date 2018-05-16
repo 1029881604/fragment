@@ -22,8 +22,8 @@ public class MeAddCollectActivity extends BaseActivity implements View.OnClickLi
     protected void initView(Bundle savedInstanceState) {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setTitle("新建收藏夹");
-        me_confirm=findViewById(R.id.me_confirm);
-        et_heading=findViewById(R.id.et_heading);
+        me_confirm= (TextView) findViewById(R.id.me_confirm);
+        et_heading= (EditText) findViewById(R.id.et_heading);
         setSupportActionBar(mToolbar);
         me_confirm.setOnClickListener(this);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {

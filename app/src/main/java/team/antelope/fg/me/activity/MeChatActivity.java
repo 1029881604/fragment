@@ -41,9 +41,9 @@ public class MeChatActivity extends BaseActivity {
     protected void initView(Bundle savedInstanceState) {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         sendId = getIntent().getLongExtra("sendId", 0l);
-        listView = findViewById(R.id.me_chat_list);
-        inputText =findViewById(R.id.et_inputText);
-        btn_send=findViewById(R.id.bt_send);
+        listView = (ListView) findViewById(R.id.me_chat_list);
+        inputText = (EditText) findViewById(R.id.et_inputText);
+        btn_send= (Button) findViewById(R.id.bt_send);
         privateMessageDao = new PrivateMessageDaoImpl(this);
         UserDaoImpl dao = new UserDaoImpl(MeChatActivity.this);
         User user = dao.queryAllUser().get(0);

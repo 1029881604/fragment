@@ -1,12 +1,10 @@
 package team.antelope.fg.me.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
@@ -19,26 +17,39 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
+import team.antelope.fg.customized.activity.SkillDetails;
+import team.antelope.fg.customized.adapter.DzRecyclerAdapterImgUrl;
+import team.antelope.fg.customized.constant.SkillAboutDetails;
 import team.antelope.fg.db.dao.impl.UserDaoImpl;
+import team.antelope.fg.entity.PublishNeed;
 import team.antelope.fg.entity.PublishSkill;
 import team.antelope.fg.entity.User;
-import team.antelope.fg.me.adapter.MeCollectionAdapter;
+import team.antelope.fg.me.adapter.MeNeedAdapter;
+import team.antelope.fg.me.adapter.MeSubAdapter;
 import team.antelope.fg.me.adapter.MeSubAdapterImgUrl;
 import team.antelope.fg.me.constant.MeAccessNetConst;
 import team.antelope.fg.ui.base.BaseActivity;
+import team.antelope.fg.ui.business.CustmoizedBusiness;
+import team.antelope.fg.ui.business.RetrofitServiceManager;
 import team.antelope.fg.util.DateUtil;
+import team.antelope.fg.util.L;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
-public class MeCollectionActivity extends BaseActivity {
+public class MeSubActivity extends BaseActivity {
     Toolbar mToolbar;
     private  long id;
     private Properties mProp;
@@ -81,8 +92,8 @@ public class MeCollectionActivity extends BaseActivity {
         mRecyclerView=(RecyclerView) findViewById(R.id.recyclerView);
 
 
-        mToolbar= (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle("我的收藏");
+       mToolbar= (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle("我的定制");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +102,7 @@ public class MeCollectionActivity extends BaseActivity {
             }
         });
 
-        UserDaoImpl userDao = new UserDaoImpl(MeCollectionActivity.this);
+        UserDaoImpl userDao = new UserDaoImpl(MeSubActivity.this);
         User ur = userDao.queryAllUser().get(0);
         id = ur.getId();
         sendOkHttpRequest();
@@ -107,7 +118,7 @@ public class MeCollectionActivity extends BaseActivity {
 
                     mProp = PropertiesUtil.getInstance();
                     String path = mProp.getProperty(AccessNetConst.BASEPATH)
-                            +mProp.getProperty(MeAccessNetConst.GetMeCollectionServletEndPath);
+                            +mProp.getProperty(MeAccessNetConst.getSkillsByPersonEndPath);
                     Request request = new Request.Builder()
                             .url(path+"?id="+id)
                             .build();
@@ -146,36 +157,36 @@ public class MeCollectionActivity extends BaseActivity {
             userid.add(publishSkills.get(i).getuId());
             resids.add(publishSkills.get(i).getImg());
         }
-        //recyclerView的相关设置,绑定适配器
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        //设置RecyclerView布局管理器为2列垂直排布
-        mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        adapter = new MeSubAdapterImgUrl(MeCollectionActivity.this,lists,resids);
-        mRecyclerView.setAdapter(adapter);
-        adapter.setOnClickListener(new MeSubAdapterImgUrl.OnItemClickListener() {
-            //单击事件
-            @Override
-            public void ItemClickListener(View view, int postion) {
-                Intent intent=new Intent();
-                intent.putExtra("title",lists.get(postion));
-                intent.putExtra("contents",contents.get(postion));
-                intent.putExtra("skilltype",type.get(postion));
-                intent.putExtra("startdate",startdate.get(postion));
-                intent.putExtra("stopdate",stopdate.get(postion));
-                intent.putExtra("userid",userid.get(postion));
-                intent.putExtra("skillpic",resids.get(postion));    //新增的传递的图片
-                intent.setClass(MeCollectionActivity.this,MeSkillDetailActivity.class);  //指定传递对象
-                startActivity(intent);
+                //recyclerView的相关设置,绑定适配器
+                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                //设置RecyclerView布局管理器为2列垂直排布
+                mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+                adapter = new MeSubAdapterImgUrl(MeSubActivity.this,lists,resids);
+                mRecyclerView.setAdapter(adapter);
+                adapter.setOnClickListener(new MeSubAdapterImgUrl.OnItemClickListener() {
+                    //单击事件
+                    @Override
+                    public void ItemClickListener(View view, int postion) {
+                        Intent intent=new Intent();
+                        intent.putExtra("title",lists.get(postion));
+                        intent.putExtra("contents",contents.get(postion));
+                        intent.putExtra("skilltype",type.get(postion));
+                        intent.putExtra("startdate",startdate.get(postion));
+                        intent.putExtra("stopdate",stopdate.get(postion));
+                        intent.putExtra("userid",userid.get(postion));
+                        intent.putExtra("skillpic",resids.get(postion));    //新增的传递的图片
+                        intent.setClass(MeSubActivity.this,MeSkillDetailActivity.class);  //指定传递对象
+                        startActivity(intent);
 //                ToastUtil.showCustom(getActivity().getApplicationContext(),"点击了："+postion, 2000);
-            }
-            //长按事件
-            @Override
-            public void ItemLongClickListener(View view, int postion) {
-                //长按删除
+                    }
+                    //长按事件
+                    @Override
+                    public void ItemLongClickListener(View view, int postion) {
+                        //长按删除
 //                lists.remove(postion);
 //                adapter.notifyItemRemoved(postion);
-            }
-        });
+                    }
+                });
     }
 
 

@@ -30,7 +30,6 @@ import team.antelope.fg.me.adapter.MessageListAdapter;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.L;
 import team.antelope.fg.util.SetRoundImageViewUtil;
-import team.antelope.fg.util.ToastUtil;
 
 import static android.media.CamcorderProfile.get;
 
@@ -39,7 +38,7 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
     ListView lv_message;    //消息列表
     MessageListAdapter messageListAdapter;  //列表adapter
     PrivateMessageDaoImpl privateMessageDao;    //消息访问实例
-    List <PrivateMessage> list;             // message数据集合
+    List<PrivateMessage> list;             // message数据集合
     List<Map<String, Object>> listMap2; // 封装message的数据结婚
     RelativeLayout relativeLayout;
     ImageView me_message_head;
@@ -51,7 +50,6 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
     private PopupWindow mPopWindow;
     int mPosition;              // 消息在listview里面的位置
     long senderId;
-
 
 
     @Override
@@ -68,11 +66,11 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
         });
         L.i("AAA", "111111111");
         lv_message = (ListView) findViewById(R.id.me_message_list);
-        relativeLayout = (RelativeLayout)findViewById(R.id.rl_layout_sys_message);
-        sys_date =(TextView)findViewById(R.id.tv_me_date);
-        sys_content=(TextView)findViewById(R.id.tv_me_message);
-        sys_red_point=(TextView)findViewById(R.id.tv_me_msgnum);
-        me_message_head=(ImageView) findViewById(R.id.me_message_head);
+        relativeLayout = (RelativeLayout) findViewById(R.id.rl_layout_sys_message);
+        sys_date = (TextView) findViewById(R.id.tv_me_date);
+        sys_content = (TextView) findViewById(R.id.tv_me_message);
+        sys_red_point = (TextView) findViewById(R.id.tv_me_msgnum);
+        me_message_head = (ImageView) findViewById(R.id.me_message_head);
         privateMessageDao = new PrivateMessageDaoImpl(this);
 
         initListView();
@@ -91,7 +89,6 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
 
             }
         });
-
 
 
     }
@@ -116,26 +113,27 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
                 initListView();
             }
         });
-           lv_message.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-               @Override
-               public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                   TextView hide = view.findViewById(R.id.tv_senderid_hidden_me);
-                   String hideText = (String) hide.getText();
-                   senderId = Integer.parseInt(hideText);
-                   mPosition = position;
-                   showPopupWindow();
-                   return true;
-               }
-           });
+        lv_message.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView hide = view.findViewById(R.id.tv_senderid_hidden_me);
+                String hideText = (String) hide.getText();
+                senderId = Integer.parseInt(hideText);
+                mPosition = position;
+                showPopupWindow();
+                return true;
+            }
+        });
     }
+
     private void showPopupWindow() {
-        View contentView = LayoutInflater.from(MessageListActivity.this).inflate(R.layout.me_popupwindow, null);
+        View contentView = LayoutInflater.from(MessageListActivity.this).inflate(R.layout.me_message_popupwindow, null);
         mPopWindow = new PopupWindow(contentView);
         mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        Button tv1 = (Button)contentView.findViewById(R.id.btn_pop_up);
-        Button tv2 = (Button)contentView.findViewById(R.id.btn_pop_is_read);
-        Button tv3 = (Button)contentView.findViewById(R.id.btn_pop_delete);
+        Button tv1 = (Button) contentView.findViewById(R.id.btn_pop_up);
+        Button tv2 = (Button) contentView.findViewById(R.id.btn_pop_is_read);
+        Button tv3 = (Button) contentView.findViewById(R.id.btn_pop_delete);
         tv1.setOnClickListener(this);
         tv2.setOnClickListener(this);
         tv3.setOnClickListener(this);
@@ -153,9 +151,9 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
         UserDaoImpl dao = new UserDaoImpl(MessageListActivity.this);
         User user = null;
         List<User> userList = dao.queryAllUser();
-        if(userList != null && !userList.isEmpty()){
+        if (userList != null && !userList.isEmpty()) {
             user = userList.get(0);
-        } else{
+        } else {
             return;
         }
         long userId = user.getId();
@@ -168,36 +166,36 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
         //去掉重复的人的消息，把他发的最后一条消息的content，time，name, num设置
         listMap2 = new ArrayList<Map<String, Object>>();
         boolean same = false;
-        L.i(listMap1.size()+"----size");
-        for (int i = 0; i < listMap1.size() ; i++) {
+        L.i(listMap1.size() + "----size");
+        for (int i = 0; i < listMap1.size(); i++) {
             PrivateMessage privateMessage = (PrivateMessage) listMap1.get(i).get("privateMessage");
             long id = privateMessage.getSenderId();
-            if (id == userId){
+            if (id == userId) {
                 break;
             }
             for (int j = 0; j < listMap2.size(); j++) {
                 PrivateMessage privateMessage1 = (PrivateMessage) listMap2.get(j).get("privateMessage");
-                if (privateMessage1 == null){
+                if (privateMessage1 == null) {
                     break;
                 }
-                if(privateMessage1.getSenderId() == id ){
+                if (privateMessage1.getSenderId() == id) {
                     same = true;
                     privateMessage1.setContent(privateMessage.getContent());
                     privateMessage1.setSendTime(privateMessage.getSendTime());
                     Integer msgnum = (Integer) listMap2.get(j).get("msgnum");
-                    listMap2.get(j).put("msgnum", ++ msgnum);
+                    listMap2.get(j).put("msgnum", ++msgnum);
                 }
             }
-            if (! same){
-                L.i(""+listMap1.get(i).get("privateMessage").toString());
+            if (!same) {
+                L.i("" + listMap1.get(i).get("privateMessage").toString());
                 listMap2.add(listMap1.get(i));
             }
             same = false;
         }
         for (int i = 0; i < 2; i++) {
-            ImagePicture head1 = new ImagePicture("j",R.drawable.me_user_head2);
+            ImagePicture head1 = new ImagePicture("j", R.drawable.me_user_head2);
             imagePictureList.add(head1);
-            ImagePicture head2 = new ImagePicture("j",R.drawable.me_user_head4);
+            ImagePicture head2 = new ImagePicture("j", R.drawable.me_user_head4);
             imagePictureList.add(head2);
 //            ImagePicture head3 = new ImagePicture(R.drawable.me_user_head1);
 //            imagePictureList.add(head3);
@@ -205,9 +203,10 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
 //            imagePictureList.add(head4);
 
         }
-        messageListAdapter = new MessageListAdapter(this, listMap2,imagePictureList);
+        messageListAdapter = new MessageListAdapter(this, listMap2, imagePictureList);
         lv_message.setAdapter(messageListAdapter);
     }
+
     @Override
     public int getLayout() {
         return R.layout.me_message_activity;
@@ -217,18 +216,18 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id){
-            case R.id.btn_pop_up:{
+        switch (id) {
+            case R.id.btn_pop_up: {
                 Toast.makeText(this, "clicked computer", Toast.LENGTH_SHORT).show();
                 mPopWindow.dismiss();
             }
             break;
-            case R.id.btn_pop_is_read:{
+            case R.id.btn_pop_is_read: {
 
                 mPopWindow.dismiss();
             }
             break;
-            case R.id.btn_pop_delete:{
+            case R.id.btn_pop_delete: {
                 //选择行的位置
                 List<PrivateMessage> messages = privateMessageDao.queryBySenderId(senderId);
                 for (int i = 0; i < messages.size(); i++) {

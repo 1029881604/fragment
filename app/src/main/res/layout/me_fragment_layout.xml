@@ -141,53 +141,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="3.0dip" />
-
-                <TextView
-                    android:id="@+id/me_free_time"
-                    style="@style/TxtTitle"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
-                    android:background="@drawable/setting_item2_selector"
-                    android:clickable="true"
-                    android:drawableEnd="@mipmap/ic_chevron_right_white_24dp"
-                    android:drawablePadding="10dp"
-                    android:drawableStart="@mipmap/ic_access_time_white_24dp"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:text="空闲时间"
-                    android:textSize="16sp" />
-
 
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="3.0dip" />
 
-                <TextView
-
-                    android:id="@+id/me_my_comment"
-                    style="@style/TxtTitle"
-                    android:layout_width="fill_parent"
-                    android:layout_height="45dp"
-                    android:background="@drawable/setting_item2_selector"
-                    android:clickable="true"
-                    android:drawableEnd="@mipmap/ic_chevron_right_white_24dp"
-                    android:drawablePadding="10dp"
-                    android:drawableStart="@mipmap/ic_style_white_24dp"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:text="我的评价"
-                    android:textSize="16sp" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="3.0dip" />
 
                 <TextView
 
