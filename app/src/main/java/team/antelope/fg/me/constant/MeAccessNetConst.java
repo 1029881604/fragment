@@ -14,4 +14,5 @@ public interface MeAccessNetConst {
     String GetUserNeedServletEndPath ="GetUserNeedServletEndPath";
     String getSkillsByPersonEndPath ="getSkillsByPersonEndPath";
     String GetMeCollectionServletEndPath="GetMeCollectionServletEndPath";
+    String PostUnfollowServletEndPath="PostUnfollowServletEndPath";
 }

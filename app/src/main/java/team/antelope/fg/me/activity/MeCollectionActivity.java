@@ -38,6 +38,11 @@ import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:41
+ * @Description: 收藏
+ **/
 public class MeCollectionActivity extends BaseActivity {
     Toolbar mToolbar;
     private  long id;

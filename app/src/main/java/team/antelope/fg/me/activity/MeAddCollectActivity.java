@@ -13,6 +13,11 @@ import android.widget.TextView;
 import team.antelope.fg.R;
 import team.antelope.fg.ui.base.BaseActivity;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:39
+ * @Description:  暂时无用
+ **/
 public class MeAddCollectActivity extends BaseActivity implements View.OnClickListener{
       Toolbar mToolbar;
       TextView me_confirm;

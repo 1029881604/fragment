@@ -33,6 +33,11 @@ import team.antelope.fg.util.CircleImageViewUtil;
 
 import static android.media.CamcorderProfile.get;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:45
+ * @Description: 登录用户资料
+ **/
 public class MeProfileActivity extends BaseActivity implements View.OnClickListener {
 
      Toolbar mToolbar;

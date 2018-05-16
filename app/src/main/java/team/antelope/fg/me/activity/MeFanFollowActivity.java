@@ -34,6 +34,11 @@ import team.antelope.fg.util.CircleImageViewUtil;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:42
+ * @Description: 登录用户的粉丝的关注列表
+ **/
 public class MeFanFollowActivity extends BaseActivity {
 
     Toolbar mToolbar;

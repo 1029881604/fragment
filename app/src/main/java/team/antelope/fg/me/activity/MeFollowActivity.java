@@ -8,9 +8,11 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -62,7 +64,11 @@ import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 import team.antelope.fg.util.SetRoundImageViewUtil;
 
-
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:44
+ * @Description: 登录用户的关注列表
+ **/
 public class MeFollowActivity extends BaseActivity implements View.OnClickListener {
     Toolbar mToolbar;
     TextView indexTv, tv_follow_name, tv_show;
@@ -77,19 +83,20 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
     List<Person> psList;
     private PopupWindow mPopWindow;
     private Properties mProp;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private String key="0";
 
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
             after_person = (ArrayList<PersonPinyin>) msg.obj;
             meFollowListAdapter = new MeFollowListAdapter(MeFollowActivity.this, after_person);
             listView.setAdapter(meFollowListAdapter);
 
-
         }
     };
+
 
 
     @Override
@@ -107,6 +114,7 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
         iv_follow_user_head = (ImageView) findViewById(R.id.iv_follow_user_head);
         listView = (ListView) findViewById(R.id.listView);
         tv_center = (TextView) findViewById(R.id.tv_center);
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swipeLayout);
         QuickIndexBar quickIndexBar = (QuickIndexBar) findViewById(R.id.quick_bar);
         quickIndexBar.setListener(new QuickIndexBar.OnLetterUpdateListener() {
             @Override
@@ -265,6 +273,32 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
                 return true;
             }
         });
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        swipeRefreshLayout.setProgressBackgroundColor(R.color.white);
+        swipeRefreshLayout.setProgressViewEndTarget(true, 200);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+//                        data.clear();
+//                        for(int i=0;i<50;i++){
+//                            data.add("SwipeRefreshLayout下拉刷新"+i);
+//                        }
+                        try {
+                            Thread.sleep(1500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        handler.sendEmptyMessage(1);
+                    }
+                }).start();
+            }
+        });
     }
 
     private void showPopupWindow() {
@@ -280,9 +314,11 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
         mPopWindow.setBackgroundDrawable(new BitmapDrawable());
         mPopWindow.setOutsideTouchable(true);
         //各ITEM点击响应
-        mPopWindow.showAsDropDown(listView);
-
+        mPopWindow.showAtLocation(MeFollowActivity.this.findViewById(R.id.listView),
+                Gravity.BOTTOM| Gravity.CENTER_HORIZONTAL, 0, 0); //设置layout在PopupWindow中显示的位置
     }
+
+
 
 
     @Override
@@ -304,12 +340,44 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
             break;
             case R.id.btn_followed: {
 
+                 sendRequest();
                 mPopWindow.dismiss();
             }
             break;
             default:
                 break;
         }
+    }
+
+    private void sendRequest() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    OkHttpClient.Builder builder = OkHttpUtils.createHttpClientBuild();
+                    OkHttpClient client = builder.build();
+//                    OkHttpClient client = new OkHttpClient();
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("person_id", String.valueOf(person_id))
+                            .add("attention_id",String.valueOf(select_id))
+                            .build();
+                    mProp = PropertiesUtil.getInstance();
+                    String path = mProp.getProperty(AccessNetConst.BASEPATH)
+                            +mProp.getProperty(MeAccessNetConst.PostUnfollowServletEndPath);
+                    Request request = new Request.Builder()
+                            .url(path)
+                            .post(requestBody)
+                            .build();
+                    client.newCall(request).execute();
+//                    String responseData = response.body().string();
+//                    parseJSONWithGSON(responseData);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void initListView() {

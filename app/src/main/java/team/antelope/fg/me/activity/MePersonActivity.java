@@ -19,6 +19,11 @@ import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.CircleImageViewUtil;
 import team.antelope.fg.util.SetRoundImageViewUtil;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:45
+ * @Description: 其他用户的资料
+ **/
 public class MePersonActivity extends BaseActivity implements View.OnClickListener{
     Toolbar mToolbar;
     Bitmap bitmap1,bitmap2;

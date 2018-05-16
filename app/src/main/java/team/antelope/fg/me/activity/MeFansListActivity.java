@@ -42,6 +42,11 @@ import team.antelope.fg.util.CircleImageViewUtil;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:43
+ * @Description: 登录用户的粉丝列表
+ **/
 public class MeFansListActivity extends BaseActivity implements View.OnClickListener{
 
     Toolbar mToolbar;

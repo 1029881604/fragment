@@ -20,7 +20,11 @@ import team.antelope.fg.entity.User;
 import team.antelope.fg.me.adapter.ChatListAdapter;
 import team.antelope.fg.ui.base.BaseActivity;
 
-
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:40
+ * @Description:  聊天界面
+ **/
 public class MeChatActivity extends BaseActivity {
 
     long sendId;

@@ -5,6 +5,11 @@ import android.os.Bundle;
 
 import team.antelope.fg.ui.base.BaseActivity;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:41
+ * @Description: 暂时无用
+ **/
 public class MeCommentsActivity extends BaseActivity {
 
     @Override

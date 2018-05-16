@@ -49,6 +49,11 @@ import team.antelope.fg.util.L;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:46
+ * @Description: 我的定制
+ **/
 public class MeSubActivity extends BaseActivity {
     Toolbar mToolbar;
     private  long id;

@@ -37,6 +37,11 @@ import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:40
+ * @Description: 修改用户资料
+ **/
 public class MeChangeProfileActivity extends BaseActivity implements View.OnClickListener {
     private Toolbar mToolbar;
     private EditText et_change_name, et_change_email, et_change_age;
