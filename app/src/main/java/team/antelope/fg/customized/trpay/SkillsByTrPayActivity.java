@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.icu.math.BigDecimal;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -22,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.UUID;
 
 import team.antelope.fg.R;
+import team.antelope.fg.customized.util.AppIsAvilible;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.ToastUtil;
 
@@ -90,7 +92,7 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                     @Override
                     public void onPayFinish(Context context, String outtradeno, int resultCode, String resultString, int payType, Long amount, String tradename) {
                         if (resultCode == TrPayResult.RESULT_CODE_SUCC.getId()) {       //1：支付成功回调
-                            TrPay.getInstance((Activity) context).closePayView();       //关闭快捷支付页面
+                            TrPay.getInstance((Activity) context).closePayView();       //关闭支付页面
                             ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                             //支付成功逻辑处理
                         } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {        //2：支付失败回调
@@ -100,37 +102,48 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                     }
                 });
                 break;
-            }
-            case R.id.to_wechatpay:{
+            }//case11111
+
+            case R.id.to_wechatpay: {
                 /**
                  * 发起微信支付调用
                  */
-                TrPay.getInstance(this).callWxPay(tradename, outtradeno, amount, backparams, notifyurl, userid, new PayResultListener() {
-                    /**
-                     * 支付完成回调
-                     * @param context      上下文
-                     * @param outtradeno   商户系统订单号
-                     * @param resultCode   支付状态(RESULT_CODE_SUCC：支付成功、RESULT_CODE_FAIL：支付失败)
-                     * @param resultString 支付结果
-                     * @param payType      支付类型（1：支付宝 2：微信）
-                     * @param amount       支付金额
-                     * @param tradename    商品名称
-                     */
-                    @Override
-                    public void onPayFinish(Context context, String outtradeno, int resultCode, String resultString, int payType, Long amount, String tradename) {
-                        if (resultCode == TrPayResult.RESULT_CODE_SUCC.getId()) {       //1：支付成功回调
-                            TrPay.getInstance((Activity) context).closePayView();       //关闭快捷支付页面
-                            ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
-                            //支付成功逻辑处理
-                        } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {        //2：支付失败回调
-                            ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
-                            //支付失败逻辑处理
-                        }
-                    }
-                });
-            }
+                if (AppIsAvilible.isAppInstalled(this, "com.tencent.mm")) {
 
-        }
+                    TrPay.getInstance(this).callWxPay(tradename, outtradeno, amount, backparams, notifyurl, userid, new PayResultListener() {
+                        /**
+                         * 支付完成回调
+                         *
+                         * @param context      上下文
+                         * @param outtradeno   商户系统订单号
+                         * @param resultCode   支付状态(RESULT_CODE_SUCC：支付成功、RESULT_CODE_FAIL：支付失败)
+                         * @param resultString 支付结果
+                         * @param payType      支付类型（1：支付宝 2：微信）
+                         * @param amount       支付金额
+                         * @param tradename    商品名称
+                         */
+                        @Override
+                        public void onPayFinish(Context context, String outtradeno, int resultCode, String resultString, int payType, Long amount, String tradename) {
+                            if (resultCode == TrPayResult.RESULT_CODE_SUCC.getId()) {       //1：支付成功回调
+                                TrPay.getInstance((Activity) context).closePayView();       //关闭支付页面
+                                ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
+                                //支付成功逻辑处理
+                            } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {        //2：支付失败回调
+                                ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
+                                //支付失败逻辑处理
+                            }
+                        }
+                    });
+                }
+                else{
+                    ToastUtil.showCustom(SkillsByTrPayActivity.this, "未安装微信，请先安装微信", Toast.LENGTH_LONG);
+//                    Uri uri = Uri.parse("market://details?id=com.tencent.mm");//id为包名
+//                    Intent it = new Intent(Intent.ACTION_VIEW, uri);
+//                    startActivity(it);
+                }
+            }//case2222
+
+        }//switch
     }//onClick
 
     @Override
