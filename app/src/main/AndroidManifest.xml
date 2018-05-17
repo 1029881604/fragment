@@ -82,6 +82,8 @@
         <activity android:name=".customized.activity.SkillDetails" />
         <activity android:name=".customized.activity.SearchResult" />
         <activity android:name=".customized.activity.PersonDetails"/>
+        <activity android:name=".customized.trpay.PayActivity"/>
+        <activity android:name=".customized.trpay.SkillsByTrPayActivity"/>
         <!-- ————————定制—————————— -->
 
         <!-- ——————publish start—————— -->
@@ -119,13 +121,23 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".me.activity.MeProfileActivity"
-            android:label="@string/title_activity_me_profile"/>
-        <activity android:name=".me.activity.MeCollectionActivity"
-            android:theme="@style/AppTheme"
-            />
+            android:label="@string/title_activity_me_profile" />
+        <activity
+            android:name=".me.activity.MeCollectionActivity"
+            android:theme="@style/AppTheme" />
         <activity android:name=".me.activity.MeChangeProfileActivity" />
         <activity android:name=".me.activity.MePersonActivity" />
         <activity android:name=".me.activity.MeAddCollectActivity" />
+        <activity android:name=".me.activity.MeFanFollowActivity" />
+        <activity android:name=".me.activity.MeFansListActivity" />
+        <activity android:name=".me.activity.MeNeedActivity" />
+        <activity android:name=".me.activity.MeSubActivity" />
+        <activity android:name=".me.activity.MeCommentsActivity" />
+        <activity android:name=".me.activity.MeComplainActivity" />
+        <activity android:name=".me.activity.MeFreeTimeActivity">
+        </activity>
+        <activity android:name=".me.activity.MeSkillDetailActivity">
+        </activity>
         <!-- ——————————me end——————— -->
 
         <!-- ——————————————activity end ———————————————— -->

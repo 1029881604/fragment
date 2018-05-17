@@ -1,11 +1,12 @@
-package team.antelope.fg.customized.activity;
+package team.antelope.fg.me.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,10 +24,10 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
 import team.antelope.fg.common.GlideApp;
-import team.antelope.fg.customized.trpay.PayActivity;
+import team.antelope.fg.customized.activity.PersonDetails;
+import team.antelope.fg.customized.activity.SkillDetails;
 import team.antelope.fg.customized.constant.AccessNetConst;
 import team.antelope.fg.customized.scrollView.MyScrollView;
-import team.antelope.fg.customized.trpay.SkillsByTrPayActivity;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.ui.business.CustmoizedBusiness;
@@ -35,12 +36,14 @@ import team.antelope.fg.util.L;
 import team.antelope.fg.util.PropertiesUtil;
 import team.antelope.fg.util.ToastUtil;
 
-
 /**
- * Created by Kyrene on 2018/1/5.
- */
+ * @Author：Carlos
+ * @Date： 2018/5/15 11:30
+ * @Description:   Carlos copy from lx and change something
+ *
+  **/
+public class MeSkillDetailActivity extends BaseActivity implements View.OnClickListener{
 
-public class SkillDetails extends BaseActivity implements View.OnClickListener {
 
     ImageView ivBack;
     Toolbar toolbar;
@@ -63,11 +66,8 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
     TextView fansnum;   //
     TextView skillnum; //
     TextView finishnum; //
-    TextView skillprice;
     LinearLayout personDetailsLayout;
     ImageView skillpic;
-
-    Button pay;
 
     Person mPerson;  //人物实例
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
@@ -100,13 +100,10 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
         finishnum = findViewById(R.id.finishNum);   //人物技能完成数
         personDetailsLayout = findViewById(R.id.persondetails);     //人物信息部分LinearLayout
         skillpic = findViewById(R.id.skillbb);     //技能图片
-        skillprice = findViewById(R.id.skillprice); //技能价格
-        pay = findViewById(R.id.pay_btn);
 
         ivBack.setOnClickListener(this);
         ivShoppingCart.setOnClickListener(this);
         ivMore.setOnClickListener(this);
-        pay.setOnClickListener(this);
 
         //获得Intent，并获取上一个activity传递过来的值
         Intent intent=getIntent();
@@ -170,15 +167,15 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
                             .error(R.mipmap.error200)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .fitCenter();
-                    GlideApp.with(SkillDetails.this)
+                    GlideApp.with(MeSkillDetailActivity.this)
                             .load(mPerson.getHeadImg())
                             .apply(options)
                             .into(personpic);
-                    GlideApp.with(SkillDetails.this)
+                    GlideApp.with(MeSkillDetailActivity.this)
                             .load(skillPicture)
                             .apply(options)
                             .into(skillpic);
-                    GlideApp.with(SkillDetails.this)
+                    GlideApp.with(MeSkillDetailActivity.this)
                             .load(skillPicture)
                             .apply(options)
                             .into(ivHeader);
@@ -227,7 +224,7 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
                 float move_distance = head_height - title_height;
                 if (!isUp && dy <= move_distance) {//手指往上滑,距离未超过200dp
                     //标题栏逐渐从透明变成不透明
-                    toolbar.setBackgroundColor(ContextCompat.getColor(SkillDetails.this, R.color.color_white));
+                    toolbar.setBackgroundColor(ContextCompat.getColor(MeSkillDetailActivity.this, R.color.color_white));
                     TitleAlphaChange(dy, move_distance);//标题栏渐变
                     HeaderTranslate(dy);//图片视差平移
 
@@ -267,23 +264,8 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
             public void onClick(View v) {
                 Intent intentPerson=new Intent();
                 intentPerson.putExtra("person_id",userid);
-                intentPerson.setClass(SkillDetails.this,PersonDetails.class);
+                intentPerson.setClass(MeSkillDetailActivity.this,PersonDetails.class);
                 startActivity(intentPerson);
-            }
-        });
-
-        /**
-        * @说明 支付按钮点击事件
-        * @创建日期 2018/5/15 下午3:13
-        */
-        pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent1 = new Intent();
-                intent1.putExtra("title",skillTitle);
-                intent1.putExtra("price",skillprice.getText().toString().trim());
-                intent1.setClass(SkillDetails.this, SkillsByTrPayActivity.class);
-                startActivity(intent1);
             }
         });
 
@@ -334,12 +316,6 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
 //                intentPerson.putExtra("person_id",userid);
 //                intentPerson.setClass(SkillDetails.this,PersonDetails.class);
 //                startActivity(intentPerson);
-//            case R.id.pay_btn:
-//                Intent intent = new Intent();
-//                intent.putExtra("title",skillTitle);
-//                intent.setClass(this, PayActivity.class);
-//
-//                startActivity(intent);
             default:
                 break;
         }
@@ -351,12 +327,11 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
      */
     @Override
     public int getLayout() {
-        return R.layout.lx_activity_skilldetails;
+        return R.layout.me_skill_activity;
     }
 
 
     public void addSubscription(Subscription subscription){
         compositeSubscription.add(subscription);
     }
-
 }

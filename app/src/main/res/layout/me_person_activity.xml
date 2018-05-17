@@ -78,9 +78,12 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_follow"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical">
 
                     <TextView
@@ -102,9 +105,12 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/layout_fans"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="match_parent"

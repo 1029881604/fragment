@@ -32,29 +32,36 @@ import team.antelope.fg.db.dao.impl.UserDaoImpl;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.entity.PrivateMessage;
 import team.antelope.fg.entity.User;
+import team.antelope.fg.me.constant.MeAccessNetConst;
 import team.antelope.fg.ui.base.BaseActivity;
+import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:40
+ * @Description: 修改用户资料
+ **/
 public class MeChangeProfileActivity extends BaseActivity implements View.OnClickListener {
     private Toolbar mToolbar;
-    private EditText et_change_name, et_change_email,et_change_age;
+    private EditText et_change_name, et_change_email, et_change_age;
     private String after_name;
     private String after_sex;
     private String after_age;
     private String after_email;
     private Long user_id;
     private Properties mProp;
-    private TextView  tv_change_sex;
+    private TextView tv_change_sex;
     private PopupWindow sexPopWindow;
     private PopupWindow agePopWindow;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        et_change_name = findViewById(R.id.et_change_name);
-        et_change_email = findViewById(R.id.et_email);
-        et_change_age = findViewById(R.id.et_age);
-        tv_change_sex = findViewById(R.id.tv_sex);
+        et_change_name = (EditText) findViewById(R.id.et_change_name);
+        et_change_email = (EditText) findViewById(R.id.et_email);
+        et_change_age = (EditText) findViewById(R.id.et_age);
+        tv_change_sex = (TextView) findViewById(R.id.tv_sex);
         setSupportActionBar(mToolbar);
         Intent intent = getIntent();
         String user_name = intent.getStringExtra("name");
@@ -131,11 +138,12 @@ public class MeChangeProfileActivity extends BaseActivity implements View.OnClic
                             public void run() {
                                 String url = null;
                                 try {
-                                          url = mProp.getProperty(AccessNetConst.BASEPATH)+
-                                                  mProp.getProperty(AccessNetConst.CHANGEPROFILESERVLEENDTPATH);
+                                    url = mProp.getProperty(AccessNetConst.BASEPATH) +
+                                            mProp.getProperty(MeAccessNetConst.CHANGEPROFILESERVLEENDTPATH);
 //                                    url="http://192.168.1.110:8080/ServletPractice/test01";
 //                                    url = "http://192.168.1.110:8080/fragment_server/ChangeProfileServlet";
-                                    OkHttpClient client = new OkHttpClient();
+                                    OkHttpClient.Builder builder = OkHttpUtils.createHttpClientBuild();
+                                    OkHttpClient client = builder.build();
                                     RequestBody requestBody = new FormBody.Builder()
                                             .add("after_name", after_name)
                                             .add("after_sex", after_sex)
@@ -189,17 +197,17 @@ public class MeChangeProfileActivity extends BaseActivity implements View.OnClic
             case R.id.tv_sex:
                 showSexPopupWindow();
                 break;
-            case R.id.btn_pop_male:{
+            case R.id.btn_pop_male: {
                 tv_change_sex.setText("男");
                 sexPopWindow.dismiss();
             }
             break;
-            case R.id.btn_pop_female:{
+            case R.id.btn_pop_female: {
                 tv_change_sex.setText("女");
                 sexPopWindow.dismiss();
             }
             break;
-            case R.id.btn_pop_secret:{
+            case R.id.btn_pop_secret: {
                 //选择行的位置
                 tv_change_sex.setText("保密");
                 tv_change_sex.invalidate();
@@ -211,7 +219,7 @@ public class MeChangeProfileActivity extends BaseActivity implements View.OnClic
 
     private void showSexPopupWindow() {
         View contentView = LayoutInflater.from(MeChangeProfileActivity.this).inflate(R.layout.me_sex_popupwindow, null);
-         sexPopWindow = new PopupWindow(contentView);
+        sexPopWindow = new PopupWindow(contentView);
         sexPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         sexPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         Button btn1 = (Button) contentView.findViewById(R.id.btn_pop_male);

@@ -168,13 +168,13 @@ public class SearchResult extends BaseActivity {
     private void initLayoutView() {
 
         Intent intent=getIntent();
-        final String[] searchWord = {intent.getStringExtra("searchword")};
+        final String searchWord = intent.getStringExtra("searchword");
 
         String endUrl = PropertiesUtil.getInstance().
-                getProperty(AccessNetConst.GETCUSTOMIZEDSKILLENDPATH);
+                getProperty(AccessNetConst.SEARCHSKILLSENDPATH);
         Observable<List<PublishSkill>> observable = RetrofitServiceManager.getInstance()
-                .create(CustmoizedBusiness.class).getList(endUrl,
-                        SkillAboutDetails.SKILLTYPE1).observeOn(AndroidSchedulers.mainThread())
+                .create(CustmoizedBusiness.class).searchResult(endUrl, searchWord)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).delaySubscription(0, TimeUnit.MILLISECONDS);
         addSubscription(observable.subscribe(new Subscriber<List<PublishSkill>>() {
             @Override
@@ -182,29 +182,32 @@ public class SearchResult extends BaseActivity {
                 L.i("1234", "complete123");
                 L.i("1234", "publishSkills:"+publishSkills);
 
-                for (int i=0; i<publishSkills.size(); i++){
-                    /**
-                     * @说明 设置中间字符串(transform全大写)解决字母大小写问题
-                     * @创建日期 2018/1/7 上午12:50
-                     */
-                    String dbTitleString=publishSkills.get(i).getTitle();
-                    String dbContentString=publishSkills.get(i).getContent();
-                    dbTitleString=dbTitleString.toUpperCase();
-                    dbContentString=dbContentString.toUpperCase();
-                    searchWord[0] = searchWord[0].toUpperCase();
+                if (!publishSkills.isEmpty()) {
+                    for (int i = 0; i < publishSkills.size(); i++) {
+//                    /**
+//                     * @说明 设置中间字符串(transform全大写)解决字母大小写问题
+//                     * @创建日期 2018/1/7 上午12:50
+//                     */
+//                    String dbTitleString=publishSkills.get(i).getTitle();
+//                    String dbContentString=publishSkills.get(i).getContent();
+//                    dbTitleString=dbTitleString.toUpperCase();
+//                    dbContentString=dbContentString.toUpperCase();
+//                    searchWord = searchWord.toUpperCase();
 
-                    if (!(searchWord[0] ==null|| searchWord[0].isEmpty())&&(judgeContains(dbTitleString, searchWord[0])||
-                            judgeContains(dbContentString, searchWord[0]))){
+//                    if (!(searchWord[0] ==null|| searchWord[0].isEmpty())&&(judgeContains(dbTitleString, searchWord[0])||
+//                            judgeContains(dbContentString, searchWord[0]))){
 
-                        lists.add(publishSkills.get(i).getTitle());
-                        contents.add(publishSkills.get(i).getContent());
-                        type.add(publishSkills.get(i).getSkillType());
-                        startdate.add(DateUtil.formatDate(publishSkills.get(i).getPublishDate().getTime()));
-                        stopdate.add(DateUtil.formatDate(publishSkills.get(i).getStopDate().getTime()));
-                        userid.add(publishSkills.get(i).getuId());
-                        resids.add(publishSkills.get(i).getImg());
+                        if (!searchWord.isEmpty()) {
+                            lists.add(publishSkills.get(i).getTitle());
+                            contents.add(publishSkills.get(i).getContent());
+                            type.add(publishSkills.get(i).getSkillType());
+                            startdate.add(DateUtil.formatDate(publishSkills.get(i).getPublishDate().getTime()));
+                            stopdate.add(DateUtil.formatDate(publishSkills.get(i).getStopDate().getTime()));
+                            userid.add(publishSkills.get(i).getuId());
+                            resids.add(publishSkills.get(i).getImg());
+                        }
+
                     }
-
                 }
 
                 //recyclerView的相关设置,绑定适配器

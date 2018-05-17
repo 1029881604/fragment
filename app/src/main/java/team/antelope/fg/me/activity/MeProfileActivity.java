@@ -2,7 +2,6 @@ package team.antelope.fg.me.activity;
 
 import android.content.ContentUris;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,16 +33,23 @@ import team.antelope.fg.util.CircleImageViewUtil;
 
 import static android.media.CamcorderProfile.get;
 
+/**
+ * @Author：Carlos
+ * @Date： 2018/5/16 11:45
+ * @Description: 登录用户资料
+ **/
 public class MeProfileActivity extends BaseActivity implements View.OnClickListener {
 
-    Toolbar mToolbar;
+     Toolbar mToolbar;
      ImageView iv_chang;
     TextView tv_set_name, tv_age, tv_sex, tv_email, tv_dealNum, tv_fanNum;
-    SharedPreferences sharedPreferences;
-    String user_name;
-    String user_age,user_sex,user_email;
-    CircleImageViewUtil iv_user_head;
+   private String user_name;
+   private String user_age,user_sex,user_email;
+    private CircleImageViewUtil iv_user_head;
      private final static int CHOOSE_PHOTO= 2;
+     private LinearLayout layout_fans;//粉丝
+    private LinearLayout layout_moments;//动态
+    private Long id;
 
 
     @Override
@@ -57,11 +64,15 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
         iv_user_head = findViewById(R.id.iv_user_head);
         mToolbar.setTitle("个人资料");
         tv_set_name = findViewById(R.id.tv_set_name);
+        layout_fans =findViewById(R.id.layout_fans);
+        layout_moments = findViewById(R.id.layout_moments);
         Intent intent = getIntent();
         user_name = intent.getStringExtra("get_name");
         tv_set_name.setText(user_name);
 
         UserDaoImpl userDao = new UserDaoImpl(MeProfileActivity.this);
+        User ur = userDao.queryAllUser().get(0);
+        id = ur.getId();
         //先判断userList是否为null或者没有元素
         List<User> userList = userDao.queryAllUser();
         User user = null;
@@ -106,6 +117,7 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
         }
         iv_chang.setOnClickListener(this);
         iv_user_head.setOnClickListener(this);
+        layout_fans.setOnClickListener(this);
 
     }
 
@@ -155,8 +167,12 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 //开始选择
                 startActivityForResult(intent, CHOOSE_PHOTO);
+                break;
             }
-
+            case R.id.layout_fans:
+                Intent intent = new Intent(MeProfileActivity.this,MeFansListActivity.class);
+                intent.putExtra("userId",id);
+                startActivity(intent);
         }
     }
 

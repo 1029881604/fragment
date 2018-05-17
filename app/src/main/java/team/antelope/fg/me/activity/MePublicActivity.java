@@ -11,7 +11,7 @@ import team.antelope.fg.ui.base.BaseActivity;
 /**
  * @Author：yy
  * @Date： 2017/12/12 11:40
- * @Description:
+ * @Description: 暂时无用
  **/
 
 public class MePublicActivity extends BaseActivity  {

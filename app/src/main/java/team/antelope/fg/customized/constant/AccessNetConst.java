@@ -10,4 +10,5 @@ public interface AccessNetConst {
     String GETCUSTOMIZEDSKILLENDPATH = "getCustomizedSkillEndPath";
     String GETPERSONDETAILSENDPATH = "getPersonDetailsEndPath";
     String GETSKILLSBYPERSONENDPATH = "getSkillsByPersonEndPath";
+    String SEARCHSKILLSENDPATH = "searchSkillsEndPath";
 }

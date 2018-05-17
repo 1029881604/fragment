@@ -23,12 +23,10 @@ import team.antelope.fg.db.DBOpenHelper;
 import team.antelope.fg.db.dao.IPersonDao;
 import team.antelope.fg.db.dao.impl.PersonDaoImpl;
 import team.antelope.fg.db.dao.impl.UserDaoImpl;
-import team.antelope.fg.entity.NearbyModularInfo;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.entity.User;
 import team.antelope.fg.ui.base.BaseFragment;
 import team.antelope.fg.ui.business.MeBusiness;
-import team.antelope.fg.ui.business.NearbyBusiness;
 import team.antelope.fg.ui.business.RetrofitServiceManager;
 import team.antelope.fg.util.L;
 import team.antelope.fg.util.PropertiesUtil;
@@ -59,7 +57,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         tv_follow = layout.findViewById(R.id.me_follow);
         tv_collecion = layout.findViewById(R.id.me_collection);
         tv_myneed = layout.findViewById(R.id.me_my_need);
-        tv_freetime = layout.findViewById(R.id.me_free_time);
         tv_making = layout.findViewById(R.id.me_making);
         tv_setting= layout.findViewById( R.id.me_my_setting);
         tv_name=layout.findViewById(R.id.tv_name);
@@ -166,7 +163,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.mefragment_layout;
+        return R.layout.me_fragment_layout;
     }
 
 
@@ -182,7 +179,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         tv_collecion.setOnClickListener(this);
         tv_follow.setOnClickListener(this);
         tv_myneed.setOnClickListener(this);
-        tv_freetime.setOnClickListener(this);
         tv_setting.setOnClickListener(this);
 
     }
@@ -205,12 +201,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.me_follow://关注
                 startActivity(new Intent(getActivity(), MeFollowActivity.class));
                 break;
-//            case R.id.me_making://我的定制
-//                startActivity(new Intent(getActivity(), MePublicActivity.class));
-//                break;
-//            case R.id.me_my_need://我的需求
-//                startActivity(new Intent(getActivity(), MePublicActivity.class));
-//                break;
+            case R.id.me_making://我的定制
+                startActivity(new Intent(getActivity(), MeSubActivity.class));
+                break;
+            case R.id.me_my_need://我的需求
+                startActivity(new Intent(getActivity(), MeNeedActivity.class));
+                break;
 //
 //            case R.id.me_free_time://空闲时间
 //                startActivity(new Intent(getActivity(), MePublicActivity.class));
