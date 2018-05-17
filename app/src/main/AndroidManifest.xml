@@ -103,6 +103,7 @@
         <activity android:name=".ui.activity.AsyncNeedActivity" />
         <activity android:name=".ui.activity.PersonInfoActivity" />
         <activity android:name=".ui.activity.NeedInfoActivity" />
+        <activity android:name=".ui.activity.SkillInfoActivity" />
 
         <!-- ——————nearby end—————— -->
 

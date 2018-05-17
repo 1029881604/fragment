@@ -1,7 +1,6 @@
 package team.antelope.fg.widght;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -27,10 +26,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import team.antelope.fg.FgApp;
-import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.util.L;
-import team.antelope.fg.util.PropertiesUtil;
-import team.antelope.fg.util.SpUtil;
 
 /**
  * @Author：hwc
@@ -41,7 +37,6 @@ import team.antelope.fg.util.SpUtil;
 public class MyWebView extends WebView {
     private ProgressView progressView;//进度条
     private Context context;
-
     public MyWebView(Context context) {
         this(context, null);
     }
@@ -56,10 +51,11 @@ public class MyWebView extends WebView {
         init();
     }
 
+
     private void init() {
         //初始化进度条
         progressView = new ProgressView(context);
-        progressView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(context, 4)));
+        progressView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(context, 2)));
         progressView.setColor(Color.rgb(35,141,206));
         progressView.setProgress(10);
         //把进度条加到Webview中
@@ -67,6 +63,10 @@ public class MyWebView extends WebView {
         initWebSettings();
         setWebChromeClient(new MyWebCromeClient());
         setWebViewClient(new MyWebviewClient());
+    }
+
+    public ProgressView getProgressView() {
+        return progressView;
     }
 
     private void initWebSettings() {
@@ -89,6 +89,8 @@ public class MyWebView extends WebView {
         settings.setAppCacheMaxSize(5 * 1024 * 1024);
         //设置数据库缓存路径 存储管理复杂数据 方便对数据进行增加、删除、修改、查询 不推荐使用
         settings.setDatabaseEnabled(true);
+        settings.setJavaScriptCanOpenWindowsAutomatically(true); //支持通过JS打开新窗口
+        settings.setLoadsImagesAutomatically(true); //支持自动加载图片
         final String dbPath = context.getApplicationContext().getDir("db", Context.MODE_PRIVATE).getPath();
         settings.setDatabasePath(dbPath);
     }
@@ -227,6 +229,13 @@ public class MyWebView extends WebView {
             super.onPageFinished(view, url);
         }
 
+        //6.0以下执行
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            super.onReceivedError(view, errorCode, description, failingUrl);
+        }
+
+        //6.0以上执行
         @Override
         public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
             L.e("TTT", "onPageFinished");

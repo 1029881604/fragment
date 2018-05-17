@@ -27,6 +27,8 @@ public interface AccessNetConst {
     String NEARBYFRAGMENTINFOSENDPATH = "NearbyFragmentInfosEndPath";
     //nearby need
     String TONEEDINFO = "toNeedInfo";
+    //nearby skill
+    String TOSKILLINFO = "toSkillInfo";
 
     //forward
     String TOPERSONINFOENDPATH = "toPersonInfoEndPath";

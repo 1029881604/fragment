@@ -28,7 +28,7 @@
     <string name="et_verification_hint_register">请输入验证码</string>
     <string name="btn_verification_text_register">获取验证码</string>
     <string name="tv_verification_text_register">验证码:</string>
-
+    <string name="please_wait">请稍后....</string>
     <!-- TODO: Remove or change this placeholder text -->
     <!--  login activity end-->
 

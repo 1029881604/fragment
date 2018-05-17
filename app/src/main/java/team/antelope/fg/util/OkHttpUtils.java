@@ -69,6 +69,7 @@ public class OkHttpUtils {
                             Cookie cookie = new Cookie.Builder()
                                     .hostOnlyDomain(httpUrl.host())
                                     .name("JSESSIONID").value(cookieStr.substring(cookieStr.indexOf('=')+1))
+                                    .name("path").value("/")        //这个很关键，没有设置ajax读取不了
                                     .build();
                             cookies.add(cookie);
 

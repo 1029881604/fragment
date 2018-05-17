@@ -5,10 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -36,12 +34,12 @@ import team.antelope.fg.widght.MyWebView;
 /**
  * @Author hwc
  * @Date 2018/5/12
- * @TODO NeedInfoActivity   需求信息页面
+ * @TODO SkillInfoActivity   技能信息页面
  *
  */
-public class NeedInfoActivity extends BaseActivity{
+public class SkillInfoActivity extends BaseActivity{
     //定义webView控件
-    private static final String TAG = "NeedInfoActivity";
+    private static final String TAG = "SkillInfoActivity";
     private MyWebView webView;
     private FrameLayout loadingLayout; //提示用户正在加载数据
     private LinearLayout webParentView;
@@ -53,7 +51,7 @@ public class NeedInfoActivity extends BaseActivity{
      */
     @Override
     protected void initView(Bundle savedInstanceState) {
-        webView =  findViewById(R.id.webview_need);
+        webView =  findViewById(R.id.webview_skill);
         loadingLayout = (FrameLayout) findViewById(R.id.load_layout);
         initErrorPage();//初始化自定义页面
         initWebView();
@@ -66,7 +64,7 @@ public class NeedInfoActivity extends BaseActivity{
      */
     @Override
     public int getLayout() {
-        return R.layout.activity_need_info;
+        return R.layout.activity_skill_info;
     }
 
     private void init() {
@@ -74,7 +72,7 @@ public class NeedInfoActivity extends BaseActivity{
         PropertiesUtil prop = PropertiesUtil.getInstance();
         String baseUrl =prop.getProperty(AccessNetConst.BASEPATH);
         String url = baseUrl
-                + prop.getProperty(AccessNetConst.TONEEDINFO);
+                + prop.getProperty(AccessNetConst.TOSKILLINFO);
         L.i("webvv", "url:" + url );
         syncCookie(baseUrl); //同步cookie要在loadUrl之前设置
         StringBuilder builder1 = new StringBuilder();

@@ -245,6 +245,14 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
                 .load(item.getImg())
                 .apply(options)
                 .into(skillItemHolder.getIv_preview_skill());
+        // 定义item的点击事件
+        Bundle bundle = new Bundle();
+        bundle.putString("id", String.valueOf(item.getId()));
+        bundle.putString("longitude", String.valueOf(longitude));
+        bundle.putString("latitude", String.valueOf(latitude));
+        //定义item的点击事件
+        addNeedDetailClickEvent(AsyncSkillActivity.this, skillItemHolder.getItemView(), bundle, 1);
+
     }
 
     /**
@@ -261,15 +269,10 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
         private final TextView tv_iscomplete;
         private final TextView tv_location;
         private final ImageView iv_preview_skill;
+        private final View itemView;
 
         public SkillItemHolder(View v) {
             super(v);
-            // Define click listener for the ViewHolder's View.
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
             tvTitle =  v.findViewById(R.id.title);
             tvDescription = v.findViewById(R.id.description);
             tv_publish_time = v.findViewById(R.id.tv_publish_time);
@@ -277,6 +280,7 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
             tv_iscomplete = v.findViewById(R.id.tv_iscomplete);
             tv_location = v.findViewById(R.id.tv_location);
             iv_preview_skill = v.findViewById(R.id.iv_preview_skill);
+            itemView = v;
         }
 
         public TextView getTextViewTitle() {
@@ -301,6 +305,9 @@ public class AsyncSkillActivity extends BaseNearByActivity implements AsyncExpan
         }
         public ImageView getIv_preview_skill(){
             return iv_preview_skill;
+        }
+        public View getItemView() {
+            return itemView;
         }
     }
 }

@@ -5,14 +5,21 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="team.antelope.fg.ui.activity.PersonInfoActivity">
+    tools:context="team.antelope.fg.ui.activity.NeedInfoActivity">
+    <!--style="?android:attr/webViewStyle"
+    关键, 不加这个HTML中的input输入框获取焦点时没有输入法-->
     <team.antelope.fg.widght.MyWebView
         style="?android:attr/webViewStyle"
-        android:id="@+id/webview_person"
+        android:id="@+id/webview_need"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </team.antelope.fg.widght.MyWebView>
-    <!--style="?android:attr/webViewStyle"  关键-->
-
+    <!--加载提示的loading图-->
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/load_layout"
+        layout="@layout/loading_anim"
+        android:layout_centerInParent="true"/>
 
 </LinearLayout>

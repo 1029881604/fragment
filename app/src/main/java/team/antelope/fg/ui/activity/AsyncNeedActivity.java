@@ -236,7 +236,9 @@ public class AsyncNeedActivity extends BaseNearByActivity implements AsyncExpand
         needItemHolder.getItemView();
         // 定义item的点击事件
         Bundle bundle = new Bundle();
-        bundle.putLong("id", item.getId());
+        bundle.putString("id", String.valueOf(item.getId()));
+        bundle.putString("longitude", String.valueOf(longitude));
+        bundle.putString("latitude", String.valueOf(latitude));
         //定义item的点击事件
         addNeedDetailClickEvent(AsyncNeedActivity.this, needItemHolder.getItemView(), bundle, 0);
     }

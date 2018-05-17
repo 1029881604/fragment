@@ -30,6 +30,7 @@ import team.antelope.fg.entity.NeedPreInfo;
 import team.antelope.fg.entity.SkillPreInfo;
 import team.antelope.fg.ui.activity.NeedInfoActivity;
 import team.antelope.fg.ui.activity.PersonInfoActivity;
+import team.antelope.fg.ui.activity.SkillInfoActivity;
 import team.antelope.fg.ui.dialog.CustomProgressDialog;
 import team.antelope.fg.ui.presenter.INearbyAsyncPresenter;
 import team.antelope.fg.ui.view.INearbyAsyncView;
@@ -113,7 +114,7 @@ public abstract class BaseNearByActivity extends BaseActivity implements INearby
             public void onClick(View view) {
                 Intent intent = new Intent(context, NeedInfoActivity.class);
                 if (activityType == 1){
-//                    intent = new Intent(context, SkillInfoActivity.class);
+                    intent = new Intent(context, SkillInfoActivity.class);
                 }
                 intent.putExtras(bundle);
                 startActivity(intent);
