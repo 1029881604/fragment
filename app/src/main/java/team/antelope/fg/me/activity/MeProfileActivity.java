@@ -11,6 +11,10 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -19,8 +23,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.ViewPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.ViewPagerItems;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import team.antelope.fg.R;
@@ -28,7 +39,18 @@ import team.antelope.fg.db.dao.impl.PersonDaoImpl;
 import team.antelope.fg.db.dao.impl.UserDaoImpl;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.entity.User;
+import team.antelope.fg.me.fragment.MeMomentFragment;
+import team.antelope.fg.me.fragment.MeProfileFragment;
+import team.antelope.fg.publish.fragment.PublishFragmentNeed;
+import team.antelope.fg.publish.fragment.PublishFragmentSkill;
+import team.antelope.fg.ui.MainActivity;
 import team.antelope.fg.ui.base.BaseActivity;
+import team.antelope.fg.ui.fragment.AccompanyFragment;
+import team.antelope.fg.ui.fragment.ErrandFragment;
+import team.antelope.fg.ui.fragment.GuideFragment;
+import team.antelope.fg.ui.fragment.ManualFragment;
+import team.antelope.fg.ui.fragment.NearbyOtherFragment;
+import team.antelope.fg.ui.fragment.PhotographyFragment;
 import team.antelope.fg.util.CircleImageViewUtil;
 
 import static android.media.CamcorderProfile.get;
@@ -47,10 +69,13 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
    private String user_age,user_sex,user_email;
     private CircleImageViewUtil iv_user_head;
      private final static int CHOOSE_PHOTO= 2;
-     private LinearLayout layout_fans;//粉丝
-    private LinearLayout layout_moments;//动态
     private Long id;
-
+    TextView tv_change;//修改资料
+    TextView tv_fan;//粉丝列表按钮
+    TextView tv_follow;//关注列表按钮
+    FragmentPagerItemAdapter adapter;
+    SmartTabLayout viewPagerTab; //Fragment的View加载完毕的标记
+    ViewPager viewPager;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -62,14 +87,16 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
         tv_fanNum = findViewById(R.id.tv_fanNum);
         iv_chang =findViewById(R.id.iv_chang);
         iv_user_head = findViewById(R.id.iv_user_head);
-        mToolbar.setTitle("个人资料");
+        mToolbar.setTitle("个人主页");
         tv_set_name = findViewById(R.id.tv_set_name);
-        layout_fans =findViewById(R.id.layout_fans);
-        layout_moments = findViewById(R.id.layout_moments);
+        viewPager =  findViewById(R.id.vp_profile);
+        viewPagerTab = findViewById(R.id.ly_vp_tab);
+        tv_change = (TextView) findViewById(R.id.tv_change);
+        tv_fan = (TextView) findViewById(R.id.tv_fan);
+        tv_follow = (TextView) findViewById(R.id.tv_follow);
         Intent intent = getIntent();
         user_name = intent.getStringExtra("get_name");
         tv_set_name.setText(user_name);
-
         UserDaoImpl userDao = new UserDaoImpl(MeProfileActivity.this);
         User ur = userDao.queryAllUser().get(0);
         id = ur.getId();
@@ -115,10 +142,41 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        iv_chang.setOnClickListener(this);
         iv_user_head.setOnClickListener(this);
-        layout_fans.setOnClickListener(this);
+        tv_change.setOnClickListener(this);
+        tv_fan.setOnClickListener(this);
+        tv_follow.setOnClickListener(this);
+        viewPagerEvent();
 
+    }
+
+    private void viewPagerEvent() {
+        viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Fragment  page = adapter.getPage(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
+//        adapter = new ViewPagerItemAdapter(
+//                ViewPagerItems.with(this)
+//                .add("动态", R.layout.me_moment_fragment)
+//                .add("关于TA",R.layout.me_profile_fragment)
+//                .create());
+         adapter = new FragmentPagerItemAdapter(
+                getSupportFragmentManager(), FragmentPagerItems.with(this)
+                .add("动态", MeMomentFragment.class)
+                .add("关于TA", MeProfileFragment.class)
+                .create());
+        viewPager.setAdapter(adapter);
+        viewPagerTab.setViewPager(viewPager);
     }
 
     @Override
@@ -129,7 +187,7 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_chang:{
+            case R.id.tv_change:{
                 Intent intent = new Intent(MeProfileActivity.this, MeChangeProfileActivity.class);
                 user_age =tv_age.getText().toString();
                 user_sex =tv_sex.getText().toString();
@@ -169,11 +227,18 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
                 startActivityForResult(intent, CHOOSE_PHOTO);
                 break;
             }
-            case R.id.layout_fans:
-                Intent intent = new Intent(MeProfileActivity.this,MeFansListActivity.class);
-                intent.putExtra("userId",id);
+            case R.id.tv_fan: {
+                Intent intent = new Intent(MeProfileActivity.this, MeFansListActivity.class);
+                intent.putExtra("userId", id);
                 startActivity(intent);
+                break;
+            }
+            case R.id.tv_follow:{
+                Intent intent = new Intent(MeProfileActivity.this, MeFollowActivity.class);
+                startActivity(intent);
+            }
         }
+
     }
 
     @Override
