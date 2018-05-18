@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import team.antelope.fg.R;
+import team.antelope.fg.publish.utils.SetImageUtils;
 import team.antelope.fg.util.L;
 
 /**
@@ -67,6 +68,7 @@ public class PublishItemsAdapter extends BaseAdapter{
         } else {
             holder = (ViewHolder) convertView.getTag();  //取出ViewHolder对象
         }
+        SetImageUtils.setBitmap(holder.iv_touxiang,list.get(position).get("head").toString());
         holder.tv_username.setText(list.get(position).get("username").toString());
         holder.tv_fbtime.setText(list.get(position).get("fbtime").toString());
         holder.tv_detail.setText(list.get(position).get("detail").toString());
@@ -79,7 +81,7 @@ public class PublishItemsAdapter extends BaseAdapter{
         }
        if (fbkind){
            holder.iv_isfinished.setVisibility(View.VISIBLE);
-           holder.iv_touxiang.setImageResource(R.drawable.publish_touxiang_nan);
+           //holder.iv_touxiang.setImageResource(R.drawable.publish_touxiang_nan);
            if(list.get(position).get("isfinished").toString()=="true"){
                holder.iv_isfinished.setImageResource(R.drawable.publish_fb_finished);
            }else{
@@ -87,7 +89,6 @@ public class PublishItemsAdapter extends BaseAdapter{
            }
        }else{
            holder.iv_isfinished.setVisibility(View.INVISIBLE);
-           holder.iv_touxiang.setImageResource(R.drawable.publish_touxiang_nv);
        }
         //holder.iv_fenxiang.setImageResource(list.get(position).get("touxiang").);
 

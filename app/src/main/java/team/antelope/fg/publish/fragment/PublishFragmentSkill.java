@@ -10,6 +10,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
@@ -25,6 +26,7 @@ import team.antelope.fg.ui.base.BaseFragment;
 import team.antelope.fg.ui.business.PublishBusiness;
 import team.antelope.fg.ui.business.RetrofitServiceManager;
 import team.antelope.fg.util.DateUtil;
+import team.antelope.fg.util.PropertiesUtil;
 
 /**
 *@Author: lry
@@ -37,6 +39,7 @@ public class PublishFragmentSkill extends BaseFragment {
     PublishItemsAdapter skillItemsAdapter;
     ArrayList<HashMap<String,Object>> listItem;
     List<PersonSkill> personSkills;
+    private Properties mProp;
 
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
     @Override
@@ -65,8 +68,9 @@ public class PublishFragmentSkill extends BaseFragment {
         setskillitem();
     }
     public void setskillitem(){
+        mProp = PropertiesUtil.getInstance();
         Observable<List<PersonSkill>> observable = RetrofitServiceManager.getInstance()
-                .create(PublishBusiness.class).getAllPersonSkill("GetAllPersonSkillServlet").observeOn(AndroidSchedulers.mainThread())
+                .create(PublishBusiness.class).getAllPersonSkill(mProp.getProperty("getAllPublishSkillEndPath")).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).delaySubscription(0, TimeUnit.MILLISECONDS);
         addSubscription(observable.subscribe(new Subscriber<List<PersonSkill>>() {
             @Override
@@ -77,6 +81,7 @@ public class PublishFragmentSkill extends BaseFragment {
                     listItem=new  ArrayList<>();
                     for (int i=0;i<personSkills.size();i++){
                         HashMap<String,Object> map=new HashMap<String,Object>();
+                        map.put("head",personSkills.get(i).getHeadimg());
                         map.put("username", personSkills.get(i).getName());
                         map.put("isonline",personSkills.get(i).isIsonline());
                         map.put("dingwei",personSkills.get(i).getAddressdesc());

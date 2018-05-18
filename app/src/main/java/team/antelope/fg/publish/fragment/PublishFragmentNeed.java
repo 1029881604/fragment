@@ -45,8 +45,6 @@ public class PublishFragmentNeed extends BaseFragment {
     private Properties mProp;
     private CountDownLatch latch = new CountDownLatch(1);
     private List<PersonNeed> personNeeds;
-
-    public CompositeSubscription compositeSubscription = new CompositeSubscription();
     @Override
     protected int getLayoutId() {
         return R.layout.publish_fragment_listview;
@@ -80,6 +78,7 @@ public class PublishFragmentNeed extends BaseFragment {
         listItem=new  ArrayList<>();
         for (int i = 0; i < personNeeds.size(); i++) {
             HashMap<String,Object> map=new HashMap<String,Object>();
+            map.put("head",personNeeds.get(i).getHeadimg());
             map.put("username",personNeeds.get(i).getName());
             map.put("isonline",personNeeds.get(i).isIsonline());
             map.put("dingwei",personNeeds.get(i).getAddressdesc());

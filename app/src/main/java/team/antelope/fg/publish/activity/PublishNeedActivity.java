@@ -48,7 +48,7 @@ import team.antelope.fg.util.L;
 
 public class PublishNeedActivity extends BaseActivity implements View.OnClickListener{
 
-    private static final String TAG = "PublishNeedActivity";
+    private static final String TAG = PublishNeedActivity.class.getSimpleName();
     private Context mContext;
     private Toolbar mToolbar;
     private PopupWindow popupWindow;
@@ -269,9 +269,6 @@ public class PublishNeedActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void btn_fabuneed(){
-       /* PublishSkillDaoImpl skilldao = new PublishSkillDaoImpl(PublishSkillActivity.this);
-        skilldao.insert(new PublishSkill(1000l ,1001l ,"hhh" , "4444" ,new Date(),new Date(System.currentTimeMillis()+3600*24),"img",
-                "type", false, false, "add", 15,15));*/
         long id,uid;
         String title,content,img="http:img",type,address;
         Date date=new Date(),stopdata;
