@@ -41,8 +41,9 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
 
     private RecyclerView mRecyclerView;
     private DzRecyclerAdapterImgUrl adapter;
+    private List<Long> skillid; //技能ID集合
     private List<String> lists; //标题集合
-    private List<String> resids;  //图片集合
+    private List<String> resids;  //图片资源集合
     private List<String> contents;  //内容介绍集合
     private List<String> type;  //技能类型集合
     private List<String> startdate; //开始时间集合
@@ -67,6 +68,8 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
+        //技能id集合
+        skillid = new ArrayList();
         //文字信息集合
         lists = new ArrayList();
         //内容介绍信息集合
@@ -126,15 +129,16 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
                 if (!publishSkills.isEmpty()){
                     //循环添加集合元素
                     for (int i=0; i<publishSkills.size(); i++) {
-                    lists.add(publishSkills.get(i).getTitle());
-                    contents.add(publishSkills.get(i).getContent());
-                    type.add(publishSkills.get(i).getSkillType());
-                    startdate.add(DateUtil.formatDate(publishSkills.get(i).getPublishDate().getTime()));
-                    stopdate.add(DateUtil.formatDate(publishSkills.get(i).getStopDate().getTime()));
-                    userid.add(publishSkills.get(i).getuId());
-                    resids.add(publishSkills.get(i).getImg());
+                        skillid.add(publishSkills.get(i).getId());
+                        lists.add(publishSkills.get(i).getTitle());
+                        contents.add(publishSkills.get(i).getContent());
+                        type.add(publishSkills.get(i).getSkillType());
+                        startdate.add(DateUtil.formatDate(publishSkills.get(i).getPublishDate().getTime()));
+                        stopdate.add(DateUtil.formatDate(publishSkills.get(i).getStopDate().getTime()));
+                        userid.add(publishSkills.get(i).getuId());
+                        resids.add(publishSkills.get(i).getImg());
                     }
-               }
+                }
 
                 //recyclerView的相关设置,绑定适配器
                 mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -147,6 +151,7 @@ public class PagerFragment1 extends BaseFragment implements View.OnClickListener
                     @Override
                     public void ItemClickListener(View view, int postion) {
                         Intent intent=new Intent();
+                        intent.putExtra("skillid",skillid.get(postion));
                         intent.putExtra("title",lists.get(postion));
                         intent.putExtra("contents",contents.get(postion));
                         intent.putExtra("skilltype",type.get(postion));
