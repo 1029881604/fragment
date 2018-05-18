@@ -189,6 +189,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.lay_view_user:// 个人信息
                 String beforename =tv_name.getText().toString();
                 Intent intent =new Intent(getActivity(),MeProfileActivity.class);
+                intent.putExtra("person_id",mUser.getId());
             intent.putExtra("get_name",beforename);
             startActivityForResult(intent,1);
                 break;

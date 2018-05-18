@@ -90,14 +90,35 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            after_person = (ArrayList<PersonPinyin>) msg.obj;
-            meFollowListAdapter = new MeFollowListAdapter(MeFollowActivity.this, after_person);
-            listView.setAdapter(meFollowListAdapter);
+//            after_person = (ArrayList<PersonPinyin>) msg.obj;
+
+            switch (msg.what){
+                case 1:
+//                    after_person = (ArrayList<PersonPinyin>) msg.obj;
+                {
+
+                    meFollowListAdapter.notifyDataSetChanged();
+                }
+                break;
+                case 2:{
+                    swipeRefreshLayout.setRefreshing(false);//不显示刷新圈
+                    meFollowListAdapter = new MeFollowListAdapter(MeFollowActivity.this, personPinyins);
+                    listView.setAdapter(meFollowListAdapter);
+                }
+
+                default:
+                    break;
+            }
 
         }
     };
 
+    Handler handler2=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
 
+        }
+    };
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -197,11 +218,12 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
                     Message message = new Message();
                     personPinyins = new ArrayList<PersonPinyin>();
                     fillAndSortData(personPinyins);
-                    message.obj = personPinyins;
-                    IPersonDao personDao = new PersonDaoImpl(MeFollowActivity.this);
-                    for (Person person : psList) {
-                        personDao.insert(person);
-                    }
+//                    message.obj = personPinyins;
+                    message.what=2;
+//                    IPersonDao personDao = new PersonDaoImpl(MeFollowActivity.this);
+//                    for (Person person : psList) {
+//                        personDao.insert(person);
+//                    }
                     handler.sendMessage(message);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -265,9 +287,9 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView person_id = (TextView) findViewById(R.id.tv_personId);
-                String tv_personId = person_id.getText().toString();
-                select_id = Long.valueOf(tv_personId);
+                TextView tv_personId = view.findViewById(R.id.tv_personId);
+                String personId = tv_personId.getText().toString();
+                select_id = Long.valueOf(personId);
 
                 showPopupWindow();
                 return true;
@@ -278,23 +300,51 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         swipeRefreshLayout.setProgressBackgroundColor(R.color.white);
         swipeRefreshLayout.setProgressViewEndTarget(true, 200);
-
+/**
+ * @Author：Carlos
+ * @Date:  2018/5/17 8:58
+ * @Description: 下拉刷新
+ **/
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-//                        data.clear();
-//                        for(int i=0;i<50;i++){
-//                            data.add("SwipeRefreshLayout下拉刷新"+i);
-//                        }
                         try {
                             Thread.sleep(1500);
-                        } catch (InterruptedException e) {
+                            OkHttpClient.Builder builder = OkHttpUtils.createHttpClientBuild();
+                            OkHttpClient client = builder.build();
+//                    OkHttpClient client = new OkHttpClient();
+                            RequestBody requestBody = new FormBody.Builder()
+                                    .add("person_id", String.valueOf(person_id))
+                                    .build();
+                            mProp = PropertiesUtil.getInstance();
+                            String path = mProp.getProperty(AccessNetConst.BASEPATH)
+                                    +mProp.getProperty(MeAccessNetConst.PostPersonFriendsServletEndPath);
+                            Request request = new Request.Builder()
+                                    .url(path)
+                                    .post(requestBody)
+                                    .build();
+                            Response response = client.newCall(request).execute();
+                            String responseData = response.body().string();
+                            parseJSONWithGSON(responseData);
+                            Message message = new Message();
+                            personPinyins = new ArrayList<PersonPinyin>();
+                            fillAndSortData(personPinyins);
+//                    message.obj = personPinyins;
+                            message.what=2;
+                    IPersonDao personDao = new PersonDaoImpl(MeFollowActivity.this);
+                    for (Person person : psList) {
+                        personDao.insert(person);
+                    }
+                            handler.sendMessage(message);
+//                            handler.sendEmptyMessage(1);
+
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        handler.sendEmptyMessage(1);
+
                     }
                 }).start();
             }
