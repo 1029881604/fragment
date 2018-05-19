@@ -23,6 +23,7 @@ import team.antelope.fg.db.dao.impl.PersonDaoImpl;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.me.fragment.MeMomentFragment;
 import team.antelope.fg.me.fragment.MeProfileFragment;
+import team.antelope.fg.me.me_utils.MeViewPager;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.CircleImageViewUtil;
 import team.antelope.fg.util.SetRoundImageViewUtil;
@@ -42,7 +43,7 @@ public class MePersonActivity extends BaseActivity implements View.OnClickListen
     TextView tv_follow;//关注列表按钮
     FragmentPagerItemAdapter adapter;
     SmartTabLayout viewPagerTab; //Fragment的View加载完毕的标记
-    ViewPager viewPager;
+    MeViewPager viewPager;
     @Override
     protected void initView(Bundle savedInstanceState) {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -76,21 +77,22 @@ public class MePersonActivity extends BaseActivity implements View.OnClickListen
         viewPagerEvent();
 
     }
+
     private void viewPagerEvent() {
-        viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Fragment page = adapter.getPage(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+//        viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                Fragment page = adapter.getPage(position);
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//            }
+//        });
 //        adapter = new ViewPagerItemAdapter(
 //                ViewPagerItems.with(this)
 //                .add("动态", R.layout.me_moment_fragment)
@@ -98,7 +100,7 @@ public class MePersonActivity extends BaseActivity implements View.OnClickListen
 //                .create());
         adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
-                .add("动态", MeMomentFragment.class)
+                .add("记录", MeMomentFragment.class)
                 .add("关于TA", MeProfileFragment.class)
                 .create());
         viewPager.setAdapter(adapter);

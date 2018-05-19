@@ -245,19 +245,17 @@
                 app:stl_drawDecorationAfterTab="false"
                 android:layout_gravity="center"
                 />
-            <android.support.v4.view.ViewPager
+            <team.antelope.fg.me.me_utils.MeViewPager
                 android:id="@+id/vp_profile"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:flipInterval="30"
                 android:persistentDrawingCache="animation" />
-
             <!-- tab end-->
 
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
 
 </android.support.design.widget.CoordinatorLayout>

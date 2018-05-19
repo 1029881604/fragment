@@ -40,6 +40,7 @@ import team.antelope.fg.util.ToastUtil;
  * @Author：Carlos
  * @Date： 2018/5/15 11:30
  * @Description:   Carlos copy from lx and change something
+ *                  显示定制内容的信息
  *
   **/
 public class MeSkillDetailActivity extends BaseActivity implements View.OnClickListener{

@@ -64,7 +64,7 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
 
      Toolbar mToolbar;
      ImageView iv_chang;
-    TextView tv_set_name, tv_age, tv_sex, tv_email, tv_dealNum, tv_fanNum;
+    TextView tv_set_name, tv_age, tv_sex, tv_email, tv_dealNum;
    private String user_name;
    private String user_age,user_sex,user_email;
     private CircleImageViewUtil iv_user_head;
@@ -73,6 +73,8 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
     TextView tv_change;//修改资料
     TextView tv_fan;//粉丝列表按钮
     TextView tv_follow;//关注列表按钮
+    TextView tv_fanNum;//粉丝数
+    TextView tv_follow_num;//关注数
     FragmentPagerItemAdapter adapter;
     SmartTabLayout viewPagerTab; //Fragment的View加载完毕的标记
     ViewPager viewPager;
@@ -151,20 +153,20 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void viewPagerEvent() {
-        viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Fragment  page = adapter.getPage(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+//        viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                Fragment  page = adapter.getPage(position);
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//            }
+//        });
 //        adapter = new ViewPagerItemAdapter(
 //                ViewPagerItems.with(this)
 //                .add("动态", R.layout.me_moment_fragment)
@@ -172,7 +174,7 @@ public class MeProfileActivity extends BaseActivity implements View.OnClickListe
 //                .create());
          adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
-                .add("动态", MeMomentFragment.class)
+                .add("记录", MeMomentFragment.class)
                 .add("关于TA", MeProfileFragment.class)
                 .create());
         viewPager.setAdapter(adapter);

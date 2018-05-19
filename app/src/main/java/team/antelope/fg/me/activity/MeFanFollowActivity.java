@@ -37,7 +37,7 @@ import team.antelope.fg.util.PropertiesUtil;
 /**
  * @Author：Carlos
  * @Date： 2018/5/16 11:42
- * @Description: 登录用户的粉丝的关注列表
+ * @Description: 其他用户的关注列表
  **/
 public class MeFanFollowActivity extends BaseActivity {
 
@@ -123,7 +123,7 @@ public class MeFanFollowActivity extends BaseActivity {
                             .build();
                     mProp = PropertiesUtil.getInstance();
                     String path = mProp.getProperty(AccessNetConst.BASEPATH)
-                            +mProp.getProperty(MeAccessNetConst.PostFindFansServletEndPath);
+                            +mProp.getProperty(MeAccessNetConst.PostPersonFriendsServletEndPath);
                     Request request = new Request.Builder()
                             .url(path)
                             .post(requestBody)
