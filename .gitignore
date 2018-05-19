@@ -52,3 +52,5 @@ obj/
 
 #server url path
 /app/src/main/res/raw/urls.properties
+# release filter
+/app/release/

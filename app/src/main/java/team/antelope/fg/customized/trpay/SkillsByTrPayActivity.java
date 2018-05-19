@@ -1,16 +1,22 @@
 package team.antelope.fg.customized.trpay;
 
 import android.app.Activity;
+import android.app.DownloadManager;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.math.BigDecimal;
+import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
+import android.os.Environment;
+import android.os.PowerManager;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,19 +25,29 @@ import com.base.bj.paysdk.domain.TrPayResult;
 import com.base.bj.paysdk.listener.PayResultListener;
 import com.base.bj.paysdk.utils.TrPay;
 
-import java.lang.reflect.Method;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.UUID;
 
+import team.antelope.fg.BuildConfig;
 import team.antelope.fg.R;
-import team.antelope.fg.customized.util.AppIsAvilible;
+import team.antelope.fg.customized.dialog.DialogButtonListener;
+import team.antelope.fg.customized.dialog.DialogUtil;
+import team.antelope.fg.customized.util.AppUtils;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.ToastUtil;
 
 /**
  * Create by Kyrene
-* @说明 支付页
-* @创建日期 2018/5/15 上午10:45
-*/
+ * @说明 支付页
+ * @创建日期 2018/5/15 上午10:45
+ */
 public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView commodityName;//商品名称
@@ -104,12 +120,17 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                 break;
             }//case11111
 
+
+
             case R.id.to_wechatpay: {
                 /**
                  * 发起微信支付调用
                  */
-                if (AppIsAvilible.isAppInstalled(this, "com.tencent.mm")) {
-
+                if (AppUtils.isAppInstalled(this, "com.tencent.mm")) {
+                    /**
+                     * @说明 用户已安装微信的逻辑
+                     * @创建日期 2018/5/16 上午9:04
+                     */
                     TrPay.getInstance(this).callWxPay(tradename, outtradeno, amount, backparams, notifyurl, userid, new PayResultListener() {
                         /**
                          * 支付完成回调
@@ -128,19 +149,41 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                                 TrPay.getInstance((Activity) context).closePayView();       //关闭支付页面
                                 ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                                 //支付成功逻辑处理
-                            } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {        //2：支付失败回调
+                            } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {//2：支付失败回调
                                 ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                                 //支付失败逻辑处理
                             }
                         }
                     });
-                }
+                }//if
+
                 else{
+                    /**
+                     * @说明 用户未安装微信的逻辑
+                     * @创建日期 2018/5/16 上午9:05
+                     */
                     ToastUtil.showCustom(SkillsByTrPayActivity.this, "未安装微信，请先安装微信", Toast.LENGTH_LONG);
-//                    Uri uri = Uri.parse("market://details?id=com.tencent.mm");//id为包名
-//                    Intent it = new Intent(Intent.ACTION_VIEW, uri);
-//                    startActivity(it);
-                }
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(SkillsByTrPayActivity.this);
+                    dialog.setTitle("提示");
+                    dialog.setMessage("是否下载微信？");
+                    dialog.setCancelable(false);
+                    dialog.setPositiveButton("下载", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            showDownloadProgressDialog(SkillsByTrPayActivity.this);
+                        }
+                    });
+                    dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ToastUtil.showCustom(SkillsByTrPayActivity.this, "用户取消下载", Toast.LENGTH_LONG);
+                        }
+                    });
+                    dialog.show();
+
+
+                }//else
+
             }//case2222
 
         }//switch
@@ -154,9 +197,9 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
     }
 
     /**
-    * @说明 数额*100，因为单位是分，*100用于内部计算
-    * @创建日期 2018/5/15 下午3:45
-    */
+     * @说明 数额*100，因为单位是分，*100用于内部计算
+     * @创建日期 2018/5/15 下午3:45
+     */
     public double mulString(String num){
         try {
             double result = Double.parseDouble(num);
@@ -171,5 +214,140 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
     @Override
     public int getLayout() {
         return R.layout.lx_skillsbytrpay;
+    }
+
+
+
+    /**
+     * @说明 下载任务
+     * @创建日期 2018/5/16 上午11:04
+     */
+    private void showDownloadProgressDialog(Context context) {
+        ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setTitle("提示");
+        progressDialog.setMessage("正在下载...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.setMax(100);
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.show();
+        String downloadUrl = "http://dldir1.qq.com/weixin/android/weixin666android1300.apk";
+        new DownloadAPK(progressDialog).execute(downloadUrl);
+    }
+
+    /**
+     * 下载APK的异步任务
+
+     */
+
+    private class DownloadAPK extends AsyncTask<String, Integer, String> {
+        ProgressDialog progressDialog;
+        File file;
+
+        public DownloadAPK(ProgressDialog progressDialog) {
+            this.progressDialog = progressDialog;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            URL url;
+            HttpURLConnection conn;
+            BufferedInputStream bis = null;
+            FileOutputStream fos = null;
+
+            try {
+                url = new URL(params[0]);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setConnectTimeout(5000);
+
+                int fileLength = conn.getContentLength();
+                bis = new BufferedInputStream(conn.getInputStream());
+                String fileName = Environment.getExternalStorageDirectory().getPath() + "/download/new.apk";
+
+                file = new File(fileName);
+                if (!file.exists()) {
+                    if (!file.getParentFile().exists()) {
+                        file.getParentFile().mkdirs();
+                    }
+                    file.createNewFile();
+                }
+                fos = new FileOutputStream(file);
+                byte data[] = new byte[4 * 1024];
+                long total = 0;
+                int count;
+                while ((count = bis.read(data)) != -1) {
+                    total += count;
+                    publishProgress((int) (total * 100 / fileLength));
+                    fos.write(data, 0, count);
+                    fos.flush();
+                }
+                fos.flush();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (fos != null) {
+                        fos.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (bis != null) {
+                        bis.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+            progressDialog.setProgress(progress[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+//            openFile(file);
+            progressDialog.dismiss();
+        }
+
+        private void openFile(File file) {
+//
+////参数1 上下文, 参数2 Provider主机地址 和配置文件中保持一致   参数3  共享的文件
+//            Uri apkUri =
+//                    FileProvider.getUriForFile(SkillsByTrPayActivity.this, BuildConfig.APPLICATION_ID + ".fileProvider", file);
+//
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            // 由于没有在Activity环境下启动Activity,设置下面的标签
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            //添加这一句表示对目标应用临时授权该Uri所代表的文件
+//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+//            SkillsByTrPayActivity.this.startActivity(intent);
+
+
+
+            if (file!=null){
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                // 由于没有在Activity环境下启动Activity,设置下面的标签
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                //添加这一句表示对目标应用临时授权该Uri所代表的文件
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+//                SkillsByTrPayActivity.this.startActivity(intent);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+
+
+        }
     }
 }

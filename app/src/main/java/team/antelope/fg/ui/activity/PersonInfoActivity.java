@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -15,6 +16,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
@@ -70,6 +72,7 @@ public class PersonInfoActivity extends BaseActivity{
                 + prop.getProperty(AccessNetConst.TOPERSONINFOENDPATH)
                 +"?id="+id;
         syncCookie(); //同步cookie要在loadUrl之前设置
+        webView.addJavascriptInterface(this, "android");
         webView.loadUrl(url);
     }
 
@@ -121,7 +124,36 @@ public class PersonInfoActivity extends BaseActivity{
         webView.destroy();
         super.onDestroy();
     }
+    //javasricpt调用android代码
+    @JavascriptInterface
+    public void close(){
+        Toast.makeText(this, "hahah", Toast.LENGTH_LONG).show();
+        finish();
+    }
 
+    //javasricpt调用android代码
+    @JavascriptInterface
+    public void back(){
+        //是否可以后退
+        if(webView.canGoBack()){
+            webView.goBack();
+        }
+    }
+
+    //javasricpt调用android代码
+    @JavascriptInterface
+    public void forward(){
+        //是否可以前进
+        if(webView.canGoForward()){
+            //前进网页
+            webView.goForward();
+        }
+    }
+    //javasricpt调用android代码
+    @JavascriptInterface
+    public void reload(){
+        webView.reload();
+    }
     private void initWebView() {
         //加载需要显示的网页
         WebSettings mWebSettings = webView.getSettings();

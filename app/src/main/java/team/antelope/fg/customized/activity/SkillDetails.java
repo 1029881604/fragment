@@ -1,20 +1,35 @@
 package team.antelope.fg.customized.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -27,11 +42,18 @@ import team.antelope.fg.customized.trpay.PayActivity;
 import team.antelope.fg.customized.constant.AccessNetConst;
 import team.antelope.fg.customized.scrollView.MyScrollView;
 import team.antelope.fg.customized.trpay.SkillsByTrPayActivity;
+import team.antelope.fg.db.dao.IUserDao;
+import team.antelope.fg.db.dao.impl.PersonDaoImpl;
+import team.antelope.fg.db.dao.impl.UserDaoImpl;
 import team.antelope.fg.entity.Person;
+import team.antelope.fg.entity.User;
+import team.antelope.fg.me.activity.MeChangeProfileActivity;
+import team.antelope.fg.me.constant.MeAccessNetConst;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.ui.business.CustmoizedBusiness;
 import team.antelope.fg.ui.business.RetrofitServiceManager;
 import team.antelope.fg.util.L;
+import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 import team.antelope.fg.util.ToastUtil;
 
@@ -68,12 +90,15 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
     ImageView skillpic;
 
     Button pay;
+    Button collectSkill;
+
+    private Long user_id;   //当前登录用户id
+    private Long skillId;  //技能id
+    String collectStatus;   //收藏状态（是否收藏）
+    private Properties mProp;
 
     Person mPerson;  //人物实例
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
-
-//    protected List<PublishSkill> publishSkills;
-//    PersonDaoImpl personDao;    //人物数据实例
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -101,15 +126,19 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
         personDetailsLayout = findViewById(R.id.persondetails);     //人物信息部分LinearLayout
         skillpic = findViewById(R.id.skillbb);     //技能图片
         skillprice = findViewById(R.id.skillprice); //技能价格
-        pay = findViewById(R.id.pay_btn);
+        pay = findViewById(R.id.pay_btn);   //支付按钮
+        collectSkill = findViewById(R.id.collectskill);     //收藏按钮
+
 
         ivBack.setOnClickListener(this);
         ivShoppingCart.setOnClickListener(this);
         ivMore.setOnClickListener(this);
         pay.setOnClickListener(this);
+        collectSkill.setOnClickListener(this);
 
         //获得Intent，并获取上一个activity传递过来的值
         Intent intent=getIntent();
+        skillId = intent.getLongExtra("skillid", 0);
         final String skillTitle=intent.getStringExtra("title");
         final String skillContent=intent.getStringExtra("contents");
         final String skillType=intent.getStringExtra("skilltype");
@@ -117,11 +146,21 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
         final String stopDate=intent.getStringExtra("stopdate");
         final String skillPicture = intent.getStringExtra("skillpic");  //新增的传递的图片
 //        L.i("testskillpic",skillPicture);
-        final long userid = intent.getLongExtra("userid", 0);
+
+        final long userid = intent.getLongExtra("userid", 0);       //技能拥有者id
 //        L.i("testuserid",String.valueOf(userid));
 
 //        personDao=new PersonDaoImpl(this);
 //        person=personDao.queryById(userid);     //搜寻uid所对应的人物所有信息
+
+        /**
+         * @说明 获取当前登录用户的id
+         * @创建日期 2018/5/18 下午8:11
+         */
+        IUserDao userDao = new UserDaoImpl(SkillDetails.this);
+        User user = userDao.queryAllUser().get(0);
+        user_id = user.getId();     //当前登录用户id
+
 
         /**
          * @说明 从服务器端获取person对象读取数据
@@ -199,8 +238,45 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
             }
         }));
 
+        /**
+         * @说明 获取收藏状态（是否收藏）
+         * @创建日期 2018/5/18 下午10:10
+         */
+        String endUrl1 = PropertiesUtil.getInstance().
+                getProperty(AccessNetConst.GETCOLLECTIONSTATUSENDPATH);
+        Observable<String> observable1 = RetrofitServiceManager.getInstance()
+                .create(CustmoizedBusiness.class).getCollectionStatus(endUrl1, Long.toString(user_id), Long.toString(skillId)).observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).delaySubscription(0, TimeUnit.MILLISECONDS);
+        addSubscription(observable1.subscribe(new Subscriber<String>() {
+            @Override
+            public void onCompleted() {
+                Log.i("status", "statusUSERID"+user_id);
+                Log.i("status", "statusSKILLID"+skillId);
+                Log.i("status", "statusCollect"+collectStatus);
+                if (!collectStatus.equals("")) {
+                    collectSkill.setText(collectStatus);
+                }
 
+            }
 
+            @Override
+            public void onError(Throwable e) {
+                L.i("statusOnError", "onError");
+            }
+
+            @Override
+            public void onNext(String s) {
+                collectStatus = s;
+                L.i("statusOnNext", "onNext1");
+            }
+        }));
+
+//        /**
+//         * @说明 获取收藏状态，并根据状态设置不同的ui
+//         * @创建日期 2018/5/18 下午9:26
+//         */
+//        sendOkHttpRequestForGetStatus();
+//        Log.i("status", "ss"+collectStatus);
 
 
 
@@ -273,9 +349,9 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
         });
 
         /**
-        * @说明 支付按钮点击事件
-        * @创建日期 2018/5/15 下午3:13
-        */
+         * @说明 支付按钮点击事件
+         * @创建日期 2018/5/15 下午3:13
+         */
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -287,7 +363,88 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
             }
         });
 
+        /**
+         * @说明 收藏按钮点击事件
+         * @创建日期 2018/5/18 下午10:49
+         */
+        collectSkill.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(SkillDetails.this);
+                dialog.setTitle("提示");
+                if (collectStatus.equals("收藏")){
+                    dialog.setMessage("确定收藏该技能？");
+                }else{
+                    dialog.setMessage("取消收藏？");
+                }
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mProp = PropertiesUtil.getInstance();
+//                        doDatabase();
+                        sendRequestWithOkHttp();
+                        if (collectStatus.equals("收藏")){
+                            ToastUtil.showCustom(SkillDetails.this, "收藏成功", Toast.LENGTH_LONG);
+                        }else{
+                            ToastUtil.showCustom(SkillDetails.this, "取消收藏成功", Toast.LENGTH_LONG);
+                        }
+                        finish();
+                    }
+
+                    //                    private void doDatabase() {
+//                        IUserDao userDao = new UserDaoImpl(SkillDetails.this);
+//                        User user = userDao.queryAllUser().get(0);
+//                        user_id = user.getId();     //当前用户id
+//                    }
+                    private void sendRequestWithOkHttp() {
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String url = null;
+                                try {
+                                    url = mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +
+                                            mProp.getProperty(AccessNetConst.COLLECTSKILLSENDPATH);
+//                                    OkHttpClient client = new OkHttpClient();
+                                    OkHttpClient.Builder builder = OkHttpUtils.createHttpClientBuild();
+                                    OkHttpClient client = builder.build();
+                                    //POST方式
+                                    RequestBody requestBody = new FormBody.Builder()
+                                            .add("userid", String.valueOf(user_id))
+                                            .add("skillid", String.valueOf(skillId))
+                                            .build();
+                                    Request request = new Request.Builder().url(url).post(requestBody).build();
+                                    Response response = client.newCall(request).execute();
+                                    String responseData = response.body().string();
+                                    showResponse(responseData);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            private void showResponse(String responseData) {
+                                if (responseData != null) {
+                                    Log.i("666", "成功"+"userid:"+user_id+"skillid:"+skillId);
+                                } else
+                                    Log.i("666", "失败");
+                            }
+                        }).start();
+                    }
+                });
+                dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        ToastUtil.showCustom(SkillDetails.this, "用户取消收藏", Toast.LENGTH_LONG);
+                    }
+                });
+                dialog.show();
+            }
+        });
+
     }
+
 
     private void HeaderTranslate(float distance) {
         lvHeader.setTranslationY(-distance);
@@ -340,6 +497,10 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
 //                intent.setClass(this, PayActivity.class);
 //
 //                startActivity(intent);
+
+//            case R.id.collectskill:
+//                ToastUtil.showCustom(this,"点击了收藏按钮",2000);
+//                break;
             default:
                 break;
         }
@@ -354,9 +515,9 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
         return R.layout.lx_activity_skilldetails;
     }
 
-
     public void addSubscription(Subscription subscription){
         compositeSubscription.add(subscription);
     }
+
 
 }

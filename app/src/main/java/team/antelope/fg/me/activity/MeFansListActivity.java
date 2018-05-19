@@ -107,7 +107,7 @@ Handler handler = new Handler(){
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 fans_id = (TextView) findViewById(R.id.fans_id);
                 Long fanId= Long.valueOf(fans_id.getText().toString());
-                Intent intent = new Intent(MeFansListActivity.this,MeFansListActivity.class);
+                Intent intent = new Intent(MeFansListActivity.this,MePersonActivity.class);
                 intent.putExtra("person_id",fanId);
                 startActivity(intent);
             }

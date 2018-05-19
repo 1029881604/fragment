@@ -29,6 +29,10 @@ public interface CustmoizedBusiness {
     @GET("{endPath}")
     Observable<List<PublishSkill>> searchResult(@Path("endPath") String endPath, @Query("keyword") String keyword);
 
+    @GET("{endPath}")
+    Observable<String> getCollectionStatus(@Path("endPath") String endPath, @Query("userid") String user_id,
+                                           @Query("skillid") String skill_id);
+
 }
 
 
