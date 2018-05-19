@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,21 +22,31 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-
+import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import java.io.IOException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import team.antelope.fg.R;
+import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.db.dao.impl.PublishSkillDaoImpl;
 import team.antelope.fg.db.dao.impl.UserDaoImpl;
 import team.antelope.fg.entity.PublishSkill;
@@ -43,13 +56,17 @@ import team.antelope.fg.publish.widget.CustomDatePicker;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.L;
+import team.antelope.fg.util.OkHttpUtils;
+import team.antelope.fg.util.PropertiesUtil;
 
 /**
  * Created by PC_LRY on 2018/1/4.
  */
 public class PublishSkillActivity extends BaseActivity implements View.OnClickListener{
 
-    private static final String TAG = "PublishSkillActivity";
+    private static final String TAG = PublishSkillActivity.class.getSimpleName();
+    private static final int FALL = 0;
+    private static final int SUCCESS=1;
     private Context mContext;
     private Toolbar mToolbar;
     private PopupWindow popupWindow;
@@ -140,8 +157,6 @@ public class PublishSkillActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.ok_tv:
                 btn_fabuskill();
-                popupWindow.dismiss();
-                finish();
                 break;
         }
     }
@@ -274,18 +289,12 @@ public class PublishSkillActivity extends BaseActivity implements View.OnClickLi
     }
 
     public void btn_fabuskill(){
-       /* PublishSkillDaoImpl skilldao = new PublishSkillDaoImpl(PublishSkillActivity.this);
-        skilldao.insert(new PublishSkill(1000l ,1001l ,"hhh" , "4444" ,new Date(),new Date(System.currentTimeMillis()+3600*24),"img",
-                "type", false, false, "add", 15,15));*/
-        long id,uid;
+        long uid;
         String title,content,img="http:img",type,address;
         Date date=new Date(),stopdata;
         Boolean isonline,iscomplete=false;
         double x=0.0,y=0.0;
 
-
-        List<PublishSkill> publishskills=(new PublishSkillDaoImpl(PublishSkillActivity.this)).queryAllPublishSkill();
-        id=publishskills.get(publishskills.size()-1).getId()+1;
         List<User> users=(new UserDaoImpl(PublishSkillActivity.this)).queryAllUser();
         uid=users.get(0).getId();
         title=et_title.getText().toString();
@@ -296,9 +305,53 @@ public class PublishSkillActivity extends BaseActivity implements View.OnClickLi
         stopdata=strToDateLong(str_time);
         L.i("tag","我的时间："+DateUtil.formatDataTime(stopdata.getTime()));
         isonline=cb_isonline.isChecked();
-        PublishSkillDaoImpl skilldao = new PublishSkillDaoImpl(PublishSkillActivity.this);
-        skilldao.insert(new PublishSkill(id , uid , title , content , date,stopdata, img,
-                type, iscomplete, isonline, address, x,y));
+        PublishSkill skill=new PublishSkill(0 , uid , title , content , date,stopdata, img, type, iscomplete, isonline, address, x,y);
+        String json=new Gson().toJson(skill);
+        final Handler handler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what){
+                    case FALL:
+                        Toast.makeText(PublishSkillActivity.this,"网络错误，发布失败",Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
+                        break;
+                    case SUCCESS:
+                        Toast.makeText(PublishSkillActivity.this,"技能发布成功",Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
+                        finish();
+                        break;
+                }
+            }
+        };
+        Properties mProp= PropertiesUtil.getInstance();
+        String url=mProp.getProperty(AccessNetConst.BASEPATH)+mProp.getProperty("publishSkillEndPath");
+        OkHttpClient client=OkHttpUtils.createHttpClientBuild().build();
+        RequestBody body=new FormBody.Builder()
+                .add("json",json)
+                .build();
+        Request request=new Request.Builder()
+                .post(body)
+                .url(url)
+                .build();
+        Call call=client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG,"onFailure");
+                Message message = handler.obtainMessage();
+                message.what = FALL;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.e(TAG,"onResponse");
+                Message message=handler.obtainMessage();
+                message.what=SUCCESS;
+                handler.sendMessage(message);
+            }
+        });
     }
     public void showpopfb(){
         View contentView= LayoutInflater.from(PublishSkillActivity.this).inflate(R.layout.publish_fb_sure,null);

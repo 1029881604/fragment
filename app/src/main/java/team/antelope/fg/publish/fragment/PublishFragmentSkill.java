@@ -2,30 +2,36 @@ package team.antelope.fg.publish.fragment;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
+import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.entity.PersonSkill;
 import team.antelope.fg.publish.adapter.PublishItemsAdapter;
 import team.antelope.fg.ui.base.BaseFragment;
-import team.antelope.fg.ui.business.PublishBusiness;
-import team.antelope.fg.ui.business.RetrofitServiceManager;
 import team.antelope.fg.util.DateUtil;
+import team.antelope.fg.util.L;
+import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
 /**
@@ -35,11 +41,11 @@ import team.antelope.fg.util.PropertiesUtil;
 */
 
 public class PublishFragmentSkill extends BaseFragment {
+    private static final int FALL = 0;
+    private static final int SUCCESS=1;
     ListView lv_skill;
     PublishItemsAdapter skillItemsAdapter;
     ArrayList<HashMap<String,Object>> listItem;
-    List<PersonSkill> personSkills;
-    private Properties mProp;
 
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
     @Override
@@ -52,8 +58,8 @@ public class PublishFragmentSkill extends BaseFragment {
      */
     @Override
     protected void initView(View layout, Bundle savedInstanceState) {
-        lv_skill = (ListView) layout.findViewById(R.id.publish_lv);
-        setskillitem();
+        lv_skill =layout.findViewById(R.id.publish_lv);
+        sendRequest();
     }
     /**
      *@Description: 初始化视图处理事件
@@ -65,77 +71,77 @@ public class PublishFragmentSkill extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setskillitem();
+        sendRequest();
     }
-    public void setskillitem(){
-        mProp = PropertiesUtil.getInstance();
-        Observable<List<PersonSkill>> observable = RetrofitServiceManager.getInstance()
-                .create(PublishBusiness.class).getAllPersonSkill(mProp.getProperty("getAllPublishSkillEndPath")).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).delaySubscription(0, TimeUnit.MILLISECONDS);
-        addSubscription(observable.subscribe(new Subscriber<List<PersonSkill>>() {
-            @Override
-            public void onCompleted() {
-//                view.setvisibililty(view.gone);  设置加载图片消失
 
-                if (personSkills != null){
-                    listItem=new  ArrayList<>();
-                    for (int i=0;i<personSkills.size();i++){
-                        HashMap<String,Object> map=new HashMap<String,Object>();
-                        map.put("head",personSkills.get(i).getHeadimg());
-                        map.put("username", personSkills.get(i).getName());
-                        map.put("isonline",personSkills.get(i).isIsonline());
-                        map.put("dingwei",personSkills.get(i).getAddressdesc());
-                        map.put("detail",personSkills.get(i).getContent());
-                        map.put("fbtime", DateUtil.formatDate(personSkills.get(i).getPublishdate().getTime()));
-                        listItem.add(map);
-                    }
-                    skillItemsAdapter= new PublishItemsAdapter(getContext(),listItem,false);
-                    //setListAdapter(simpleAdapter);
-                    lv_skill.setAdapter(skillItemsAdapter);  //为ListView绑定Adapter
-                    skillItemsAdapter.notifyDataSetChanged();
-                    lv_skill.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.v("Publishskill","你点击了ListView条目"+position);  //在LogCat中输出信息
-                        }
-                    });
+    private void setskillitem(List<PersonSkill> personSkills) {
+        if(personSkills==null){
+            return;
+        }
+            listItem=new  ArrayList<>();
+            for (int i=0;i<personSkills.size();i++){
+                HashMap<String,Object> map=new HashMap<String,Object>();
+                map.put("head",personSkills.get(i).getHeadimg());
+                map.put("username", personSkills.get(i).getName());
+                map.put("isonline",personSkills.get(i).isIsonline());
+                map.put("dingwei",personSkills.get(i).getAddressdesc());
+                map.put("detail",personSkills.get(i).getContent());
+                map.put("fbtime", DateUtil.formatDate(personSkills.get(i).getPublishdate().getTime()));
+                listItem.add(map);
+            }
+            skillItemsAdapter= new PublishItemsAdapter(getContext(),listItem,false);
+            //setListAdapter(simpleAdapter);
+            lv_skill.setAdapter(skillItemsAdapter);  //为ListView绑定Adapter
+            skillItemsAdapter.notifyDataSetChanged();
+            lv_skill.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.v("Publishskill","你点击了ListView条目"+position);  //在LogCat中输出信息
+                }
+            });
+    }
+
+    private void sendRequest() {
+        final Handler handler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what){
+                    case SUCCESS:
+                        String json= (String) msg.obj;
+                        List<PersonSkill> personSkills=new Gson().fromJson(json, new TypeToken<List<PersonSkill>>(){}.getType());
+                        L.i("gson","personNeeds.size "+personSkills.size());
+                        setskillitem(personSkills);
+                        break;
+                    case FALL:
+                        break;
                 }
             }
+        };
+        Properties mProp = PropertiesUtil.getInstance();
+        String url = mProp.getProperty(AccessNetConst.BASEPATH)+ mProp.getProperty("getAllPublishSkillEndPath");
+        OkHttpClient okHttpClient = OkHttpUtils.createHttpClientBuild().build();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                Message message=handler.obtainMessage();
+                message.what=FALL;
+                handler.sendMessage(message);
+            }
 
             @Override
-            public void onError(Throwable e) {
+            public void onResponse(Call call, Response response) throws IOException {
+                String resp = response.body().string();
+                Message message=handler.obtainMessage();
+                message.what=SUCCESS;
+                message.obj=resp;
+                handler.sendMessage(message);
             }
-
-            @Override
-            public void onNext(List<PersonSkill> ps) {
-                personSkills = ps;
-            }
-        }));
-    }
-
-    /**
-     * @Description 订阅
-     * @date 2018/1/5
-     */
-    public void addSubscription(Subscription subscription){
-        compositeSubscription.add(subscription);
-    }
-    /**
-     * @Description 取消订阅
-     * @date 2018/1/5
-     */
-    public void unSubscribe(){
-        if (compositeSubscription.hasSubscriptions()) {
-            if (!compositeSubscription.isUnsubscribed()) {
-                compositeSubscription.unsubscribe();
-                compositeSubscription.clear();
-            }
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unSubscribe();
+        });
     }
 }

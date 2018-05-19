@@ -5,7 +5,6 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -14,6 +13,7 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import team.antelope.fg.util.OkHttpUtils;
 
 /**
  * @Author: uniquelry
@@ -23,7 +23,7 @@ import okhttp3.Response;
  */
 public class SetImageUtils {
     private static final int SUCCESS = 1;
-    private static final int FALL = 2;
+    private static final int FALL = 0;
 
     public static void setBitmap(final ImageView img, String url){
         final Handler handler = new Handler(){
@@ -48,7 +48,7 @@ public class SetImageUtils {
         };
 
         //1.创建一个okhttpclient对象
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = OkHttpUtils.createHttpClientBuild().build();
         //2.创建Request.Builder对象，设置参数，请求方式如果是Get，就不用设置，默认就是Get
         Request request = new Request.Builder()
                 .url(url)

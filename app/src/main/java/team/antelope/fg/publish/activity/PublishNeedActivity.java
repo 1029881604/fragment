@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,36 +22,48 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import team.antelope.fg.R;
-import team.antelope.fg.db.dao.impl.PublishNeedDaoImpl;
-import team.antelope.fg.db.dao.impl.PublishSkillDaoImpl;
+import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.db.dao.impl.UserDaoImpl;
 import team.antelope.fg.entity.PublishNeed;
-import team.antelope.fg.entity.PublishSkill;
 import team.antelope.fg.entity.User;
 import team.antelope.fg.publish.adapter.PublishFbPicGridViewAdapter;
 import team.antelope.fg.publish.widget.CustomDatePicker;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.util.L;
+import team.antelope.fg.util.OkHttpUtils;
+import team.antelope.fg.util.PropertiesUtil;
 
 /**
  * Created by PC_LRY on 2018/1/4.
  */
 
 public class PublishNeedActivity extends BaseActivity implements View.OnClickListener{
-
     private static final String TAG = PublishNeedActivity.class.getSimpleName();
+    private static final int FALL = 0;
+    private static final int SUCCESS=1;
     private Context mContext;
     private Toolbar mToolbar;
     private PopupWindow popupWindow;
@@ -59,7 +74,6 @@ public class PublishNeedActivity extends BaseActivity implements View.OnClickLis
     private TextView tv_stoptime;
     private CheckBox cb_isonline;
     private TextView tv_address;
-
     private TextView currentTime;
     private GridView gridView;
     private CustomDatePicker customDatePicker;
@@ -139,8 +153,6 @@ public class PublishNeedActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.ok_tv:
                 btn_fabuneed();
-                popupWindow.dismiss();
-                finish();
                 break;
         }
     }
@@ -269,24 +281,79 @@ public class PublishNeedActivity extends BaseActivity implements View.OnClickLis
     }
 
     public void btn_fabuneed(){
-        long id,uid;
+        long uid = 0;
         String title,content,img="http:img",type,address;
         Date date=new Date(),stopdata;
         Boolean isonline,iscomplete=false;
         double x=0.0,y=0.0;
 
-        List<PublishNeed> publishNeeds=(new PublishNeedDaoImpl(PublishNeedActivity.this)).queryAllPublishNeed();
-        id=publishNeeds.get(publishNeeds.size()-1).getId()+1;
         List<User> users=(new UserDaoImpl(PublishNeedActivity.this)).queryAllUser();
-        uid=users.get(0).getId();
+        if (users!=null&&!users.isEmpty()){
+            uid=users.get(0).getId();
+        }
         title=et_title.getText().toString();
         content=et_dec.getText().toString();
         type=tv_type.getText().toString();
         address=tv_address.getText().toString();
         stopdata=new Date(System.currentTimeMillis()+3600*24);
         isonline=true;
-        PublishNeedDaoImpl needdao = new PublishNeedDaoImpl(PublishNeedActivity.this);
-        needdao.insert(new PublishNeed(id , uid , title , content ,  type,date,stopdata, iscomplete, isonline, address, x,y));
+        PublishNeed need=new PublishNeed(0, uid , title , content ,  type,date,stopdata, iscomplete, isonline, address, x,y);
+        String json=new Gson().toJson(need);
+        final Handler handler=new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what){
+                    //加载网络成功进行UI的更新
+                    case FALL:
+                        Toast.makeText(PublishNeedActivity.this,"网络错误，发布失败",Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
+                        break;
+                    //当加载网络失败执行的逻辑代码
+                    case SUCCESS:
+                        Toast.makeText(PublishNeedActivity.this,"需求发布成功",Toast.LENGTH_SHORT).show();
+                        popupWindow.dismiss();
+                        finish();
+                        break;
+                }
+            }
+        };
+        Properties mProp = PropertiesUtil.getInstance();
+        String url = mProp.getProperty(AccessNetConst.BASEPATH)+ mProp.getProperty("publishNeedEndPath");
+        Log.e("url",url);
+        OkHttpClient client= OkHttpUtils.createHttpClientBuild().build();
+        RequestBody body=new FormBody.Builder()
+                .add("json",json)
+                .build();
+        Request request=new Request.Builder()
+                .post(body)
+                .url(url)
+                .build();
+        Call call=client.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(TAG,"onFailure");
+                Message message = handler.obtainMessage();
+                message.what = FALL;
+                handler.sendMessage(message);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.e(TAG,"onResponse");
+                String  state=response.body().string();
+                Log.e(TAG,state);
+                Message message = handler.obtainMessage();
+                if(state.equals("success")){
+                    message.what = SUCCESS;
+                }else {
+                    message.what = FALL;
+                }
+                handler.sendMessage(message);
+            }
+        });
+
     }
     public void showpopfb(){
         View contentView= LayoutInflater.from(PublishNeedActivity.this).inflate(R.layout.publish_fb_sure,null);
