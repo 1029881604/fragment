@@ -49,8 +49,10 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     private TextView tv_collecion;//收藏
     private TextView tv_skill;//我的定制
     private TextView tv_setting;//设置
-    private TextView tv_order;//我的订单
-    private TextView tv_name;
+    private TextView tv_order;//全部订单
+    private TextView tv_name;//用户名
+    private  TextView tv_no_pay;//代付款订单
+    private  TextView tv_had_paid;//已完成订单
     private LinearLayout layout_user_profile;//点击进入用户信息
     private DBOpenHelper dbOpenHelper;
     SetRoundImageViewUtil setRoundImageViewUtil;
@@ -68,6 +70,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         tv_setting= layout.findViewById( R.id.me_my_setting);
         tv_name=layout.findViewById(R.id.tv_name);
         tv_order=layout.findViewById(R.id.tv_order);
+        tv_no_pay=layout.findViewById(R.id.tv_no_pay);
+        tv_had_paid=layout.findViewById(R.id.tv_had_paid);
         layout_user_profile= layout.findViewById(R.id.lay_view_user);
         /*设置圆形头像*/
         setRoundImageViewUtil = layout.findViewById(R.id.me_user_head);
@@ -189,6 +193,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         tv_myneed.setOnClickListener(this);
         tv_setting.setOnClickListener(this);
         tv_order.setOnClickListener(this);
+        tv_no_pay.setOnClickListener(this);
+        tv_had_paid.setOnClickListener(this);
     }
 
     @Override
@@ -216,7 +222,13 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.me_my_need://我的需求
                 startActivity(new Intent(getActivity(), MeNeedActivity.class));
                 break;
-            case R.id.tv_order://我的订单
+            case R.id.tv_order://全部订单
+                startActivity(new Intent(getActivity(), MePublicActivity.class));
+                break;
+            case R.id.tv_no_pay://代付款订单
+                startActivity(new Intent(getActivity(), MePublicActivity.class));
+                break;
+            case R.id.tv_had_paid://已完成订单
                 startActivity(new Intent(getActivity(), MePublicActivity.class));
                 break;
             case R.id.me_my_setting://设置
