@@ -356,7 +356,12 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent();
-                intent1.putExtra("title",skillTitle);
+                intent1.putExtra("uid_s", userid);//技能拥有者id
+                intent1.putExtra("skillid", skillId);//技能id
+                intent1.putExtra("title", skillTitle);//技能标题
+                intent1.putExtra("content",skillContent);//技能详情
+                intent1.putExtra("img", skillPicture);//技能图片
+                intent1.putExtra("skilltype", skillType);//技能类型
                 intent1.putExtra("price",skillprice.getText().toString().trim());
                 intent1.setClass(SkillDetails.this, SkillsByTrPayActivity.class);
                 startActivity(intent1);

@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
@@ -30,14 +31,20 @@ import team.antelope.fg.entity.Orders;
 import team.antelope.fg.entity.PublishSkill;
 import team.antelope.fg.entity.User;
 import team.antelope.fg.me.constant.MeAccessNetConst;
+import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.ui.base.BaseFragment;
 import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
-public class OrdersIsPayFragment extends BaseFragment{
+/**
+* @说明 Create by lx  已支付订单页
+* @创建日期 2018/5/20 下午9:45
+*/
+public class OrdersIsPayActivity extends BaseActivity{
 
     long id;    //当前用户id
+    Toolbar mToolbar;
 
     RecyclerView mRecyclerView;
     OrdersRecyclerAdapter adapter;
@@ -58,7 +65,7 @@ public class OrdersIsPayFragment extends BaseFragment{
     List<String> isPay;     //是否删除
     List<String> isComment;  //是否评论
 
-    protected List<Orders> orders;
+    List<Orders> orders;
 
     Handler handler = new Handler(){
         @Override
@@ -69,7 +76,7 @@ public class OrdersIsPayFragment extends BaseFragment{
     };
 
     @Override
-    protected void initView(View view, Bundle savedInstanceState) {
+    protected void initView(Bundle savedInstanceState) {
 
         orderID = new ArrayList<>();
         uID = new ArrayList<>();
@@ -84,9 +91,20 @@ public class OrdersIsPayFragment extends BaseFragment{
         isPay = new ArrayList<>();
         isComment = new ArrayList<>();
 
-        mRecyclerView = view.findViewById(R.id.orderRecyclerView);
+        mRecyclerView = findViewById(R.id.orderRecyclerView1);
 
-        IUserDao userDao = new UserDaoImpl(getActivity());
+
+        mToolbar = findViewById(R.id.toolbar);
+        mToolbar.setTitle("已完成");
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        IUserDao userDao = new UserDaoImpl(this);
         User ur = userDao.queryAllUser().get(0);
         id = ur.getId();
         sendOkHttpRequest();
@@ -113,7 +131,7 @@ public class OrdersIsPayFragment extends BaseFragment{
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //设置RecyclerView布局管理器为2列垂直排布
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-        adapter = new OrdersRecyclerAdapter(getActivity(),orderID, skillPic, skillTitle, skillContent);
+        adapter = new OrdersRecyclerAdapter(this,orderID, skillPic, skillTitle, skillContent);
         mRecyclerView.setAdapter(adapter);
         adapter.setOnClickListener(new OrdersRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -147,17 +165,6 @@ public class OrdersIsPayFragment extends BaseFragment{
         });
     }
 
-
-    @Override
-    protected int getLayoutId() {
-        return R.layout.lx_order_fragment;
-    }
-
-    @Override
-    protected void init() {
-
-    }
-
     private void sendOkHttpRequest() {
         new Thread(new Runnable() {
             @Override
@@ -170,7 +177,7 @@ public class OrdersIsPayFragment extends BaseFragment{
                     String path = mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH)
                             +mProp.getProperty(AccessNetConst.GETORDERSISPAYENDPATH);
                     Request request = new Request.Builder()
-                            .url(path+"?id="+id)
+                            .url(path+"?uid="+id)
                             .build();
                     Response response = client.newCall(request).execute();
                     String responseData = response.body().string();
@@ -188,8 +195,13 @@ public class OrdersIsPayFragment extends BaseFragment{
 
     private void parseJSONWithGSON(String responseData) {
         Gson gson = new Gson();
-        orList = gson.fromJson(responseData, new TypeToken<List<PublishSkill>>() {}.getType());
+        orList = gson.fromJson(responseData, new TypeToken<List<Orders>>() {}.getType());
     }
 
+    @Override
+    public int getLayout() {
+//        return R.layout.lx_order_fragment;
+        return R.layout.lx_activity_orders;
+    }
 
 }

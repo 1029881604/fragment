@@ -84,7 +84,10 @@
         <activity android:name=".customized.activity.PersonDetails"/>
         <activity android:name=".customized.trpay.PayActivity"/>
         <activity android:name=".customized.trpay.SkillsByTrPayActivity"/>
-        <activity android:name=".customized.activity.OrdersAllFragment"/>
+        <activity android:name=".customized.activity.OrdersAllActivity"/>
+        <activity android:name=".customized.activity.OrdersIsPayActivity"/>
+        <activity android:name=".customized.activity.OrdersNotPayActivity"/>
+        <activity android:name=".customized.trpay.PayResult"/>
         <!-- ————————定制—————————— -->
 
         <!-- ——————publish start—————— -->

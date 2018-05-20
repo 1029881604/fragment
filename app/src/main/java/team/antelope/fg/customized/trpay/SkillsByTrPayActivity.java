@@ -33,14 +33,27 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 import java.util.UUID;
 
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import team.antelope.fg.BuildConfig;
 import team.antelope.fg.R;
+import team.antelope.fg.customized.activity.SkillDetails;
+import team.antelope.fg.customized.constant.AccessNetConst;
 import team.antelope.fg.customized.dialog.DialogButtonListener;
 import team.antelope.fg.customized.dialog.DialogUtil;
 import team.antelope.fg.customized.util.AppUtils;
+import team.antelope.fg.db.dao.IUserDao;
+import team.antelope.fg.db.dao.impl.UserDaoImpl;
+import team.antelope.fg.entity.User;
 import team.antelope.fg.ui.base.BaseActivity;
+import team.antelope.fg.util.OkHttpUtils;
+import team.antelope.fg.util.PropertiesUtil;
 import team.antelope.fg.util.ToastUtil;
 
 /**
@@ -57,6 +70,16 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
     private final static String channel = "暂无";//应用商店渠道名(如：360，小米、华为)
     private final static String appkey = "be6c44e655104d3d90e0d42432eb3c4d";//应用AppKey(测试key)
 
+    private Properties mProp;
+    private Long user_id;   //当前登录用户id
+    private String uid_s;
+    private String skillid;
+    private String content;
+    private String img;
+    private String skilltype;
+    private String skilltitle;
+    private String skillprice;
+
     /**
      * 初始化视图
      */
@@ -69,10 +92,23 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
         to_wechatpay.setOnClickListener(this);
 
         Intent intent = getIntent();
-        String skilltitle = intent.getStringExtra("title");
-        String skillprice = intent.getStringExtra("price");
+        uid_s = intent.getStringExtra("uid_s");
+        skillid = intent.getStringExtra("skillid");
+        content = intent.getStringExtra("content");
+        img = intent.getStringExtra("img");
+        skilltype = intent.getStringExtra("skilltype");
+        skilltitle = intent.getStringExtra("title");
+        skillprice = intent.getStringExtra("price");
         commodityName.setText(skilltitle);
         commodityMoney.setText(skillprice);
+
+        /**
+         * @说明 获取当前登录用户的id
+         * @创建日期 2018/5/18 下午8:11
+         */
+        IUserDao userDao = new UserDaoImpl(SkillsByTrPayActivity.this);
+        User user = userDao.queryAllUser().get(0);
+        user_id = user.getId();     //当前登录用户id
     }
 
     @Override
@@ -111,9 +147,11 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                             TrPay.getInstance((Activity) context).closePayView();       //关闭支付页面
                             ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                             //支付成功逻辑处理
+
                         } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {        //2：支付失败回调
                             ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                             //支付失败逻辑处理
+
                         }
                     }
                 });
@@ -152,6 +190,7 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                             } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {//2：支付失败回调
                                 ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                                 //支付失败逻辑处理
+
                             }
                         }
                     });
@@ -162,6 +201,7 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                      * @说明 用户未安装微信的逻辑
                      * @创建日期 2018/5/16 上午9:05
                      */
+
                     ToastUtil.showCustom(SkillsByTrPayActivity.this, "未安装微信，请先安装微信", Toast.LENGTH_LONG);
                     AlertDialog.Builder dialog = new AlertDialog.Builder(SkillsByTrPayActivity.this);
                     dialog.setTitle("提示");
@@ -177,6 +217,22 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ToastUtil.showCustom(SkillsByTrPayActivity.this, "用户取消下载", Toast.LENGTH_LONG);
+                            mProp = PropertiesUtil.getInstance();
+                            Log.i("alipay", "1111");
+                            Log.i("alipay",mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +mProp.getProperty(AccessNetConst.ADDORDERENDPATH));
+                            sendRequestWithOkHttp();
+                            //测试代码
+//                            Intent intent = new Intent();
+//                            Intent intent1 = new Intent();
+////                            intent1.putExtra("uid", String.valueOf(user_id));//当前登录用户id
+//                            intent1.putExtra("uid_s", uid_s);//技能拥有者id
+//                            intent1.putExtra("skillid", skillid);//技能id
+//                            intent1.putExtra("title", skilltitle);//技能标题
+//                            intent1.putExtra("content", content);//技能详情
+//                            intent1.putExtra("img", img);//技能图片
+//                            intent1.putExtra("skilltype", skilltype);//技能类型
+//                            intent1.setClass(SkillsByTrPayActivity.this, PayResult.class);
+//                            startActivity(intent1);
                         }
                     });
                     dialog.show();
@@ -187,6 +243,7 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
             }//case2222
 
         }//switch
+
     }//onClick
 
     @Override
@@ -216,7 +273,52 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
         return R.layout.lx_skillsbytrpay;
     }
 
+    /**
+    * @说明 建立连接
+    * @创建日期 2018/5/20 下午10:43
+    */
+    private void sendRequestWithOkHttp(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url = null;
+                try {
+                    url = mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +
+                            mProp.getProperty(AccessNetConst.ADDORDERENDPATH);
+//                                    OkHttpClient client = new OkHttpClient();
+                    OkHttpClient.Builder builder = OkHttpUtils.createHttpClientBuild();
+                    OkHttpClient client = builder.build();
+                    //POST方式
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("uid", String.valueOf(user_id))
+                            .add("uid_s", uid_s)
+                            .add("skillid", skillid)
+                            .add("title", skilltitle)
+                            .add("content", content)
+                            .add("img", img)
+                            .add("skilltype", skilltype)
+                            .add("ispay", "1")
+                            .add("isdelete", "0")
+                            .add("iscomment", "0")
+                            .build();
+                    Log.i("trpay111", "1111");
+                    Request request = new Request.Builder().url(url).post(requestBody).build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    showResponse(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
+            private void showResponse(String responseData) {
+                if (responseData != null) {
+                    Log.i("trpay111", "成功"+"userid:"+user_id+"skillid:"+skillid);
+                } else
+                    Log.i("trpay111", "失败");
+            }
+        }).start();
+    }//sendRequest
 
     /**
      * @说明 下载任务

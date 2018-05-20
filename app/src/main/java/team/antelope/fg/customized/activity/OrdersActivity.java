@@ -3,12 +3,8 @@ package team.antelope.fg.customized.activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -29,7 +25,10 @@ import team.antelope.fg.R;
 import team.antelope.fg.customized.adapter.FragAdapter;
 import team.antelope.fg.customized.adapter.TopPagerAdapter;
 import team.antelope.fg.ui.base.BaseActivity;
-
+/**
+* @说明 暂时没用
+* @创建日期 2018/5/20 下午9:45
+*/
 public class OrdersActivity extends BaseActivity implements View.OnClickListener {
 
     private Button back_button;
@@ -42,9 +41,9 @@ public class OrdersActivity extends BaseActivity implements View.OnClickListener
     private MagicIndicator mMagicIndicator;     //指示器
     private CommonNavigator mCommonNavigator;      //Tab
     //Fragment
-    private OrdersAllFragment all = new OrdersAllFragment();
-    private OrdersIsPayFragment ispay = new OrdersIsPayFragment();
-    private OrdersNotPayFragment notpay = new OrdersNotPayFragment();
+    private OrdersAllActivity all = new OrdersAllActivity();
+    private OrdersIsPayActivity ispay = new OrdersIsPayActivity();
+    private OrdersNotPayActivity notpay = new OrdersNotPayActivity();
 
     private FragAdapter fragAdapter;
     private List<Fragment> list=new ArrayList<Fragment>();
@@ -65,9 +64,9 @@ public class OrdersActivity extends BaseActivity implements View.OnClickListener
         mMagicIndicator.setNavigator(mCommonNavigator);     //设置指示器
         ViewPagerHelper.bind(mMagicIndicator, mViewPager);      //绑定ViewPager
 
-//        list.add(new OrdersAllFragment());
-//        list.add(new OrdersIsPayFragment());
-//        list.add(new OrdersNotPayFragment());
+//        list.add(new OrdersAllActivity());
+//        list.add(new OrdersIsPayActivity());
+//        list.add(new OrdersNotPayActivity());
 
         fragAdapter = new FragAdapter(this.getSupportFragmentManager(), list);
         mViewPager.setAdapter(fragAdapter);

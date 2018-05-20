@@ -16,4 +16,5 @@ public interface AccessNetConst {
     String GETORDERSALLENDPATH = "getOrdersAllEndPath";
     String GETORDERSISPAYENDPATH = "getOrdersIsPayEndPath";
     String GETORDERSNOTPAYENDPATH = "getOrdersNotPayEndPath";
+    String ADDORDERENDPATH = "addOrderEndPath";
 }

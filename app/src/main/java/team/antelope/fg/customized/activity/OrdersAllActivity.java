@@ -37,7 +37,11 @@ import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
-public class OrdersAllFragment extends BaseActivity {
+/**
+* @说明 Create by lx  所有订单页
+* @创建日期 2018/5/20 下午9:45
+*/
+public class OrdersAllActivity extends BaseActivity {
 
     long id;    //当前用户id
     Toolbar mToolbar;
@@ -91,7 +95,7 @@ public class OrdersAllFragment extends BaseActivity {
 
 
         mToolbar = findViewById(R.id.toolbar);
-        mToolbar.setTitle("我的订单");
+        mToolbar.setTitle("全部订单");
         setSupportActionBar(mToolbar);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,4 +203,5 @@ public class OrdersAllFragment extends BaseActivity {
 //        return R.layout.lx_order_fragment;
         return R.layout.lx_activity_orders;
     }
+
 }
