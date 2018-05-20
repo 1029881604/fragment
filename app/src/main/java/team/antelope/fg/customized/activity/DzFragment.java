@@ -49,7 +49,7 @@ public class DzFragment extends BaseFragment implements View.OnClickListener {
             SkillAboutDetails.SKILLTYPE6,
             SkillAboutDetails.SKILLTYPE7,
             SkillAboutDetails.SKILLTYPE8,
-            "Test"};
+            };
     private List<String> mDataList = new ArrayList<String>(Arrays.asList(CHANNELS));
     private TopPagerAdapter mTopPagerAdapter = new TopPagerAdapter(mDataList);//适配器
     private ViewPager mViewPager;   //ViewPager

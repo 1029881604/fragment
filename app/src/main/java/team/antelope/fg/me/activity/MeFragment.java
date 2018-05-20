@@ -19,6 +19,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
+import team.antelope.fg.customized.activity.OrdersAllFragment;
 import team.antelope.fg.db.DBOpenHelper;
 import team.antelope.fg.db.dao.IPersonDao;
 import team.antelope.fg.db.dao.impl.PersonDaoImpl;
@@ -223,7 +224,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(getActivity(), MeNeedActivity.class));
                 break;
             case R.id.tv_order://全部订单
-                startActivity(new Intent(getActivity(), MePublicActivity.class));
+                startActivity(new Intent(getActivity(), OrdersAllFragment.class));
                 break;
             case R.id.tv_no_pay://代付款订单
                 startActivity(new Intent(getActivity(), MePublicActivity.class));

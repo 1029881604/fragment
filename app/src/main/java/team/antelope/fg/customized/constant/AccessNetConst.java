@@ -13,4 +13,7 @@ public interface AccessNetConst {
     String SEARCHSKILLSENDPATH = "searchSkillsEndPath";
     String COLLECTSKILLSENDPATH = "collectSkillsEndPath";
     String GETCOLLECTIONSTATUSENDPATH = "getCollectionStatusEndPath";
+    String GETORDERSALLENDPATH = "getOrdersAllEndPath";
+    String GETORDERSISPAYENDPATH = "getOrdersIsPayEndPath";
+    String GETORDERSNOTPAYENDPATH = "getOrdersNotPayEndPath";
 }
