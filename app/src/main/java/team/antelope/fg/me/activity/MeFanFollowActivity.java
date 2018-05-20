@@ -25,6 +25,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
+import team.antelope.fg.db.dao.IPersonDao;
+import team.antelope.fg.db.dao.impl.PersonDaoImpl;
 import team.antelope.fg.entity.Person;
 import team.antelope.fg.me.adapter.MeFanFollowAdapter;
 import team.antelope.fg.me.adapter.MeFansListAdapter;
@@ -42,7 +44,6 @@ import team.antelope.fg.util.PropertiesUtil;
 public class MeFanFollowActivity extends BaseActivity {
 
     Toolbar mToolbar;
-    private TextView fans_id;
     private TextView fans_name;
     private CircleImageViewUtil fans_head;
     private ListView listView;
@@ -97,11 +98,14 @@ public class MeFanFollowActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                fans_id = (TextView) findViewById(R.id.fans_id);
-                Long fanId= Long.valueOf(fans_id.getText().toString());
+                //找id记得加view
+                TextView fans_id = (TextView) view.findViewById(R.id.fans_id);//记得加view
+               String  fanId=fans_id.getText().toString();
+                Log.i("FansIDaaa",fanId);
                 Intent intent = new Intent(MeFanFollowActivity.this,MePersonActivity.class);
-                intent.putExtra("person_id",fanId);
+                intent.putExtra("person_id",Long.parseLong(fanId));
                 startActivity(intent);
+
             }
         });
     }
@@ -133,7 +137,10 @@ public class MeFanFollowActivity extends BaseActivity {
                     parseJSONWithGSON(responseData);
                     Message message = new Message();
                     message.obj = psList;
-
+                    IPersonDao personDao = new PersonDaoImpl(MeFanFollowActivity.this);
+                    for (Person person : psList) {
+                        personDao.insert(person);
+                    }
                     handler.sendMessage(message);
                 } catch (Exception e) {
                     e.printStackTrace();

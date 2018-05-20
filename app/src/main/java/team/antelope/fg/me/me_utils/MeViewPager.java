@@ -47,7 +47,7 @@ public class MeViewPager extends ViewPager {
                 Log.i(TAG, "dealtY:=" + dealtY);
                 // 这里是够拦截的判断依据是左右滑动，读者可根据自己的逻辑进行是否拦截
                 if (dealtX >= dealtY) {
-                    getParent().requestDisallowInterceptTouchEvent(true);
+                    getParent().requestDisallowInterceptTouchEvent(false);
                 } else {
                     getParent().requestDisallowInterceptTouchEvent(true);
                 }

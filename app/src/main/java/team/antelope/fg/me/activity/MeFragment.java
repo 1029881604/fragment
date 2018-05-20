@@ -35,16 +35,23 @@ import team.antelope.fg.util.SetRoundImageViewUtil;
 import static android.app.Activity.RESULT_OK;
 import static android.media.CamcorderProfile.get;
 
-
 /**
- * Created by Carlos on 2017/12/5.
+ * @Author：Carlos
+ * @Date： 2017/12/5 9:25
+ * @Description:  “我”  模块
  **/
 
 public class MeFragment extends BaseFragment implements View.OnClickListener {
     @Nullable
-    private TextView tv_message,tv_follow,tv_collecion,
-            tv_myneed,tv_freetime,tv_making,tv_setting,tv_name;
-    private LinearLayout layout_user_profile;
+    private TextView tv_message;//消息
+    private TextView tv_follow;//关注
+    private TextView tv_myneed;//我的需求
+    private TextView tv_collecion;//收藏
+    private TextView tv_skill;//我的定制
+    private TextView tv_setting;//设置
+    private TextView tv_order;//我的订单
+    private TextView tv_name;
+    private LinearLayout layout_user_profile;//点击进入用户信息
     private DBOpenHelper dbOpenHelper;
     SetRoundImageViewUtil setRoundImageViewUtil;
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
@@ -57,9 +64,10 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         tv_follow = layout.findViewById(R.id.me_follow);
         tv_collecion = layout.findViewById(R.id.me_collection);
         tv_myneed = layout.findViewById(R.id.me_my_need);
-        tv_making = layout.findViewById(R.id.me_making);
+        tv_skill = layout.findViewById(R.id.me_skill);
         tv_setting= layout.findViewById( R.id.me_my_setting);
         tv_name=layout.findViewById(R.id.tv_name);
+        tv_order=layout.findViewById(R.id.tv_order);
         layout_user_profile= layout.findViewById(R.id.lay_view_user);
         /*设置圆形头像*/
         setRoundImageViewUtil = layout.findViewById(R.id.me_user_head);
@@ -84,7 +92,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             user = userList.get(0);
         }
         if(user != null){
-            //先判断数据库中有没有好吧
+            //先判断数据库中有没有
             mUser = user;
             Person person = new PersonDaoImpl(getmActivity()).queryById(user.getId());
             if(person != null){
@@ -175,12 +183,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     private void setOnListener() {
         layout_user_profile.setOnClickListener(this);
         tv_message.setOnClickListener(this);
-        tv_making.setOnClickListener(this);
+        tv_skill.setOnClickListener(this);
         tv_collecion.setOnClickListener(this);
         tv_follow.setOnClickListener(this);
         tv_myneed.setOnClickListener(this);
         tv_setting.setOnClickListener(this);
-
+        tv_order.setOnClickListener(this);
     }
 
     @Override
@@ -202,16 +210,15 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             case R.id.me_follow://关注
                 startActivity(new Intent(getActivity(), MeFollowActivity.class));
                 break;
-            case R.id.me_making://我的定制
+            case R.id.me_skill://我的定制
                 startActivity(new Intent(getActivity(), MeSubActivity.class));
                 break;
             case R.id.me_my_need://我的需求
                 startActivity(new Intent(getActivity(), MeNeedActivity.class));
                 break;
-//
-//            case R.id.me_free_time://空闲时间
-//                startActivity(new Intent(getActivity(), MePublicActivity.class));
-//                break;
+            case R.id.tv_order://我的订单
+                startActivity(new Intent(getActivity(), MePublicActivity.class));
+                break;
             case R.id.me_my_setting://设置
                 startActivity(new Intent(getActivity(),MeSettingActivity.class));
                 break;

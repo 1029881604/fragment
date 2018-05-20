@@ -50,7 +50,6 @@ import team.antelope.fg.util.PropertiesUtil;
 public class MeFansListActivity extends BaseActivity implements View.OnClickListener{
 
     Toolbar mToolbar;
-    private TextView fans_id;
     private TextView fans_name;
     private CircleImageViewUtil fans_head;
     private ListView listView;
@@ -105,7 +104,7 @@ Handler handler = new Handler(){
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                fans_id = (TextView) findViewById(R.id.fans_id);
+              TextView  fans_id = (TextView) view.findViewById(R.id.fans_id);
                 Long fanId= Long.valueOf(fans_id.getText().toString());
                 Intent intent = new Intent(MeFansListActivity.this,MePersonActivity.class);
                 intent.putExtra("person_id",fanId);
@@ -142,7 +141,10 @@ Handler handler = new Handler(){
                     parseJSONWithGSON(responseData);
                     Message message = new Message();
                    message.obj = psList;
-
+                    IPersonDao personDao = new PersonDaoImpl(MeFansListActivity.this);
+                    for (Person person : psList) {
+                        personDao.insert(person);
+                    }
                    handler.sendMessage(message);
                 } catch (Exception e) {
                     e.printStackTrace();

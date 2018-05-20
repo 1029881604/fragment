@@ -60,7 +60,7 @@ public class MeFanFollowAdapter extends BaseAdapter {
         if(convertView == null){
             view = view.inflate(mContext, R.layout.me_fanfollow_item, null);
         }
-        MeFansListAdapter.ViewHolder mViewHolder = MeFansListAdapter.ViewHolder.getHolder(view);
+        ViewHolder mViewHolder = ViewHolder.getHolder(view);
 
         Person p = person.get(position);
 
@@ -83,12 +83,12 @@ public class MeFanFollowAdapter extends BaseAdapter {
         ImageView mHead;
         TextView mFansId;
 
-        public static MeFansListAdapter.ViewHolder getHolder(View view) {
+        public static ViewHolder getHolder(View view) {
             Object tag = view.getTag();
             if(tag != null){
-                return (MeFansListAdapter.ViewHolder)tag;
+                return (ViewHolder)tag;
             }else {
-                MeFansListAdapter.ViewHolder viewHolder = new MeFansListAdapter.ViewHolder();
+               ViewHolder viewHolder = new ViewHolder();
                 viewHolder.mName = (TextView) view.findViewById(R.id.fans_name);
                 viewHolder.mHead = (ImageView) view.findViewById(R.id.fans_head);
                 viewHolder.mFansId = (TextView) view.findViewById(R.id.fans_id);

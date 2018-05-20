@@ -220,10 +220,10 @@ public class MeFollowActivity extends BaseActivity implements View.OnClickListen
                     fillAndSortData(personPinyins);
 //                    message.obj = personPinyins;
                     message.what=2;
-//                    IPersonDao personDao = new PersonDaoImpl(MeFollowActivity.this);
-//                    for (Person person : psList) {
-//                        personDao.insert(person);
-//                    }
+                    IPersonDao personDao = new PersonDaoImpl(MeFollowActivity.this);
+                    for (Person person : psList) {
+                        personDao.insert(person);
+                    }
                     handler.sendMessage(message);
                 } catch (Exception e) {
                     e.printStackTrace();
