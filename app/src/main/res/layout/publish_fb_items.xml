@@ -63,9 +63,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:id="@+id/publish_detail"
-                android:paddingTop="10dp"
                 android:paddingLeft="10dp"
                 android:textSize="14dp"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
                 android:text="我的需求：找一个会android应用程序的开发，包括UI组件、网络编程、多线程处理、数据存储、图形图像、动画等。"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>

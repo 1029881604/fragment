@@ -27,6 +27,7 @@ import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.entity.PersonNeed;
 import team.antelope.fg.publish.adapter.PublishItemsAdapter;
+import team.antelope.fg.publish.widget.PublishRefreshableView;
 import team.antelope.fg.ui.base.BaseFragment;
 import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.L;
@@ -45,8 +46,25 @@ public class PublishFragmentNeed extends BaseFragment {
     ListView lv_need;
     PublishItemsAdapter needItemsAdapter;
     ArrayList<HashMap<String,Object>> listItem;
-    private Properties mProp;
-    private CountDownLatch latch = new CountDownLatch(1);
+    private PublishRefreshableView publish_refresh;
+
+    final Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case SUCCESS:
+                    String json= (String) msg.obj;
+                    List<PersonNeed> personNeeds=new Gson().fromJson(json, new TypeToken<List<PersonNeed>>(){}.getType());
+                    L.i("gson","personNeeds.size "+personNeeds.size());
+                    setneeditem(personNeeds);
+                    break;
+                case FALL:
+                    break;
+            }
+        }
+    };
+
     @Override
     protected int getLayoutId() {
         return R.layout.publish_fragment_listview;
@@ -58,7 +76,20 @@ public class PublishFragmentNeed extends BaseFragment {
     @Override
     protected void initView(View layout, Bundle savedInstanceState) {
         lv_need = layout.findViewById(R.id.publish_lv);
+        publish_refresh=layout.findViewById(R.id.publish_refresh);
         sendRequest();
+        publish_refresh.setOnRefreshListener(new PublishRefreshableView.PullToRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                sendRequest();
+                publish_refresh.finishRefreshing();
+            }
+        }, 0);
     }
     /**
     *@Description: 初始化视图处理事件
@@ -70,7 +101,6 @@ public class PublishFragmentNeed extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        sendRequest();
     }
     public void setneeditem(List<PersonNeed> personNeeds){
         if(personNeeds == null){
@@ -101,23 +131,7 @@ public class PublishFragmentNeed extends BaseFragment {
 
     }
     private void sendRequest() {
-        final Handler handler=new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what){
-                    case SUCCESS:
-                        String json= (String) msg.obj;
-                        List<PersonNeed> personNeeds=new Gson().fromJson(json, new TypeToken<List<PersonNeed>>(){}.getType());
-                        L.i("gson","personNeeds.size "+personNeeds.size());
-                        setneeditem(personNeeds);
-                        break;
-                    case FALL:
-                        break;
-                }
-            }
-        };
-        mProp = PropertiesUtil.getInstance();
+        Properties mProp= PropertiesUtil.getInstance();
         String url = mProp.getProperty(AccessNetConst.BASEPATH)+ mProp.getProperty("getAllPublishNeedEndPath");
         OkHttpClient okHttpClient = OkHttpUtils.createHttpClientBuild().build();
         Request request = new Request.Builder()

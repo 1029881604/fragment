@@ -28,6 +28,7 @@ import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.entity.PersonSkill;
 import team.antelope.fg.publish.adapter.PublishItemsAdapter;
+import team.antelope.fg.publish.widget.PublishRefreshableView;
 import team.antelope.fg.ui.base.BaseFragment;
 import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.L;
@@ -46,8 +47,25 @@ public class PublishFragmentSkill extends BaseFragment {
     ListView lv_skill;
     PublishItemsAdapter skillItemsAdapter;
     ArrayList<HashMap<String,Object>> listItem;
+    private PublishRefreshableView publish_refresh;
 
-    public CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case SUCCESS:
+                    String json= (String) msg.obj;
+                    List<PersonSkill> personSkills=new Gson().fromJson(json, new TypeToken<List<PersonSkill>>(){}.getType());
+                    L.i("gson","personNeeds.size "+personSkills.size());
+                    setskillitem(personSkills);
+                    break;
+                case FALL:
+                    break;
+            }
+        }
+    };
+
     @Override
     protected int getLayoutId() {
         return R.layout.publish_fragment_listview;
@@ -59,7 +77,20 @@ public class PublishFragmentSkill extends BaseFragment {
     @Override
     protected void initView(View layout, Bundle savedInstanceState) {
         lv_skill =layout.findViewById(R.id.publish_lv);
+        publish_refresh=layout.findViewById(R.id.publish_refresh);
         sendRequest();
+        publish_refresh.setOnRefreshListener(new PublishRefreshableView.PullToRefreshListener() {
+            @Override
+            public void onRefresh() {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                sendRequest();
+                publish_refresh.finishRefreshing();
+            }
+        }, 0);
     }
     /**
      *@Description: 初始化视图处理事件
@@ -71,7 +102,6 @@ public class PublishFragmentSkill extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        sendRequest();
     }
 
     private void setskillitem(List<PersonSkill> personSkills) {
@@ -102,22 +132,6 @@ public class PublishFragmentSkill extends BaseFragment {
     }
 
     private void sendRequest() {
-        final Handler handler=new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                switch (msg.what){
-                    case SUCCESS:
-                        String json= (String) msg.obj;
-                        List<PersonSkill> personSkills=new Gson().fromJson(json, new TypeToken<List<PersonSkill>>(){}.getType());
-                        L.i("gson","personNeeds.size "+personSkills.size());
-                        setskillitem(personSkills);
-                        break;
-                    case FALL:
-                        break;
-                }
-            }
-        };
         Properties mProp = PropertiesUtil.getInstance();
         String url = mProp.getProperty(AccessNetConst.BASEPATH)+ mProp.getProperty("getAllPublishSkillEndPath");
         OkHttpClient okHttpClient = OkHttpUtils.createHttpClientBuild().build();

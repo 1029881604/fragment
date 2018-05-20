@@ -2,12 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <ListView
-        android:id="@+id/publish_lv"
+    android:layout_height="match_parent">
+    <team.antelope.fg.publish.widget.PublishRefreshableView
+        android:id="@+id/publish_refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null">
-    </ListView>
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/publish_lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null">
+        </ListView>
+    </team.antelope.fg.publish.widget.PublishRefreshableView>
 </LinearLayout>
