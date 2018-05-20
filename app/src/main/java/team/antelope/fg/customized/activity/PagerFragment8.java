@@ -33,12 +33,17 @@ import team.antelope.fg.util.PropertiesUtil;
  * Created by Kyrene on 2017/12/18.
  */
 
+/**
+ * @说明 排版设计分类Pager
+ * @创建日期 2018/4/9 下午5:45
+ */
 public class PagerFragment8 extends BaseFragment implements View.OnClickListener {
 
     private RecyclerView mRecyclerView;
     private DzRecyclerAdapterImgUrl adapter;
+    private List<Long> skillid; //技能ID集合
     private List<String> lists; //标题集合
-    private List<String> resids;  //图片集合
+    private List<String> resids;  //图片资源集合
     private List<String> contents;  //内容介绍集合
     private List<String> type;  //技能类型集合
     private List<String> startdate; //开始时间集合
@@ -63,6 +68,8 @@ public class PagerFragment8 extends BaseFragment implements View.OnClickListener
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
+        //技能id集合
+        skillid = new ArrayList();
         //文字信息集合
         lists = new ArrayList();
         //内容介绍信息集合
@@ -122,6 +129,7 @@ public class PagerFragment8 extends BaseFragment implements View.OnClickListener
                 if (!publishSkills.isEmpty()){
                     //循环添加集合元素
                     for (int i=0; i<publishSkills.size(); i++) {
+                        skillid.add(publishSkills.get(i).getId());
                         lists.add(publishSkills.get(i).getTitle());
                         contents.add(publishSkills.get(i).getContent());
                         type.add(publishSkills.get(i).getSkillType());
@@ -143,6 +151,7 @@ public class PagerFragment8 extends BaseFragment implements View.OnClickListener
                     @Override
                     public void ItemClickListener(View view, int postion) {
                         Intent intent=new Intent();
+                        intent.putExtra("skillid",skillid.get(postion));
                         intent.putExtra("title",lists.get(postion));
                         intent.putExtra("contents",contents.get(postion));
                         intent.putExtra("skilltype",type.get(postion));

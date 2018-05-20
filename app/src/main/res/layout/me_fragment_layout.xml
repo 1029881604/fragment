@@ -160,13 +160,52 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:text="我的订单"
+                    android:text="全部订单"
                     android:textSize="16sp" />
                 <View
                     android:layout_width="fill_parent"
                     android:layout_height="3.0dip" />
 
+                <TextView
 
+                    android:id="@+id/tv_no_pay"
+                    style="@style/TxtTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/setting_item2_selector"
+                    android:clickable="true"
+                    android:drawableEnd="@mipmap/ic_chevron_right_white_24dp"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@mipmap/ic_no_pay_s_white_24dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="代付款订单"
+                    android:textSize="16sp" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="3.0dip" />
+                <TextView
+
+                    android:id="@+id/tv_had_paid"
+                    style="@style/TxtTitle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/setting_item2_selector"
+                    android:clickable="true"
+                    android:drawableEnd="@mipmap/ic_chevron_right_white_24dp"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@mipmap/ic_had_paid_on_white_24dp"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:text="已完成订单"
+                    android:textSize="16sp" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="3.0dip" />
                 <TextView
 
                     android:id="@+id/me_my_security_setting"
