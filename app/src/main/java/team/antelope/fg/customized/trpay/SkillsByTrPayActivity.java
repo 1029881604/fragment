@@ -199,7 +199,7 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                                 mProp = PropertiesUtil.getInstance();
                                 Log.i("alipay111", "1111"+skillid+user_id+uid_s+skillid+skilltitle+skillprice);
                                 Log.i("alipay111",mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +mProp.getProperty(AccessNetConst.ADDORDERENDPATH));
-                                sendRequestWithOkHttp();
+                                sendRequestWithOkHttp("1");
 
                             } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {//2：支付失败回调
                                 ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
