@@ -111,7 +111,7 @@ public class OrdersAllActivity extends BaseActivity {
     }
 
     private void initLayoutView() {
-        if (!orders.isEmpty()) {
+        if (orders != null || !orders.isEmpty()) {
             for (int i = 0; i < orders.size(); i++) {
                 orderID.add(orders.get(i).getId());
                 uID.add(orders.get(i).getUid());
