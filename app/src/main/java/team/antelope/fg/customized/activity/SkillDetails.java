@@ -93,7 +93,7 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
     Button collectSkill;
 
     private Long user_id;   //当前登录用户id
-    private Long skillId;  //技能id
+//    private Long skillId;  //技能id
     String collectStatus;   //收藏状态（是否收藏）
     private Properties mProp;
 
@@ -138,7 +138,7 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
 
         //获得Intent，并获取上一个activity传递过来的值
         Intent intent=getIntent();
-        skillId = intent.getLongExtra("skillid", 0);
+        final long skillId = intent.getLongExtra("skillid", 0);
         final String skillTitle=intent.getStringExtra("title");
         final String skillContent=intent.getStringExtra("contents");
         final String skillType=intent.getStringExtra("skilltype");
@@ -364,6 +364,7 @@ public class SkillDetails extends BaseActivity implements View.OnClickListener {
                 intent1.putExtra("skilltype", skillType);//技能类型
                 intent1.putExtra("price",skillprice.getText().toString().trim());
                 intent1.setClass(SkillDetails.this, SkillsByTrPayActivity.class);
+                Log.i("alipay", userid+skillId+skillTitle+skillContent+skillPicture+skillType);
                 startActivity(intent1);
             }
         });

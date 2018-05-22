@@ -38,7 +38,7 @@ import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 
 /**
-* @说明 Create by lx  已支付订单页
+* @说明 Create by
 * @创建日期 2018/5/20 下午9:45
 */
 public class OrdersIsPayActivity extends BaseActivity{
@@ -111,7 +111,7 @@ public class OrdersIsPayActivity extends BaseActivity{
     }
 
     private void initLayoutView() {
-        if (!orders.isEmpty()) {
+        if (orders != null) {
             for (int i = 0; i < orders.size(); i++) {
                 orderID.add(orders.get(i).getId());
                 uID.add(orders.get(i).getUid());

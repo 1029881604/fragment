@@ -72,8 +72,8 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
 
     private Properties mProp;
     private Long user_id;   //当前登录用户id
-    private String uid_s;
-    private String skillid;
+    private Long uid_s;
+    private Long skillid;
     private String content;
     private String img;
     private String skilltype;
@@ -92,13 +92,14 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
         to_wechatpay.setOnClickListener(this);
 
         Intent intent = getIntent();
-        uid_s = intent.getStringExtra("uid_s");
-        skillid = intent.getStringExtra("skillid");
+        uid_s = intent.getLongExtra("uid_s",0);
+        skillid = intent.getLongExtra("skillid",0);
         content = intent.getStringExtra("content");
         img = intent.getStringExtra("img");
         skilltype = intent.getStringExtra("skilltype");
         skilltitle = intent.getStringExtra("title");
         skillprice = intent.getStringExtra("price");
+        Log.i("alipay", "获得到的————"+uid_s+skillid+content+img+skilltype+skilltitle);
         commodityName.setText(skilltitle);
         commodityMoney.setText(skillprice);
 
@@ -147,10 +148,18 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                             TrPay.getInstance((Activity) context).closePayView();       //关闭支付页面
                             ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                             //支付成功逻辑处理
+                            mProp = PropertiesUtil.getInstance();
+                            Log.i("alipay111", "1111"+skillid+user_id+uid_s+skillid+skilltitle+skillprice);
+                            Log.i("alipay111",mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +mProp.getProperty(AccessNetConst.ADDORDERENDPATH));
+                            sendRequestWithOkHttp("1");
 
                         } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {        //2：支付失败回调
                             ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                             //支付失败逻辑处理
+                            mProp = PropertiesUtil.getInstance();
+                            Log.i("alipay222", "2222"+skillid+user_id+uid_s+skillid+skilltitle+skillprice);
+                            Log.i("alipay222",mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +mProp.getProperty(AccessNetConst.ADDORDERENDPATH));
+                            sendRequestWithOkHttp("0");
 
                         }
                     }
@@ -187,9 +196,18 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                                 TrPay.getInstance((Activity) context).closePayView();       //关闭支付页面
                                 ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                                 //支付成功逻辑处理
+                                mProp = PropertiesUtil.getInstance();
+                                Log.i("alipay111", "1111"+skillid+user_id+uid_s+skillid+skilltitle+skillprice);
+                                Log.i("alipay111",mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +mProp.getProperty(AccessNetConst.ADDORDERENDPATH));
+                                sendRequestWithOkHttp("1");
+
                             } else if (resultCode == TrPayResult.RESULT_CODE_FAIL.getId()) {//2：支付失败回调
                                 ToastUtil.showCustom(SkillsByTrPayActivity.this, resultString, Toast.LENGTH_LONG);
                                 //支付失败逻辑处理
+                                mProp = PropertiesUtil.getInstance();
+                                Log.i("alipay222", "2222"+skillid+user_id+uid_s+skillid+skilltitle+skillprice);
+                                Log.i("alipay222",mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +mProp.getProperty(AccessNetConst.ADDORDERENDPATH));
+                                sendRequestWithOkHttp("0");
 
                             }
                         }
@@ -217,22 +235,10 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ToastUtil.showCustom(SkillsByTrPayActivity.this, "用户取消下载", Toast.LENGTH_LONG);
-                            mProp = PropertiesUtil.getInstance();
-                            Log.i("alipay", "1111");
-                            Log.i("alipay",mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +mProp.getProperty(AccessNetConst.ADDORDERENDPATH));
-                            sendRequestWithOkHttp();
-                            //测试代码
-//                            Intent intent = new Intent();
-//                            Intent intent1 = new Intent();
-////                            intent1.putExtra("uid", String.valueOf(user_id));//当前登录用户id
-//                            intent1.putExtra("uid_s", uid_s);//技能拥有者id
-//                            intent1.putExtra("skillid", skillid);//技能id
-//                            intent1.putExtra("title", skilltitle);//技能标题
-//                            intent1.putExtra("content", content);//技能详情
-//                            intent1.putExtra("img", img);//技能图片
-//                            intent1.putExtra("skilltype", skilltype);//技能类型
-//                            intent1.setClass(SkillsByTrPayActivity.this, PayResult.class);
-//                            startActivity(intent1);
+//                            mProp = PropertiesUtil.getInstance();
+//                            Log.i("alipay", "1111"+skillid+user_id+uid_s+skillid+skilltitle+skillprice);
+//                            Log.i("alipay",mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +mProp.getProperty(AccessNetConst.ADDORDERENDPATH));
+//                            sendRequestWithOkHttp();
                         }
                     });
                     dialog.show();
@@ -277,7 +283,7 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
     * @说明 建立连接
     * @创建日期 2018/5/20 下午10:43
     */
-    private void sendRequestWithOkHttp(){
+    private void sendRequestWithOkHttp(final String ispay){
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -291,13 +297,13 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                     //POST方式
                     RequestBody requestBody = new FormBody.Builder()
                             .add("uid", String.valueOf(user_id))
-                            .add("uid_s", uid_s)
-                            .add("skillid", skillid)
+                            .add("uid_s", String.valueOf(uid_s))
+                            .add("skillid", String.valueOf(skillid))
                             .add("title", skilltitle)
                             .add("content", content)
                             .add("img", img)
                             .add("skilltype", skilltype)
-                            .add("ispay", "1")
+                            .add("ispay", ispay)
                             .add("isdelete", "0")
                             .add("iscomment", "0")
                             .build();
