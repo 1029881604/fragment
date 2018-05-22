@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -60,6 +61,9 @@ public class PublishFragmentNeed extends BaseFragment {
                     setneeditem(personNeeds);
                     break;
                 case FALL:
+                    Toast.makeText(getContext(),"网络错误，需求获取失败",Toast.LENGTH_SHORT).show();
+                    break;
+                default:
                     break;
             }
         }
@@ -151,8 +155,12 @@ public class PublishFragmentNeed extends BaseFragment {
             public void onResponse(Call call, Response response) throws IOException {
                 String resp = response.body().string();
                 Message message=handler.obtainMessage();
-                message.what=SUCCESS;
-                message.obj=resp;
+                if (resp==null){
+                    message.what=FALL;
+                }else {
+                    message.what=SUCCESS;
+                    message.obj=resp;
+                }
                 handler.sendMessage(message);
                 //latch.countDown();
             }

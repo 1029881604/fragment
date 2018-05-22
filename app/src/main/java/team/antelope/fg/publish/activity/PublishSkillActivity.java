@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -306,7 +307,10 @@ public class PublishSkillActivity extends BaseActivity implements View.OnClickLi
         L.i("tag","我的时间："+DateUtil.formatDataTime(stopdata.getTime()));
         isonline=cb_isonline.isChecked();
         PublishSkill skill=new PublishSkill(0 , uid , title , content , date,stopdata, img, type, iscomplete, isonline, address, x,y);
-        String json=new Gson().toJson(skill);
+        Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        String json=gson.toJson(skill);
+        L.e(TAG,"skill="+skill.toString());
+        L.e(TAG,"json="+json);
         final Handler handler=new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -347,8 +351,14 @@ public class PublishSkillActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.e(TAG,"onResponse");
-                Message message=handler.obtainMessage();
-                message.what=SUCCESS;
+                String  state=response.body().string();
+                Log.e(TAG,state);
+                Message message = handler.obtainMessage();
+                if(state.equals("success")){
+                    message.what = SUCCESS;
+                }else {
+                    message.what = FALL;
+                }
                 handler.sendMessage(message);
             }
         });

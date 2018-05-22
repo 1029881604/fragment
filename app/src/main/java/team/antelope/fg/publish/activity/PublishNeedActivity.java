@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
@@ -298,7 +299,8 @@ public class PublishNeedActivity extends BaseActivity implements View.OnClickLis
         stopdata=new Date(System.currentTimeMillis()+3600*24);
         isonline=true;
         PublishNeed need=new PublishNeed(0, uid , title , content ,  type,date,stopdata, iscomplete, isonline, address, x,y);
-        String json=new Gson().toJson(need);
+        Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        String json=gson.toJson(need);
         final Handler handler=new Handler(){
             @Override
             public void handleMessage(Message msg) {
