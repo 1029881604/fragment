@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -14,6 +15,7 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -36,6 +38,7 @@ import team.antelope.fg.ui.base.BaseFragment;
 import team.antelope.fg.util.DateUtil;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
+import team.antelope.fg.util.ToastUtil;
 
 /**
 * @说明 Create by lx   未支付订单页
@@ -67,11 +70,19 @@ public class OrdersNotPayActivity extends BaseActivity{
 
     List<Orders> orders;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            orders= (List<Orders>) msg.obj;
-            initLayoutView();
+            if (msg.what == 1){
+                orders= (List<Orders>) msg.obj;
+                initLayoutView();
+                swipeRefreshLayout.setRefreshing(false);
+            }else{
+                ToastUtil.showCustom(OrdersNotPayActivity.this,"请检查网络连接",3000);
+                swipeRefreshLayout.setRefreshing(false);
+            }
         }
     };
 
@@ -93,6 +104,26 @@ public class OrdersNotPayActivity extends BaseActivity{
 
         mRecyclerView = findViewById(R.id.orderRecyclerView1);
 
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_order);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                orderID.clear();
+                uID.clear();
+                uID_s.clear();
+                skillID.clear();
+                skillTitle.clear();
+                skillContent.clear();
+                skillPic.clear();
+                skillType.clear();
+                createTime.clear();
+                isDelete.clear();
+                isPay.clear();
+                isComment.clear();
+                refreshSkills();
+            }
+        });
 
         mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle("待付款");
@@ -183,7 +214,13 @@ public class OrdersNotPayActivity extends BaseActivity{
                     String responseData = response.body().string();
                     parseJSONWithGSON(responseData);
                     Message message = new Message();
-                    message.obj = orList;
+                    //用于判断网络连接
+                    if (responseData == null){
+                        message.what = 0;
+                    }else{
+                        message.what = 1;
+                        message.obj = orList;
+                    }
                     handler.sendMessage(message);
 
                 }catch (Exception e){
@@ -196,6 +233,47 @@ public class OrdersNotPayActivity extends BaseActivity{
     private void parseJSONWithGSON(String responseData) {
         Gson gson = new Gson();
         orList = gson.fromJson(responseData, new TypeToken<List<Orders>>() {}.getType());
+    }
+
+    /**
+     * @说明 刷新事件
+     * @创建日期 2018/6/4 上午10:18
+     */
+    private void refreshSkills(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(800);
+
+                    OkHttpClient.Builder builder = OkHttpUtils.createHttpClientBuild();
+                    OkHttpClient client = builder.build();
+
+                    mProp = PropertiesUtil.getInstance();
+                    String path = mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH)
+                            +mProp.getProperty(AccessNetConst.GETORDERSNOTPAYENDPATH);
+                    Request request = new Request.Builder()
+                            .url(path+"?uid="+id)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    parseJSONWithGSON(responseData);
+                    Message message = new Message();
+                    //用于判断网络连接
+                    if (responseData == null){
+                        message.what = 0;
+                    }else{
+                        message.what = 1;
+                        message.obj = orList;
+                    }
+                    handler.sendMessage(message);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override

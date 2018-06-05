@@ -2,6 +2,9 @@ package team.antelope.fg.customized.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -52,6 +55,25 @@ public class PagerFragment8 extends BaseFragment implements View.OnClickListener
     public CompositeSubscription compositeSubscription = new CompositeSubscription();
     protected List<PublishSkill> publishSkills;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            skillid.clear();
+            lists.clear();
+            contents.clear();
+            type.clear();
+            startdate.clear();
+            stopdate.clear();
+            userid.clear();
+            resids.clear();
+            initLayoutView();
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    };
+
     /**
      * @说明 点击事件
      * @创建日期 2018/4/9 下午5:38
@@ -87,6 +109,8 @@ public class PagerFragment8 extends BaseFragment implements View.OnClickListener
 
         mRecyclerView=view.findViewById(R.id.recyclerView);
 
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh);
+
         initLayoutView();
 
     }
@@ -106,7 +130,32 @@ public class PagerFragment8 extends BaseFragment implements View.OnClickListener
      */
     @Override
     protected void init() {
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshSkills();
+            }
+        });
+    }
 
+    /**
+     * @说明 刷新事件
+     * @创建日期 2018/6/4 上午10:18
+     */
+    private void refreshSkills(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(800);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                Message message = new Message();
+                handler.sendMessage(message);
+            }
+        }).start();
     }
 
     /**
