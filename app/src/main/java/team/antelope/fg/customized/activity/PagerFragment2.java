@@ -61,14 +61,6 @@ public class PagerFragment2 extends BaseFragment implements View.OnClickListener
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            skillid.clear();
-            lists.clear();
-            contents.clear();
-            type.clear();
-            startdate.clear();
-            stopdate.clear();
-            userid.clear();
-            resids.clear();
             initLayoutView();
             swipeRefreshLayout.setRefreshing(false);
         }
@@ -135,6 +127,15 @@ public class PagerFragment2 extends BaseFragment implements View.OnClickListener
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                skillid.clear();
+                lists.clear();
+                contents.clear();
+                type.clear();
+                startdate.clear();
+                stopdate.clear();
+                userid.clear();
+                resids.clear();
+                adapter.notifyDataSetChanged();
                 refreshSkills();
             }
         });

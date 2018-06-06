@@ -121,6 +121,7 @@ public class OrdersNotPayActivity extends BaseActivity{
                 isDelete.clear();
                 isPay.clear();
                 isComment.clear();
+                adapter.notifyDataSetChanged();
                 refreshSkills();
             }
         });

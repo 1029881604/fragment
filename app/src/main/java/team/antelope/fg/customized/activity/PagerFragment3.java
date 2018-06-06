@@ -134,6 +134,15 @@ public class PagerFragment3 extends BaseFragment implements View.OnClickListener
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                skillid.clear();
+                lists.clear();
+                contents.clear();
+                type.clear();
+                startdate.clear();
+                stopdate.clear();
+                userid.clear();
+                resids.clear();
+                adapter.notifyDataSetChanged();
                 refreshSkills();
             }
         });
