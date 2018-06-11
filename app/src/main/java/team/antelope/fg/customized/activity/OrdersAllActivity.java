@@ -36,6 +36,7 @@ import team.antelope.fg.me.constant.MeAccessNetConst;
 import team.antelope.fg.ui.base.BaseActivity;
 import team.antelope.fg.ui.base.BaseFragment;
 import team.antelope.fg.util.DateUtil;
+import team.antelope.fg.util.L;
 import team.antelope.fg.util.OkHttpUtils;
 import team.antelope.fg.util.PropertiesUtil;
 import team.antelope.fg.util.ToastUtil;
@@ -168,16 +169,18 @@ public class OrdersAllActivity extends BaseActivity {
         adapter.setOnClickListener(new OrdersRecyclerAdapter.OnItemClickListener() {
             @Override
             public void ItemClickListener(View view, int postion) {
-//                Intent intent=new Intent();
-//                intent.putExtra("title",lists.get(postion));
-//                intent.putExtra("contents",contents.get(postion));
-//                intent.putExtra("skilltype",type.get(postion));
-//                intent.putExtra("startdate",startdate.get(postion));
-//                intent.putExtra("stopdate",stopdate.get(postion));
-//                intent.putExtra("userid",userid.get(postion));
-//                intent.putExtra("skillpic",resids.get(postion));    //新增的传递的图片
-//                intent.setClass(MeCollectionActivity.this,MeSkillDetailActivity.class);  //指定传递对象
-//                startActivity(intent);
+                Intent intent = new Intent();
+                intent.putExtra("orderid",orderID.get(postion));
+                intent.putExtra("uid",uID.get(postion));
+                intent.putExtra("personid", uID_s.get(postion));
+                L.i("flagbystatusBefore","-----"+isPay.get(postion));
+                if (isPay.get(postion).equals("true")){
+                    intent.putExtra("flagbystatus", 1);
+                }else{
+                    intent.putExtra("flagbystatus",0);
+                }
+                intent.setClass(OrdersAllActivity.this, OrderDetails.class);
+                startActivity(intent);
             }
 
             @Override

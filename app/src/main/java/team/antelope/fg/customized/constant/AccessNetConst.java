@@ -1,6 +1,6 @@
 package team.antelope.fg.customized.constant;
 /**
- * KYRENE
+ * Kyrene
  * @说明 访问网络常量
  * @创建日期 2018/5/11 下午3:58
  */
@@ -17,4 +17,6 @@ public interface AccessNetConst {
     String GETORDERSISPAYENDPATH = "getOrdersIsPayEndPath";
     String GETORDERSNOTPAYENDPATH = "getOrdersNotPayEndPath";
     String ADDORDERENDPATH = "addOrderEndPath";
+    String GETORDERDETAILSENDPATH = "getOrderDetailsEndPath";
+    String GETPERSONINFORMATIONENDPATH = "getPersonInformationEndPath";
 }

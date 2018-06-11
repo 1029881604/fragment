@@ -88,6 +88,7 @@
         <activity android:name=".customized.activity.OrdersIsPayActivity"/>
         <activity android:name=".customized.activity.OrdersNotPayActivity"/>
         <activity android:name=".customized.trpay.PayResult"/>
+        <activity android:name=".customized.activity.OrderDetails"/>
         <!-- ————————定制—————————— -->
 
         <!-- ——————publish start—————— -->
