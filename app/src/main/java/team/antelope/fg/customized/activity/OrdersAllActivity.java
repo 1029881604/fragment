@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import team.antelope.fg.R;
 import team.antelope.fg.customized.adapter.OrdersRecyclerAdapter;
@@ -64,12 +66,15 @@ public class OrdersAllActivity extends BaseActivity {
     List<String> skillContent; //技能内容
     List<String> skillPic;  //技能图片
     List<String> skillType; //技能类型
+    List<Double> skillPrice;    //技能价格
     List<String> createTime;    //创建时间
     List<String> isDelete;    //是否删除
     List<String> isPay;     //是否删除
     List<String> isComment;  //是否评论
 
     List<Orders> orders;
+
+    String orderIdTemp;
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -98,6 +103,7 @@ public class OrdersAllActivity extends BaseActivity {
         skillContent = new ArrayList<>();
         skillPic = new ArrayList<>();
         skillType = new ArrayList<>();
+        skillPrice = new ArrayList<>();
         createTime = new ArrayList<>();
         isDelete = new ArrayList<>();
         isPay = new ArrayList<>();
@@ -118,6 +124,7 @@ public class OrdersAllActivity extends BaseActivity {
                 skillContent.clear();
                 skillPic.clear();
                 skillType.clear();
+                skillPrice.clear();
                 createTime.clear();
                 isDelete.clear();
                 isPay.clear();
@@ -154,6 +161,7 @@ public class OrdersAllActivity extends BaseActivity {
                 skillContent.add(orders.get(i).getContent());
                 skillPic.add(orders.get(i).getImg());
                 skillType.add(orders.get(i).getSkilltype());
+                skillPrice.add(orders.get(i).getPrice());
                 createTime.add(DateUtil.formatDate(orders.get(i).getCreate_time().getTime()));
                 isDelete.add(String.valueOf(orders.get(i).isIsdelete()));
                 isPay.add(String.valueOf(orders.get(i).isIspay()));
@@ -164,7 +172,7 @@ public class OrdersAllActivity extends BaseActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         //设置RecyclerView布局管理器为2列垂直排布
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-        adapter = new OrdersRecyclerAdapter(this,orderID, skillPic, skillTitle, skillContent);
+        adapter = new OrdersRecyclerAdapter(this,orderID, skillPic, skillTitle, skillContent, skillPrice, isDelete, isPay);
         mRecyclerView.setAdapter(adapter);
         adapter.setOnClickListener(new OrdersRecyclerAdapter.OnItemClickListener() {
             @Override
@@ -190,7 +198,26 @@ public class OrdersAllActivity extends BaseActivity {
 
             @Override
             public void ItemDeleteListener(View view, int postion) {
-
+                orderIdTemp = String.valueOf(orderID.get(postion));
+                mProp = PropertiesUtil.getInstance();
+                Log.i("deleteorder1111", "1111"+orderID.get(postion));
+                Log.i("deleteorder1111",mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +mProp.getProperty(AccessNetConst.DELETEORDERENDPATH));
+                sendRequestForDeleteOrder(orderIdTemp);
+                orderID.clear();
+                uID.clear();
+                uID_s.clear();
+                skillID.clear();
+                skillTitle.clear();
+                skillContent.clear();
+                skillPic.clear();
+                skillType.clear();
+                skillPrice.clear();
+                createTime.clear();
+                isDelete.clear();
+                isPay.clear();
+                isComment.clear();
+                adapter.notifyDataSetChanged();
+                refreshSkills();
             }
 
             @Override
@@ -200,6 +227,10 @@ public class OrdersAllActivity extends BaseActivity {
         });
     }
 
+    /**
+    * @说明 建立获取订单连接
+    * @创建日期 2018/6/21 下午4:40
+    */
     private void sendOkHttpRequest() {
         new Thread(new Runnable() {
             @Override
@@ -280,6 +311,44 @@ public class OrdersAllActivity extends BaseActivity {
             }
         }).start();
     }
+
+    /**
+     * @说明 建立删除订单连接
+     * @创建日期 2018/5/20 下午10:43
+     */
+    private void sendRequestForDeleteOrder(final String temp){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url = null;
+                try {
+                    url = mProp.getProperty(team.antelope.fg.constant.AccessNetConst.BASEPATH) +
+                            mProp.getProperty(AccessNetConst.DELETEORDERENDPATH);
+//                                    OkHttpClient client = new OkHttpClient();
+                    OkHttpClient.Builder builder = OkHttpUtils.createHttpClientBuild();
+                    OkHttpClient client = builder.build();
+                    //POST方式
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("id", temp)
+                            .build();
+                    Log.i("deleteorder", "连接建立请求");
+                    Request request = new Request.Builder().url(url).post(requestBody).build();
+                    Response response = client.newCall(request).execute();
+                    String responseData = response.body().string();
+                    showResponse(responseData);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            private void showResponse(String responseData) {
+                if (responseData != null) {
+                    Log.i("deleteorder", "删除成功"+"orderID:"+temp);
+                } else
+                    Log.i("deleteorder", "删除失败"+"orderID:"+temp);
+            }
+        }).start();
+    }//sendRequest
 
     @Override
     public int getLayout() {

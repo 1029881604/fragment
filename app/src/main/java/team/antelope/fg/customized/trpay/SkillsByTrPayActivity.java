@@ -303,6 +303,7 @@ public class SkillsByTrPayActivity extends BaseActivity implements View.OnClickL
                             .add("content", content)
                             .add("img", img)
                             .add("skilltype", skilltype)
+                            .add("price", skillprice)
                             .add("ispay", ispay)
                             .add("isdelete", "0")
                             .add("iscomment", "0")

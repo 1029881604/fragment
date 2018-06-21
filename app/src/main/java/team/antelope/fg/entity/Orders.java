@@ -15,6 +15,7 @@ title varchar(60),  -- 技能标题
 content text,
 img varchar(300),
 skilltype varchar(50),
+price double,
 create_time datetime,	-- 创建日期
 ispay boolean,	-- 是否付款
 isdelete boolean, -- 是否删除
@@ -29,124 +30,86 @@ public class Orders {
     private String content;
     private Timestamp create_time;
     private String img;
+    private double price;
     private String skilltype;
     private boolean ispay;
     private boolean isdelete;
     private boolean iscomment;
-
-    public Orders() {
-        // TODO Auto-generated constructor stub
-    }
-
-    public Orders(Long id, Long uid, Long uid_s, Long skillid, String title, String content, Timestamp create_time,
-                  String img, String skilltype, boolean ispay, boolean isdelete, boolean iscomment) {
-        super();
-        this.id = id;
-        this.uid = uid;
-        this.uid_s = uid_s;
-        this.skillid = skillid;
-        this.title = title;
-        this.content = content;
-        this.create_time = create_time;
-        this.img = img;
-        this.skilltype = skilltype;
-        this.ispay = ispay;
-        this.isdelete = isdelete;
-        this.iscomment = iscomment;
-    }
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public Long getUid() {
         return uid;
     }
-
     public void setUid(Long uid) {
         this.uid = uid;
     }
-
     public Long getUid_s() {
         return uid_s;
     }
-
     public void setUid_s(Long uid_s) {
         this.uid_s = uid_s;
     }
-
     public Long getSkillid() {
         return skillid;
     }
-
     public void setSkillid(Long skillid) {
         this.skillid = skillid;
     }
-
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
-
     public String getContent() {
         return content;
     }
-
     public void setContent(String content) {
         this.content = content;
     }
-
     public Timestamp getCreate_time() {
         return create_time;
     }
-
     public void setCreate_time(Timestamp create_time) {
         this.create_time = create_time;
     }
-
     public String getImg() {
         return img;
     }
-
     public void setImg(String img) {
         this.img = img;
     }
-
+    public double getPrice() {
+        return price;
+    }
+    public void setPrice(double price) {
+        this.price = price;
+    }
     public String getSkilltype() {
         return skilltype;
     }
-
     public void setSkilltype(String skilltype) {
         this.skilltype = skilltype;
     }
-
     public boolean isIspay() {
         return ispay;
     }
-
     public void setIspay(boolean ispay) {
         this.ispay = ispay;
     }
-
     public boolean isIsdelete() {
         return isdelete;
     }
-
     public void setIsdelete(boolean isdelete) {
         this.isdelete = isdelete;
     }
-
     public boolean isIscomment() {
         return iscomment;
     }
-
     public void setIscomment(boolean iscomment) {
         this.iscomment = iscomment;
     }
@@ -162,6 +125,9 @@ public class Orders {
         result = prime * result + (iscomment ? 1231 : 1237);
         result = prime * result + (isdelete ? 1231 : 1237);
         result = prime * result + (ispay ? 1231 : 1237);
+        long temp;
+        temp = Double.doubleToLongBits(price);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
         result = prime * result + ((skillid == null) ? 0 : skillid.hashCode());
         result = prime * result + ((skilltype == null) ? 0 : skilltype.hashCode());
         result = prime * result + ((title == null) ? 0 : title.hashCode());
@@ -204,6 +170,8 @@ public class Orders {
         if (isdelete != other.isdelete)
             return false;
         if (ispay != other.ispay)
+            return false;
+        if (Double.doubleToLongBits(price) != Double.doubleToLongBits(other.price))
             return false;
         if (skillid == null) {
             if (other.skillid != null)

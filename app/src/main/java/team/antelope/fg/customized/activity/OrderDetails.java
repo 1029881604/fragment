@@ -59,6 +59,7 @@ public class OrderDetails extends BaseActivity {
     ImageView skillPic;     //技能图片组件
     TextView skillTitleTv;  //技能标题组件
     TextView skillContentTv;    //技能内容组件
+    TextView skillPriceTv;      //技能总价格
     TextView orderIDTv;     //订单编号组件
     TextView createTimeTv;  //创建时间组件
     TextView userNameTv;    //支付方姓名组件
@@ -92,6 +93,7 @@ public class OrderDetails extends BaseActivity {
         skillPic = findViewById(R.id.orderDetails_skillImg);
         skillTitleTv = findViewById(R.id.orderDetails_skillTitle);
         skillContentTv = findViewById(R.id.orderDetails_skillContent);
+        skillPriceTv = findViewById(R.id.orderDetails_orderPrice);
         orderIDTv = findViewById(R.id.orderDetails_orderId);
         createTimeTv = findViewById(R.id.orderDetails_createTime);
         userNameTv = findViewById(R.id.orderDetails_userName);
@@ -126,6 +128,7 @@ public class OrderDetails extends BaseActivity {
         SetImageViewUtil.setImageToImageView(skillPic, ordersT.getImg());
         skillTitleTv.setText(ordersT.getTitle());
         skillContentTv.setText(ordersT.getContent());
+        skillPriceTv.setText(String.valueOf(ordersT.getPrice()));
         orderIDTv.setText(String.valueOf(ordersT.getId()));
         createTimeTv.setText(String.valueOf(ordersT.getCreate_time()));
     }

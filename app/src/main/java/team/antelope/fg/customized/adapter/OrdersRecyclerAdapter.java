@@ -20,17 +20,24 @@ public class OrdersRecyclerAdapter extends RecyclerView.Adapter<OrdersHolder> {
     private List<String> resids;
     private List<String> skillTitle;
     private List<String> skillContent;
+    private List<Double> skillPrice;
+    private List<String> isDelete;
+    private List<String> isPay;
     private Context context;
     private OrdersRecyclerAdapter.OnItemClickListener mListener;
 
 
     public OrdersRecyclerAdapter(Context context, List<Long> orderID, List<String> resids,
-                                 List<String> skillTitle, List<String> skillContent) {
+                                 List<String> skillTitle, List<String> skillContent, List<Double> skillPrice,
+                                 List<String> isDelete, List<String> isPay) {
         this.context = context;
         this.orderID = orderID;
         this.resids = resids;
         this.skillTitle = skillTitle;
         this.skillContent = skillContent;
+        this.skillPrice = skillPrice;
+        this.isDelete = isDelete;
+        this.isPay = isPay;
     }
     public void setOnClickListener(OrdersRecyclerAdapter.OnItemClickListener listener){
         this.mListener = listener;
@@ -59,8 +66,15 @@ public class OrdersRecyclerAdapter extends RecyclerView.Adapter<OrdersHolder> {
         SetImageViewUtil.setImageToImageView(holder.mSkillPic, resids.get(position));
         holder.mSkillTitle.setText(skillTitle.get(position));
         holder.mSkillContent.setText(skillContent.get(position));//为控件绑定数据
+        holder.mSkillPrice.setText(String.valueOf(skillPrice.get(position)));
 
+        if (isPay.get(position).equals("true")){
+            holder.mPay.setVisibility(View.INVISIBLE);
+        }
 
+        if (isDelete.get(position).equals("true")){
+            holder.mDelete.setVisibility(View.INVISIBLE);
+        }
 
         if(mListener!=null){//如果设置了监听那么它就不为空，然后回调相应的方法
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +123,7 @@ class OrdersHolder extends RecyclerView.ViewHolder{
     ImageView mSkillPic;
     TextView mSkillTitle;
     TextView mSkillContent;
+    TextView mSkillPrice;
     Button mComment;
     Button mPay;
     Button mDelete;
@@ -119,6 +134,7 @@ class OrdersHolder extends RecyclerView.ViewHolder{
         mSkillPic = itemView.findViewById(R.id.orderskillimg);
         mSkillTitle = itemView.findViewById(R.id.orderskilltitle);
         mSkillContent = itemView.findViewById(R.id.orderskillcontent);
+        mSkillPrice = itemView.findViewById(R.id.ordersskillprice);
         mComment = itemView.findViewById(R.id.ordercomment);
         mPay = itemView.findViewById(R.id.orderpay);
         mDelete = itemView.findViewById(R.id.orderdelete);

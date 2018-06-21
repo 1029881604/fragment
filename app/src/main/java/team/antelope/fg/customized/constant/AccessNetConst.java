@@ -19,4 +19,5 @@ public interface AccessNetConst {
     String ADDORDERENDPATH = "addOrderEndPath";
     String GETORDERDETAILSENDPATH = "getOrderDetailsEndPath";
     String GETPERSONINFORMATIONENDPATH = "getPersonInformationEndPath";
+    String DELETEORDERENDPATH = "deleteOrderEndPath";
 }
