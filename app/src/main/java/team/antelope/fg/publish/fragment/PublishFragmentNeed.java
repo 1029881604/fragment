@@ -1,5 +1,6 @@
 package team.antelope.fg.publish.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +28,7 @@ import okhttp3.Response;
 import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.entity.PersonNeed;
+import team.antelope.fg.me.activity.MeSkillDetailActivity;
 import team.antelope.fg.publish.adapter.PublishItemsAdapter;
 import team.antelope.fg.publish.widget.PublishRefreshableView;
 import team.antelope.fg.ui.base.BaseFragment;
@@ -106,7 +108,7 @@ public class PublishFragmentNeed extends BaseFragment {
     public void onResume() {
         super.onResume();
     }
-    public void setneeditem(List<PersonNeed> personNeeds){
+    public void setneeditem(final List<PersonNeed> personNeeds){
         if(personNeeds == null){
             return ;
         }
@@ -129,7 +131,16 @@ public class PublishFragmentNeed extends BaseFragment {
         lv_need.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("MyListViewBase","你点击了ListView条目"+position);  //在LogCat中输出信息
+                Intent intent=new Intent();
+                intent.putExtra("title",personNeeds.get(position).getTitle());
+                intent.putExtra("contents",personNeeds.get(position).getContent());
+                intent.putExtra("skilltype",personNeeds.get(position).getNeedtype());
+                intent.putExtra("startdate",DateUtil.formatDate(personNeeds.get(position).getCustomdate().getTime()));
+                intent.putExtra("stopdate",DateUtil.formatDate(personNeeds.get(position).getRequestdate().getTime()));
+                intent.putExtra("userid",personNeeds.get(position).getUid());
+                intent.putExtra("skillpic",personNeeds.get(position).getHeadimg());    //新增的传递的图片
+                intent.setClass(getActivity(),MeSkillDetailActivity.class);  //指定传递对象
+                startActivity(intent);
             }
         });
 

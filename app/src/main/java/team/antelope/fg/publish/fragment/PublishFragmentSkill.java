@@ -1,6 +1,7 @@
 package team.antelope.fg.publish.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,10 +25,10 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import rx.subscriptions.CompositeSubscription;
 import team.antelope.fg.R;
 import team.antelope.fg.constant.AccessNetConst;
 import team.antelope.fg.entity.PersonSkill;
+import team.antelope.fg.me.activity.MeSkillDetailActivity;
 import team.antelope.fg.publish.adapter.PublishItemsAdapter;
 import team.antelope.fg.publish.widget.PublishRefreshableView;
 import team.antelope.fg.ui.base.BaseFragment;
@@ -108,7 +109,7 @@ public class PublishFragmentSkill extends BaseFragment {
         super.onResume();
     }
 
-    private void setskillitem(List<PersonSkill> personSkills) {
+    private void setskillitem(final List<PersonSkill> personSkills) {
         if(personSkills==null){
             return;
         }
@@ -130,7 +131,16 @@ public class PublishFragmentSkill extends BaseFragment {
             lv_skill.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Log.v("Publishskill","你点击了ListView条目"+position);  //在LogCat中输出信息
+                    Intent intent=new Intent();
+                    intent.putExtra("title",personSkills.get(position).getTitle());
+                    intent.putExtra("contents",personSkills.get(position).getContent());
+                    intent.putExtra("skilltype",personSkills.get(position).getSkilltype());
+                    intent.putExtra("startdate",DateUtil.formatDate(personSkills.get(position).getPublishdate().getTime()));
+                    intent.putExtra("stopdate",DateUtil.formatDate(personSkills.get(position).getStopdate().getTime()));
+                    intent.putExtra("userid",personSkills.get(position).getUid());
+                    intent.putExtra("skillpic",personSkills.get(position).getImg());    //新增的传递的图片
+                    intent.setClass(getActivity(),MeSkillDetailActivity.class);  //指定传递对象
+                    startActivity(intent);
                 }
             });
     }

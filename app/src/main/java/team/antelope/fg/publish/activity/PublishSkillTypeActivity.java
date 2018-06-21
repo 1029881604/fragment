@@ -28,7 +28,7 @@ import team.antelope.fg.util.L;
 public class PublishSkillTypeActivity extends BaseActivity {
 
     Toolbar mToolbar;
-    String[] types={"动画制作","UI设计","网页设计/制作","平面设计","视频/后期制作","App开发","程序语言设计","排版设计/制作"};
+    String[] types={"动画制作","UI设计","网页设计/制作","平面设计","视频/后期制作","App开发","程序语言设计","排版设计/制作","other"};
     @Override
     public int getLayout() {
         return R.layout.publish_select_skill_type;
